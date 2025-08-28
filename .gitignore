@@ -9,13 +9,18 @@ db.sqlite3
 # macOS
 .DS_Store
 
-# VS Code
+# IDES
 .vscode/
+.idea/
 
 # Node / React
 node_modules/
 build/
 dist/
+
+#Secrets
 .env
+
+auctionhub-Backend/.env
 
 request.http
