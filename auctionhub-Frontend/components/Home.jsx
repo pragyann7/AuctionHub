@@ -27,58 +27,11 @@ function Home() {
     }, []);
 
     if (error) return <ErrorAuth />;
-
-
-    const handleLogout = async () => {
-
-        const confirmed = window.confirm("Do you want to log out?");
-        if (!confirmed) return;
-
-        const refresh = localStorage.getItem('refresh');
-        const access = localStorage.getItem('access');
-        if (!refresh) {
-            localStorage.clear();
-            navigate('/');
-            return;
-        }
-
-        try {
-            const res = await axios.post('logout/',
-                { refresh },
-                { headers: { Authorization: `Bearer ${access}` } }
-            );
-            console.log(res.data.message)
-            navigate('/');
-        } catch (error) {
-            if (error.response) {
-                console.log(error.response.data.error);
-            } else {
-                console.log(error.message);
-            }
-        } finally {
-            localStorage.clear();
-            navigate('/');
-        }
-    };
     return (
         <>
             <Navbar />
-            <button
-                type="submit"
-                onClick={handleLogout}
-                className="flex mt-4 justify-center cursor-pointer rounded-md px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs focus-visible:outline-2 focus-visible:outline-offset-2"
-            >
-                Log Out
-            </button>
             <div className='w-full'>
-                <button
-                    type="submit"
-                    onClick={handleLogout}
-                    className="flex mt-4 justify-center cursor-pointer rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white "
-                >
-                    Log Out
-                </button>
-                <h1 className='text-zinc-300 flex justify-center'>This is Home Baby!</h1>
+                <h1 className='text-black text-7xl flex justify-center mt-50'>This is Home {username}!</h1>
             </div>
         </>
     )

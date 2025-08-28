@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
             const refreshToken = localStorage.getItem("refresh");
             if (!refreshToken) {
                 localStorage.clear();
-                window.location.href = "/login";
+                window.location.href = "/signin";
                 return Promise.reject(error);
             }
 
@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
                 return axiosInstance(originalRequest);
             } catch (err) {
                 localStorage.clear();
-                window.location.href = "/login";
+                window.location.href = "/signin";
                 return Promise.reject(err);
             }
         }
