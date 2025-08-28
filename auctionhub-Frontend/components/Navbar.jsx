@@ -8,9 +8,9 @@ function Navbar() {
 
             {/* Right side */}
             <div className="flex items-center gap-4">
-                <button className="font-bold">Log In</button>
+                <button className="font-bold cursor-pointer">Log In</button>
                 <div className="w-px h-6 bg-gray-400"></div>
-                <button className="bg-blue-500 text-white text-[14px] font-bold px-4 py-2 rounded-full">
+                <button className="bg-blue-500 text-white text-[14px] font-bold px-4 py-2 rounded-full cursor-pointer">
                     SignUp
                 </button>
             </div>
