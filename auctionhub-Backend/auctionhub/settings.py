@@ -89,10 +89,6 @@ WSGI_APPLICATION = 'auctionhub.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 from decouple import config
-<<<<<<< HEAD
-=======
-from decouple import config
->>>>>>> 5e6fc8a617d65782546cd68635a31535b71f44f6
 
 DATABASES = {
     'default': {
@@ -102,18 +98,10 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
-<<<<<<< HEAD
         'OPTIONS': {'sslmode': 'require'},
     }
 }
 
-=======
-    }
-}
-
-
-
->>>>>>> 5e6fc8a617d65782546cd68635a31535b71f44f6
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
