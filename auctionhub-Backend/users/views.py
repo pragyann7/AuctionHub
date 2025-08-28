@@ -2,7 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import RegisterSerializer
+from django.contrib.auth.models import User
+
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -20,3 +23,42 @@ class ProtectedView(APIView):
 
     def get(self, request):
         return Response({"message": f"Hello, {request.user.username}! Welcome"})
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"message": "Logout successful"}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class HomeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": f"Welcome {request.user.username}!",
+                         "username": request.user.username})
+    
+class CheckAvailabilityView(APIView):
+    def post(self, request):
+        username = request.data.get("username")
+        email = request.data.get("email")
+
+        errors = {}
+
+        if username and User.objects.filter(username=username).exists():
+            errors["username"] = "Username already exists"
+
+        if email and User.objects.filter(email=email).exists():
+            errors["email"] = "Email already exists"
+
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Available"}, status=status.HTTP_200_OK)
