@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../API/axiosInstance";
 
@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [logoutLoading, setLogoutLoading] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('access');
@@ -28,7 +29,10 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
         } catch (error) {
             console.log(error);
-            logout();
+            // logout();
+            setUser(null);
+            setIsAuthenticated(false);
+            localStorage.clear();
         } finally {
             setLoading(false);
         }
@@ -55,9 +59,12 @@ export const AuthProvider = ({ children }) => {
 
         const refresh = localStorage.getItem('refresh');
 
+        setLogoutLoading(true);
+
         if (!refresh) {
             localStorage.clear();
             navigate('/');
+            setLogoutLoading(false);
             return;
         }
 
@@ -75,11 +82,13 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             localStorage.clear();
             navigate('/');
+            setLogoutLoading(false);
+
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, loading, logoutLoading }}>
             {children}
         </AuthContext.Provider>
     )
