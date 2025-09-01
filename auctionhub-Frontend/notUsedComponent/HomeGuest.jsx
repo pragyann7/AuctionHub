@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useState, useEffect } from "react"
 import { useNavigate, Navigate } from "react-router-dom"
-import ErrorAuth from './ErrorAuth';
+import ErrorAuth from '../components/ErrorAuth';
 import axiosInstance from '../API/axiosInstance';
 import NavbarGuest from './NavbarGuest';
-import Navbar from './Navbar';
+import Navbar from '../components/Navbar';
 import React from 'react'
 
 function HomeGuest() {

@@ -24,3 +24,5 @@ dist/
 auctionhub-Backend/.env
 
 request.http
+
+.md
