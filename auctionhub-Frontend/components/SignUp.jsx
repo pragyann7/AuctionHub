@@ -17,7 +17,7 @@ export default function SignUp() {
         if (name === "username" || name === "email") {
             try {
                 const res = await axiosInstance.post("/check-availability/", { [name]: value });
-                setErrors((prev) => ({ ...prev, [name]: "" })); // available
+                setErrors((prev) => ({ ...prev, [name]: "" }));
             } catch (err) {
                 setErrors((prev) => ({ ...prev, [name]: err.response?.data[name] }));
             }
@@ -31,13 +31,11 @@ export default function SignUp() {
             return;
         }
         try {
-            // const res = await axiosInstance.post('register/', credentials);
-            const res = await axios.post('http://127.0.0.1:8000/register/', formData);
-            // console.log(res.data);
+            const res = await axiosInstance.post('register/', formData);
+            console.log(res.data);
             alert(res.data.message)
             navigate('/signin');
         } catch (err) {
-            // console.log('Registration failed. ' + (err.response?.data?.username || err.response?.data?.password));
             alert('Registration failed. ' + (err.response?.data?.username || err.response?.data?.password))
         }
     };
