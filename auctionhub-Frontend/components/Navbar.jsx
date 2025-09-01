@@ -1,25 +1,28 @@
 import React, { useContext } from 'react'
 import AuthContext from '../context/AuthContext';
 import { useNavigate, Navigate } from "react-router-dom"
+import { Loader } from './Loading';
 
 function Navbar() {
-    const { logout, user, isAuthenticated } = useContext(AuthContext);
+    const { logout, isAuthenticated, logoutLoading } = useContext(AuthContext);
 
     const handleLogout = async () => {
         await logout();
     };
 
-    const Navigate = useNavigate();
+    const navigate = useNavigate();
     const handleLogin = () => {
-        Navigate('/signin');
+        navigate('/signin');
     }
     const handleSignup = () => {
-        Navigate('/signup');
+        navigate('/signup');
     }
+
+    if (logoutLoading) return <Loader text={"Logging out..."} />;
 
     return (
         <div>
-            {isAuthenticated && user ? (
+            {isAuthenticated ? (
                 <nav className="px-6 py-2 border-b-[0.5px] border-gray-200 flex items-center justify-between">
 
                     <h1 className="text-xl pl-7 font-bold"><a href="/">AuctionHub</a></h1>
