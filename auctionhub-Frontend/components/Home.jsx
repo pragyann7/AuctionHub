@@ -1,9 +1,14 @@
 import { useContext } from "react";
 import Navbar from './Navbar';
 import AuthContext from '../context/AuthContext';
+import { Loader } from "./Loading";
 
 function Home() {
-    const { user, isAuthenticated } = useContext(AuthContext);
+    const { user, isAuthenticated, loading } = useContext(AuthContext);
+
+    if (loading) return <Loader text={"Wait Bro"} />
+
+
 
     return (
         <>
