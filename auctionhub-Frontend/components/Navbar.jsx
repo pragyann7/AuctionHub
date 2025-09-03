@@ -28,12 +28,12 @@ function Navbar() {
         <div>
             {isAuthenticated ? (
                 <nav className="relative w-full px-6 py-3 border-b-[0.5px] border-gray-200 flex items-center justify-between">
-                    {/* Logo */}
+
                     <h1 className="text-xl pl-2 font-bold">
                         <a href="/">AuctionHub</a>
                     </h1>
 
-                    {/* Desktop Links */}
+
                     <div className="hidden md:flex items-center space-x-6">
                         <Link to="/" className="hover:text-gray-600 transition-colors">Home</Link>
                         <a href="#auction" className="hover:text-gray-600 transition-colors">Auction</a>
@@ -43,14 +43,14 @@ function Navbar() {
 
 
                     <div className="relative hidden md:flex items-center space-x-5">
-                        {/* Notification */}
+
                         <div className="relative cursor-pointer">
                             <Bell className="w-6 h-6 text-gray-700 hover:text-gray-900" />
-                            {/* Red dot badge */}
+
                             <span className="absolute -top-1 -right-1 h-2.5 w-2.5 bg-red-500 rounded-full"></span>
                         </div>
 
-                        {/* User Dropdown */}
+
                         <div className="relative">
                             <button
                                 className="flex items-center space-x-1 cursor-pointer focus:outline-none"
@@ -92,14 +92,14 @@ function Navbar() {
 
 
 
-                    {/* Mobile Hamburger */}
+
                     <div className="md:hidden flex items-center">
                         <button onClick={() => setMenuOpen(!menuOpen)}>
                             {menuOpen ? "✖" : "☰"}
                         </button>
                     </div>
 
-                    {/* Mobile Menu */}
+
                     {menuOpen && (
                         <div className="absolute top-full left-0 w-full bg-white border-t border-gray-200 flex flex-col items-center md:hidden py-4 space-y-3 shadow-lg z-50">
                             <Link to="/" className="block w-full text-center py-2 hover:bg-gray-100" onClick={() => setMenuOpen(false)}>Home</Link>
@@ -107,12 +107,12 @@ function Navbar() {
                             <a href="#browse" className="block w-full text-center py-2 hover:bg-gray-100" onClick={() => setMenuOpen(false)}>Browse</a>
                             <Link to="/addproduct" className="block w-full text-center py-2 hover:bg-gray-100" onClick={() => setMenuOpen(false)}>Sell</Link>
 
-                            {/* Notification */}
+
                             <a href="#notifications" className="block w-full text-center py-2 hover:bg-gray-100 text-gray-800" onClick={() => setMenuOpen(false)}>
                                 🔔 Notifications
                             </a>
 
-                            {/* User Options */}
+
                             <a href="#profile" className="block w-full text-center py-2 hover:bg-gray-100" onClick={() => setMenuOpen(false)}>Profile</a>
                             <a href="#become-seller" className="block w-full text-center py-2 hover:bg-gray-100" onClick={() => setMenuOpen(false)}>Become Seller</a>
                             <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="block w-full text-center py-2 hover:bg-gray-100">
