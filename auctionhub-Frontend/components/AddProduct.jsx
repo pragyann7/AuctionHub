@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiFillProduct } from "react-icons/ai";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ImageUp, Eye } from "lucide-react";
+import ImageUploadLabel from "../ToolTips component/ImageUploadTT";
 
 const AddProduct = () => {
     const [step, setStep] = useState(1);
@@ -9,6 +10,7 @@ const AddProduct = () => {
         name: "",
         description: "",
         category: "",
+        condition: "",
         // Step 2 - Pricing
         startingPrice: "",
         buyNowPrice: "",
@@ -36,14 +38,14 @@ const AddProduct = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+        <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 mb-10">
             <div className="flex items-center gap-2">
                 <AiFillProduct className="text-5xl" />
                 <h2 className="text-2xl font-medium">Add Product</h2>
             </div>
             <p className="mb-9 text-[15px] font-extralight">Add a new product for auction.</p>
 
-            {/* Step Indicator */}
+
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8 mb-6">
                 {[
                     { num: 1, label: "General" },
@@ -55,7 +57,7 @@ const AddProduct = () => {
                         key={num}
                         className="flex flex-col items-center gap-1 sm:flex-row sm:items-center"
                     >
-                        {/* Circle */}
+
                         <div
                             className={`w-10 h-10 flex items-center justify-center rounded-full text-white font-light text-[19px]
           ${step >= num ? "bg-orange-500" : "bg-gray-300"}`}
@@ -63,7 +65,7 @@ const AddProduct = () => {
                             {num}
                         </div>
 
-                        {/* Label */}
+
                         <span
                             className={`mt-1 sm:mt-0 sm:ml-2 text-sm font-medium ${step === num ? "text-black" : "text-gray-600"
                                 }`}
@@ -71,7 +73,7 @@ const AddProduct = () => {
                             {label}
                         </span>
 
-                        {/* Arrow (hidden on small screens) */}
+
                         {num !== 4 && (
                             <ArrowRight
                                 size={20}
@@ -87,62 +89,195 @@ const AddProduct = () => {
 
             <div className="border-1 p-6 rounded-[18px]">
                 <form onSubmit={handleSubmit}>
-                    {/* Step 1: General */}
+
                     {step === 1 && (
                         <div className="space-y-4">
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Product Name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
-                            <textarea
-                                name="description"
-                                placeholder="Description"
-                                value={formData.description}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
-                            <input
-                                type="text"
-                                name="category"
-                                placeholder="Category"
-                                value={formData.category}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
+                            {/* <div className=""> */}
+                            <div className="flex flex-col">
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Product Name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    className="w-full border px-3 py-3 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                />
+                                <span className="text-[10px] mt-1">Give your product a name.</span>
+                            </div>
+
+                            <div className="flex flex-col">
+                                <textarea
+                                    name="description"
+                                    placeholder="Description"
+                                    value={formData.description}
+                                    onChange={handleChange}
+                                    className="w-full border px-3 pb-7 mt-4 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                />
+                                <span className="text-[10px] mt-1">Give your product a description.</span>
+
+                            </div>
+
+                            <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-29 max-w-2xl mx-auto">
+                                <div className="flex flex-col w-full md:w-auto mt-4 md:mb-4">
+                                    <span>Category</span>
+                                    <select
+                                        name="category"
+                                        value={formData.category}
+                                        onChange={handleChange}
+                                        className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="electronics">Electronics</option>
+                                        <option value="vehicles">Vehicles</option>
+                                        <option value="art">Art & Collectibles</option>
+                                        <option value="fashion">Fashion</option>
+                                        <option value="sports">Sports & Outdoors</option>
+                                    </select>
+                                </div>
+
+                                <div className="flex flex-col w-full md:w-auto">
+                                    <span>Condition</span>
+                                    <select
+                                        name="condition"
+                                        value={formData.condition}
+                                        onChange={handleChange}
+                                        className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="new">New</option>
+                                        <option value="like-new">Like new</option>
+                                        <option value="used">Used</option>
+                                        <option value="refurbished">Refurbished</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="max-w-2xl mx-auto my-6">
+                                <ImageUploadLabel />
+
+                                <div className="flex flex-col md:min-h-50 items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-orange-500 transition relative">
+                                    <div className="flex flex-col items-center">
+                                        <ImageUp />
+                                        <p className="text-gray-500 text-sm text-center">
+                                            Drag & drop images here or click to select
+                                        </p>
+                                    </div>
+
+                                    <input type="file" multiple accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                                </div>
+
+                                <span className="text-[10px] mt-1">Add images to your product.</span>
+
+
+                                <div className="flex flex-col mt-4">
+                                    <span className="flex items-center font-medium text-[14px] gap-x-0.5">
+                                        Preview
+                                        <Eye size={16} strokeWidth={1.25} />
+                                    </span>
+                                    <div className="mt-1 grid grid-cols-3 sm:grid-cols-4 gap-4">
+                                        <div className="w-full h-32 bg-gray-100 rounded-md"></div>
+                                        <div className="w-full h-32 bg-gray-100 rounded-md"></div>
+                                        <div className="w-full h-32 bg-gray-100 rounded-md"></div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     )}
 
                     {/* Step 2: Pricing */}
                     {step === 2 && (
                         <div className="space-y-4">
-                            <input
-                                type="number"
-                                name="startingPrice"
-                                placeholder="Starting Price"
-                                value={formData.startingPrice}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
-                            <input
-                                type="number"
-                                name="buyNowPrice"
-                                placeholder="Buy Now Price"
-                                value={formData.buyNowPrice}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
-                            <input
-                                type="number"
-                                name="bidIncrement"
-                                placeholder="Bid Increment"
-                                value={formData.bidIncrement}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
+                            <div>
+                                <span>Starting Price</span>
+                                <input
+                                    type="number"
+                                    name="startingPrice"
+                                    placeholder="$"
+                                    value={formData.startingPrice}
+                                    onChange={handleChange}
+                                    className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                />
+                                <span className="text-[10px] mt-1">Give your product a starting bid.</span>
+
+                            </div>
+                            <div>
+                                <span>Buy Now Price</span>
+
+                                <input
+                                    type="number"
+                                    name="buyNowPrice"
+                                    placeholder="$"
+                                    value={formData.buyNowPrice}
+                                    onChange={handleChange}
+                                    className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                />
+                                <span className="text-[10px] mt-1">Minimum: 30% more than starting bid.</span>
+
+                            </div>
+                            <div>
+                                <span>Bid Increment</span>
+
+                                <input
+                                    type="number"
+                                    name="bidIncrement"
+                                    placeholder="$"
+                                    value={formData.bidIncrement}
+                                    onChange={handleChange}
+                                    className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                />
+                                <span className="text-[10px] mt-1">Minimum increment required for each new bid.</span>
+
+                            </div>
+
+                            <div className="border-1 border-gray-400 rounded-2xl mb-0 p-5 pb-9 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-29 max-w-2xl mx-auto">
+                                {/* Auction Duration */}
+                                <div className="flex flex-col w-full md:w-auto">
+                                    <label className="mb-1 font-medium">Auction Duration</label>
+                                    <select
+                                        name="auctionDuration"
+                                        value={formData.auctionDuration}
+                                        onChange={handleChange}
+                                        className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    >
+                                        <option value="">Select</option>
+                                        <option value="3day">3 day</option>
+                                        <option value="4day">4 day</option>
+                                        <option value="5day">5 day</option>
+                                        <option value="7day">7 day</option>
+                                    </select>
+                                </div>
+
+                                {/* Auction Start Date & Time */}
+                                <div className="flex flex-col w-full md:w-auto">
+                                    <label className="mb-1 font-medium">Auction Start Date & Time</label>
+                                    <input
+                                        type="datetime-local"
+                                        name="auctionStart"
+                                        value={formData.auctionStart}
+                                        onChange={handleChange}
+                                        className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex flex-col mt-2 mb-12">
+                                {/* Checkbox + clickable label */}
+                                <label className="flex items-center space-x-2 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        name="relist"
+                                        className="w-4 h-4 accent-orange-500 cursor-pointer"
+                                    />
+                                    <span className="font-medium select-none">Auto relist</span>
+                                </label>
+
+                                {/* Description */}
+                                <span className="ml-6 text-xs text-gray-500">
+                                    Automatically relist this item up to 8 times if it doesn’t sell.
+                                </span>
+                            </div>
+
+
+
                         </div>
                     )}
 
