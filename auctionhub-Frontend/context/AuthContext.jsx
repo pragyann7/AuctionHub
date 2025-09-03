@@ -30,9 +30,15 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.log(error);
             // logout();
-            setUser(null);
-            setIsAuthenticated(false);
-            localStorage.clear();
+            // setUser(null);
+            // setIsAuthenticated(false);
+            // localStorage.clear();
+            const refreshToken = localStorage.getItem("refresh");
+            if (!refreshToken) {
+                setUser(null);
+                setIsAuthenticated(false);
+                localStorage.clear();
+            }
         } finally {
             setLoading(false);
         }
