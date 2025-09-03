@@ -13,7 +13,6 @@ function Home() {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar />
 
             <div className="flex-grow flex items-center justify-center">
                 {isAuthenticated && user ? (
@@ -24,8 +23,6 @@ function Home() {
                     <h1 className='text-black text-7xl text-center'>Guest Page</h1>
                 )}
             </div>
-
-            <Footer />
         </div>
     )
 }
