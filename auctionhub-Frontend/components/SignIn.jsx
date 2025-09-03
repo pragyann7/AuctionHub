@@ -1,5 +1,4 @@
 import { useContext, useState } from "react"
-// import axiosInstance from "../src/api/axios"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
 import AuthContext from "../context/AuthContext";
@@ -21,9 +20,6 @@ export default function SignIn() {
 
     return (
         <>
-            <nav className="px-6 py-3  border-b-[0.5px] border-gray-200 flex items-center justify-between">
-                <h1 className="text-xl pl-7 font-bold"><a href="/">AuctionHub</a></h1>
-            </nav>
             <div className="mt-14 flex h-screen min-h-full flex-1 flex-col px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <h2 className="text-center text-2xl/9 font-bold tracking-tight text-gray-900">
