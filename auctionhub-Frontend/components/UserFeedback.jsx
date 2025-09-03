@@ -5,7 +5,7 @@ import { Star, ThumbsUp, ThumbsDown } from "lucide-react";
 const feedbacks = [
   {
     id: 1,
-    name: "John Doe",
+    name: "Pragyan Sir",
     rating: 5,
     date: "2 weeks ago",
     comment: "Great seller! The product was exactly as described and shipping was fast.",
