@@ -44,6 +44,7 @@ function Navbar() {
                         <a href="#auction" className="hover:text-gray-600 transition-colors">Auction</a>
                         <a href="#browse" className="hover:text-gray-600 transition-colors">Browse</a>
                         <Link to="/addproduct" className="hover:text-gray-600 transition-colors">Sell</Link>
+                        <Link to="/contact" className="hover:text-gray-600 transition-colors">Contact</Link>
                     </div>
 
 

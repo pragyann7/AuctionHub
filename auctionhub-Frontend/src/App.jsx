@@ -3,7 +3,8 @@ import SignUp from '../components/SignUp'
 import SignIn from '../components/SignIn'
 import Home from '../components/Home'
 import AddProduct from '../components/AddProduct';
-import UserProfile from '../components/UserProfile'
+import UserProfile from '../components/UserProfile';
+import ContactUs from '../components/ContactUs'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Layout from '../Layout/Layout';
 import './App.css'
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/userprofile" element={<UserProfile/>}/>
                 <Route path="/addproduct" element={<AddProduct/>}/>
+                <Route path="/contact" element={<ContactUs/>}/>
             </Routes>
         </Layout>
     )
