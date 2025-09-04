@@ -1,0 +1,30 @@
+[
+    {
+        "code": "CAN",
+        "name": "Nepal Can Move"
+    },
+    {
+        "code": "NCN",
+        "name": "Namaste Cargo Nepal"
+    },
+    {
+        "code": "NPX",
+        "name": "Nepex Cargo"
+    },
+    {
+        "code": "FX",
+        "name": "FedEx"
+    },
+    {
+        "code": "DHL",
+        "name": "DHL Home"
+    },
+    {
+        "code": "KC",
+        "name": "Kourtier Courier"
+    },
+    {
+        "code": "BAIR",
+        "name": "Buddha Air Cargo"
+    }
+]

@@ -1,0 +1,41 @@
+[
+    {
+        "code": "NP",
+        "name": "Nepal",
+        "districts": [
+            {
+                "code": "CTN",
+                "name": "Chitwan",
+                "locations": [
+                    "Bharatpur",
+                    "Ratnanagar",
+                    "Narayangarh"
+                ]
+            },
+            {
+                "code": "KTM",
+                "name": "Kathmandu",
+                "locations": [
+                    "Kathmandu",
+                    "Kirtipur",
+                    "Tokha"
+                ]
+            }
+        ]
+    },
+    {
+        "code": "IN",
+        "name": "India",
+        "districts": [
+            {
+                "code": "DL",
+                "name": "Delhi",
+                "locations": [
+                    "New Delhi",
+                    "Dwarka",
+                    "Saket"
+                ]
+            }
+        ]
+    }
+]
