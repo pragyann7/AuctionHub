@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { AiFillProduct } from "react-icons/ai";
-import { ArrowRight, ImageUp, Eye } from "lucide-react";
+import { ArrowRight, ImageUp, Eye, Package } from "lucide-react";
 import ImageUploadLabel from "../ToolTips component/ImageUploadTT";
+import SouthAsiaData from "../Resources/southAsiaData.json";
+import courierOption from "../Resources/courierOption.json";
+
 
 const AddProduct = () => {
     const [step, setStep] = useState(1);
@@ -16,9 +19,15 @@ const AddProduct = () => {
         buyNowPrice: "",
         bidIncrement: "",
         // Step 3 - Shipping
-        weight: "",
-        dimensions: "",
+        shippingCost: "",
         shippingOptions: "",
+        shippingCountry: "",
+        shippingCity: "",
+        shippingLocation: "",
+        shippingEstimte: "",
+        shippingHandling: "",
+        courierOption: "",
+        pickupPoint: "",
         // Step 4 - Terms
         returnPolicy: "",
         auctionTerms: "",
@@ -26,6 +35,27 @@ const AddProduct = () => {
 
     const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+
+    const handleCountryChange = (e) => {
+        const countryCode = e.target.value;
+        setFormData({
+            ...formData,
+            shippingCountry: countryCode,
+            shippingCity: "", // reset district
+            shippingLocation: "" // reset location
+        });
+    };
+
+    const handleDistrictChange = (e) => {
+        const districtCode = e.target.value;
+        setFormData({
+            ...formData,
+            shippingCity: districtCode,
+            shippingLocation: "" // reset location
+        });
+    };
+
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -41,7 +71,7 @@ const AddProduct = () => {
         <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 mb-10">
             <div className="flex items-center gap-2">
                 <AiFillProduct className="text-5xl" />
-                <h2 className="text-2xl font-medium">Add Product</h2>
+                <h2 className="text-2xl font-medium" id="top">Add Product</h2>
             </div>
             <p className="mb-9 text-[15px] font-extralight">Add a new product for auction.</p>
 
@@ -87,7 +117,7 @@ const AddProduct = () => {
             </div>
 
 
-            <div className="border-1 p-6 rounded-[18px]">
+            <div className="border-0 p-6 rounded-[18px] flex justify-center">
                 <form onSubmit={handleSubmit}>
 
                     {step === 1 && (
@@ -156,7 +186,7 @@ const AddProduct = () => {
 
                                 <div className="flex flex-col md:min-h-50 items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-orange-500 transition relative">
                                     <div className="flex flex-col items-center">
-                                        <ImageUp />
+                                        <ImageUp size={40} />
                                         <p className="text-gray-500 text-sm text-center">
                                             Drag & drop images here or click to select
                                         </p>
@@ -260,7 +290,7 @@ const AddProduct = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col mt-2 mb-12">
-                                {/* Checkbox + clickable label */}
+
                                 <label className="flex items-center space-x-2 cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -270,7 +300,6 @@ const AddProduct = () => {
                                     <span className="font-medium select-none">Auto relist</span>
                                 </label>
 
-                                {/* Description */}
                                 <span className="ml-6 text-xs text-gray-500">
                                     Automatically relist this item up to 8 times if it doesn’t sell.
                                 </span>
@@ -281,33 +310,177 @@ const AddProduct = () => {
                         </div>
                     )}
 
+
+
                     {/* Step 3: Shipping */}
                     {step === 3 && (
-                        <div className="space-y-4">
-                            <input
-                                type="text"
-                                name="weight"
-                                placeholder="Weight"
-                                value={formData.weight}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
-                            <input
-                                type="text"
-                                name="dimensions"
-                                placeholder="Dimensions"
-                                value={formData.dimensions}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
-                            <input
-                                type="text"
-                                name="shippingOptions"
-                                placeholder="Shipping Options"
-                                value={formData.shippingOptions}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
+                        <div>
+                            <div className="flex justify-center mb-5">
+                                {/* <Ship size={100} strokeWidth={0.75} /> */}
+                                <Package size={100} strokeWidth={0.75} />
+                            </div>
+                            <div className="space-y-4">
+                                <div className="flex flex-col md:flex-row md:gap-50">
+                                    <div className="flex flex-col">
+                                        <label>Shipping Options</label>
+                                        <select
+                                            name="shippingOptions"
+                                            value={formData.shippingOptions}
+                                            onChange={handleChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="free">Free Ship</option>
+                                            <option value="paid">Paid Ship</option>
+                                            <option value="pickup">Pick up</option>
+                                        </select>
+                                    </div>
+                                    <label className="text-2xl mt-7 md:mt-3">Shipping Location</label>
+                                </div>
+                                <div className="flex flex-col md:flex-row md:gap-45">
+                                    <div className="flex flex-col">
+                                        <label>Shipping Cost</label>
+                                        <input
+                                            type="number"
+                                            name="shippingCost"
+                                            placeholder="Shipping Cost"
+                                            value={
+                                                formData.shippingOptions === "free" || formData.shippingOptions === "pickup" ? "" : formData.shippingCost
+                                            }
+                                            onChange={handleChange}
+                                            disabled={formData.shippingOptions === "free" || formData.shippingOptions === "pickup"}
+                                            className={`w-full mb-4 md:mb-0 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500 ${formData.shippingOptions === "free" || formData.shippingOptions === "pickup" ? "bg-gray-100 border-0 cursor-not-allowed" : ""}`}
+                                        />
+
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label>Country</label>
+                                        <select
+                                            name="shippingCountry"
+                                            value={formData.shippingCountry}
+                                            onChange={handleCountryChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select Country</option>
+                                            {SouthAsiaData.map((c) => (
+                                                <option key={c.code} value={c.code}>
+                                                    {c.name}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col md:flex-row md:gap-53">
+                                    <div className="flex flex-col">
+                                        <label>Handling Time</label>
+                                        <select
+                                            name="shippingHandling"
+                                            value={formData.shippingHandling}
+                                            onChange={handleChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="3day">3 day</option>
+                                            <option value="4day">4 day</option>
+                                            <option value="5day">5 day</option>
+                                            <option value="7day">7 day</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div className="flex flex-col">
+                                        <label>District</label>
+                                        <select
+                                            name="shippingCity"
+                                            value={formData.shippingCity}
+                                            onChange={handleDistrictChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select District</option>
+                                            {SouthAsiaData.find((c) => c.code === formData.shippingCountry)?.districts.map(
+                                                (d) => (
+                                                    <option key={d.code} value={d.code}>
+                                                        {d.name}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col md:flex-row md:gap-53">
+                                    <div className="flex flex-col">
+                                        <label>Estimated Delivery Time</label>
+                                        <select
+                                            name="shippingEstimte"
+                                            value={formData.shippingEstimte}
+                                            onChange={handleChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="3day">3 day</option>
+                                            <option value="4day">4 day</option>
+                                            <option value="5day">5 day</option>
+                                            <option value="7day">7 day</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="flex flex-col">
+                                        <label>Delivery Location</label>
+                                        <select
+                                            name="shippingLocation"
+                                            value={formData.shippingLocation}
+                                            onChange={handleChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select Location</option>
+                                            {SouthAsiaData.find((c) => c.code === formData.shippingCountry)
+                                                ?.districts.find((d) => d.code === formData.shippingCity)
+                                                ?.locations.map((loc, i) => (
+                                                    <option key={i} value={loc}>
+                                                        {loc}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col md:flex-row md:gap-53">
+                                    <div className="flex flex-col">
+                                        <label>Courier Option</label>
+                                        <select
+                                            name="courierOption"
+                                            value={formData.courierOption}
+                                            onChange={handleChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select</option>
+                                            {courierOption.map((c) => (
+                                                <option key={c.code} value={c.code}>
+                                                    {c.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="flex flex-col mb-12">
+                                        <label>PickUp Point</label>
+                                        <select
+                                            name="pickupPoint"
+                                            value={formData.pickupPoint}
+                                            onChange={handleChange}
+                                            className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        >
+                                            <option value="">Select</option>
+                                            <option value="home">Home</option>
+                                            <option value="office">Office</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
 
@@ -328,6 +501,44 @@ const AddProduct = () => {
                                 onChange={handleChange}
                                 className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
                             />
+                            <textarea
+                                name="paymentTerms"
+                                placeholder="Payment Terms"
+                                value={formData.paymentTerms}
+                                onChange={handleChange}
+                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                            />
+                            <textarea
+                                name="shippingTerms"
+                                placeholder="Shipping Terms"
+                                value={formData.shippingTerms}
+                                onChange={handleChange}
+                                className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                            />
+                            <div className="flex items-center mb-2">
+                                <input
+                                    type="checkbox"
+                                    id="warrantyCheckbox"
+                                    checked={formData.hasWarranty}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, hasWarranty: e.target.checked })
+                                    }
+                                    className="cursor-pointer"
+                                />
+                                <label htmlFor="warrantyCheckbox" className="ml-1 cursor-pointer">
+                                    Warranty / Guarantee
+                                </label>
+                            </div>
+
+                            <textarea
+                                name="warrantyTerms"
+                                placeholder="Specify term here"
+                                value={formData.warrantyTerms}
+                                onChange={handleChange}
+                                disabled={!formData.hasWarranty}
+                                className={`w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500${!formData.hasWarranty ? "bg-gray-100 border-0 cursor-not-allowed" : ""}`}
+                            ></textarea>
+
                         </div>
                     )}
 
