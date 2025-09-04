@@ -1,6 +1,6 @@
 // src/components/UserProfile.jsx
 import React, { useState } from "react";
-import { Star, Facebook, Instagram, Twitter, Mail, MapPin, Package, Share2, MessageCircle, UserPlus, ThumbsUp, Search } from "lucide-react";
+import { Star, Facebook, Instagram, Twitter, Mail, MapPin, Package, Share2, MessageCircle, UserPlus, ThumbsUp, Search, User } from "lucide-react";
 import UserProduct from "./UserProducts";
 import UserAbout from "./UserAbout";
 import UserFeedback from "./UserFeedback";
@@ -16,11 +16,11 @@ export default function UserProfile() {
           <div className="flex items-start space-x-6">
             {/* Profile Avatar */}
             <div className="w-32 h-32 rounded-full bg-gradient-to-br from-pink-300 to-pink-400 flex items-center justify-center text-white text-4xl font-bold shadow-lg flex-shrink-0 border-4 border-white">
-              <div className="w-24 h-24 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
-                <div className="w-16 h-16 rounded-full bg-white bg-opacity-50 flex items-center justify-center">
-                  K
-                </div>
+              {/* <div className="w-24 h-24 rounded-full bg-white bg-opacity-30 flex items-center justify-center"> */}
+              <div className="w-30 h-30 rounded-full bg-orange-500 bg-opacity-50 flex items-center justify-center">
+                <User size={90} />
               </div>
+              {/* </div> */}
             </div>
 
             {/* Profile Info */}
@@ -28,7 +28,7 @@ export default function UserProfile() {
               {/* Name and Social Icons */}
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-800 mb-2">Kavreli Samdhi Suppliers</h1>
+                  <h1 className="text-3xl font-bold text-gray-800 mb-2 font-serif font-light">Kavreli Samdhi Suppliers</h1>
 
                   {/* Rating */}
                   <div className="flex items-center space-x-2 mb-3">
@@ -111,31 +111,28 @@ export default function UserProfile() {
             <div className="flex space-x-8">
               <div
                 onClick={() => setActiveTab("Products")}
-                className={`pb-3 px-6 border-b-2 font-medium text-sm transition-colors cursor-pointer w-24 text-center ${
-                  activeTab === "Products"
-                    ? "border-indigo-600 text-indigo-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className={`pb-3 px-6 border-b-2 font-medium text-sm transition-colors cursor-pointer w-24 text-center ${activeTab === "Products"
+                  ? "border-indigo-600 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
               >
                 Products
               </div>
               <div
                 onClick={() => setActiveTab("About")}
-                className={`pb-3 px-6 border-b-2 font-medium text-sm transition-colors cursor-pointer w-24 text-center ${
-                  activeTab === "About"
-                    ? "border-indigo-600 text-indigo-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className={`pb-3 px-6 border-b-2 font-medium text-sm transition-colors cursor-pointer w-24 text-center ${activeTab === "About"
+                  ? "border-indigo-600 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
               >
                 About
               </div>
               <div
                 onClick={() => setActiveTab("Feedback")}
-                className={`pb-3 px-6 border-b-2 font-medium text-sm transition-colors cursor-pointer w-24 text-center ${
-                  activeTab === "Feedback"
-                    ? "border-indigo-600 text-indigo-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className={`pb-3 px-6 border-b-2 font-medium text-sm transition-colors cursor-pointer w-24 text-center ${activeTab === "Feedback"
+                  ? "border-indigo-600 text-indigo-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  }`}
               >
                 Feedback
               </div>
