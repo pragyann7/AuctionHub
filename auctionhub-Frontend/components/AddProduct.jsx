@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { AiFillProduct } from "react-icons/ai";
-import { ArrowRight, ImageUp, Eye, Package } from "lucide-react";
+import { ArrowRight, ImageUp, Eye, Package, CircleAlert } from "lucide-react";
 import ImageUploadLabel from "../ToolTips component/ImageUploadTT";
 import SouthAsiaData from "../Resources/southAsiaData.json";
 import courierOption from "../Resources/courierOption.json";
+import TermsTooltip from "../ToolTips component/TermsTooltip";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 
 const AddProduct = () => {
     const [step, setStep] = useState(1);
+    const [images, setImages] = useState([]);
+    const today = new Date();
     const [formData, setFormData] = useState({
         // Step 1 - General
         name: "",
@@ -18,11 +24,14 @@ const AddProduct = () => {
         startingPrice: "",
         buyNowPrice: "",
         bidIncrement: "",
+        auctionDuration: "",
+        auctionStartDateTime: "",
+        autoRelist: false,
         // Step 3 - Shipping
-        shippingCost: "",
         shippingOptions: "",
+        shippingCost: "",
         shippingCountry: "",
-        shippingCity: "",
+        shippingDistrict: "",
         shippingLocation: "",
         shippingEstimte: "",
         shippingHandling: "",
@@ -31,10 +40,25 @@ const AddProduct = () => {
         // Step 4 - Terms
         returnPolicy: "",
         auctionTerms: "",
+        paymentTerms: "",
+        shippingTerms: "",
+        warrantyTerms: "",
+        hasWarranty: false,
     });
 
     const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+
+        const newImages = files.map((file) => ({
+            file,
+            preview: URL.createObjectURL(file),
+        }));
+
+        setImages((prev) => [...prev, ...newImages]);
+    };
 
     const handleCountryChange = (e) => {
         const countryCode = e.target.value;
@@ -50,11 +74,15 @@ const AddProduct = () => {
         const districtCode = e.target.value;
         setFormData({
             ...formData,
-            shippingCity: districtCode,
+            shippingDistrict: districtCode,
             shippingLocation: "" // reset location
         });
     };
 
+    const handleCheckboxChange = (e) => {
+        const { name, checked } = e.target;
+        setFormData({ ...formData, [name]: checked });
+    };
 
 
     const handleChange = (e) => {
@@ -63,9 +91,18 @@ const AddProduct = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Form Submitted:", formData);
-        // Call API to submit product
+
+        // Prepare form data to log or send to API
+        const payload = {
+            ...formData,
+            images: images.map((img) => img.file.name), // for console, just logging file names
+        };
+
+        console.log("Form Submitted:", payload);
+
+        // TODO: Call API here with payload
     };
+
 
     return (
         <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 mb-10">
@@ -192,7 +229,14 @@ const AddProduct = () => {
                                         </p>
                                     </div>
 
-                                    <input type="file" multiple accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                                    <input
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    />
+
                                 </div>
 
                                 <span className="text-[10px] mt-1">Add images to your product.</span>
@@ -203,12 +247,38 @@ const AddProduct = () => {
                                         Preview
                                         <Eye size={16} strokeWidth={1.25} />
                                     </span>
+
                                     <div className="mt-1 grid grid-cols-3 sm:grid-cols-4 gap-4">
-                                        <div className="w-full h-32 bg-gray-100 rounded-md"></div>
-                                        <div className="w-full h-32 bg-gray-100 rounded-md"></div>
-                                        <div className="w-full h-32 bg-gray-100 rounded-md"></div>
+                                        {images.length > 0 ? (
+                                            images.map((img, i) => (
+                                                <div key={i} className="relative w-full h-32">
+                                                    <img
+                                                        src={img.preview}
+                                                        alt={`preview-${i}`}
+                                                        className="w-full h-full object-cover rounded-md"
+                                                    />
+                                                    {/* Optional remove button */}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            setImages(images.filter((_, index) => index !== i))
+                                                        }
+                                                        className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded"
+                                                    >
+                                                        ✕
+                                                    </button>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <>
+                                                <div className="w-full h-32 bg-gray-100 rounded-md"></div>
+                                                <div className="w-full h-32 bg-gray-100 rounded-md"></div>
+                                                <div className="w-full h-32 bg-gray-100 rounded-md"></div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
+
                             </div>
 
                         </div>
@@ -280,23 +350,33 @@ const AddProduct = () => {
                                 {/* Auction Start Date & Time */}
                                 <div className="flex flex-col w-full md:w-auto">
                                     <label className="mb-1 font-medium">Auction Start Date & Time</label>
-                                    <input
-                                        type="datetime-local"
-                                        name="auctionStart"
-                                        value={formData.auctionStart}
-                                        onChange={handleChange}
+                                    <DatePicker
+                                        selected={formData.auctionStartDateTime}
+                                        onChange={(date) =>
+                                            setFormData({ ...formData, auctionStartDateTime: date })
+                                        }
+                                        showTimeSelect
+                                        timeFormat="hh:mm aa"         // 12-hour format
+                                        timeIntervals={15}            // interval for minutes
+                                        dateFormat="MMMM d, yyyy h:mm aa"
                                         className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                                        placeholderText="Select Date & Time"
+                                        highlightDates={[today]}
                                     />
                                 </div>
+
                             </div>
                             <div className="flex flex-col mt-2 mb-12">
 
                                 <label className="flex items-center space-x-2 cursor-pointer">
                                     <input
                                         type="checkbox"
-                                        name="relist"
+                                        name="autoRelist"
+                                        checked={formData.autoRelist}
+                                        onChange={handleCheckboxChange}
                                         className="w-4 h-4 accent-orange-500 cursor-pointer"
                                     />
+
                                     <span className="font-medium select-none">Auto relist</span>
                                 </label>
 
@@ -393,8 +473,8 @@ const AddProduct = () => {
                                     <div className="flex flex-col">
                                         <label>District</label>
                                         <select
-                                            name="shippingCity"
-                                            value={formData.shippingCity}
+                                            name="shippingDistrict"
+                                            value={formData.shippingDistrict}
                                             onChange={handleDistrictChange}
                                             className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
                                         >
@@ -487,6 +567,7 @@ const AddProduct = () => {
                     {/* Step 4: Terms */}
                     {step === 4 && (
                         <div className="space-y-4">
+                            <TermsTooltip />
                             <textarea
                                 name="returnPolicy"
                                 placeholder="Return Policy"
@@ -518,12 +599,10 @@ const AddProduct = () => {
                             <div className="flex items-center mb-2">
                                 <input
                                     type="checkbox"
-                                    id="warrantyCheckbox"
+                                    name="hasWarranty"
                                     checked={formData.hasWarranty}
-                                    onChange={(e) =>
-                                        setFormData({ ...formData, hasWarranty: e.target.checked })
-                                    }
-                                    className="cursor-pointer"
+                                    onChange={handleCheckboxChange}
+                                    className="w-4 h-4 accent-orange-500 cursor-pointer"
                                 />
                                 <label htmlFor="warrantyCheckbox" className="ml-1 cursor-pointer">
                                     Warranty / Guarantee
