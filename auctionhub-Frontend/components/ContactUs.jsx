@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
-import { PhoneCall, Mail, MapPin, Shield } from "lucide-react";
+import React, {useState, useRef} from "react";
+import {PhoneCall, Mail, MapPin, Shield} from "lucide-react";
 import FAQ from "./FAQ.jsx";
+import axiosInstance from "../API/axiosInstance";
 
-const ContactUs = () => {
+export const ContactUs = () => {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -11,65 +12,72 @@ const ContactUs = () => {
         message: "Hello AuctionHub Team, ",
         file: null,
     });
-    const [agreeToTerms, setAgreeToTerms] = useState(false);
 
-    // ✅ File input reference
+    const [agreeToTerms, setAgreeToTerms] = useState(false);
     const fileInputRef = useRef(null);
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        const {name, value} = e.target;
+        setFormData((prev) => ({...prev, [name]: value}));
     };
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setFormData((prev) => ({
-            ...prev,
-            file: file,
-        }));
+        setFormData((prev) => ({...prev, file}));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!agreeToTerms) {
             alert("Please agree to the Terms & Conditions");
             return;
         }
 
-        // Example: preparing data for backend
         const data = new FormData();
-        data.append("firstName", formData.firstName);
-        data.append("lastName", formData.lastName);
+        data.append("first_name", formData.firstName);
+        data.append("last_name", formData.lastName);
         data.append("email", formData.email);
         data.append("phone", formData.phone);
         data.append("message", formData.message);
-        if (formData.file) {
-            data.append("file", formData.file);
+        if (formData.file) data.append("file", formData.file);
+
+        try {
+            const _response = await axiosInstance.post("/api/contact/submit/", data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            alert("Message sent successfully!");
+            setFormData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                message: "",
+                file: null,
+            });
+        } catch (err) {
+            console.error(err);
+            if (err.response?.status === 401) {
+                alert("You must be logged in to submit a message!");
+            } else {
+                alert(
+                    "Error submitting form: " +
+                    JSON.stringify(err.response?.data || err.message)
+                );
+            }
         }
-        console.log("Form submitted", formData);
     };
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
-
+    const handleDragOver = (e) => e.preventDefault();
     const handleDrop = (e) => {
         e.preventDefault();
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            setFormData((prev) => ({
-                ...prev,
-                file: files[0],
-            }));
+        if (e.dataTransfer.files.length > 0) {
+            setFormData((prev) => ({...prev, file: e.dataTransfer.files[0]}));
         }
     };
-
-    const handleFileClick = () => {
-        fileInputRef.current.click(); // ✅ now works
-    };
+    const handleFileClick = () => fileInputRef.current.click();
 
     return (
         <div className="bg-white-100 min-h-screen font-sans text-gray-900">
@@ -163,11 +171,12 @@ const ContactUs = () => {
                             {/* Phone */}
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 mb-2 ml-1">
-                                    Phone Number <span className="text-gray-400 font-normal">(Optional)</span>
+                                    Phone Number{" "}
+                                    <span className="text-gray-400 font-normal">(Optional)</span>
                                 </label>
-                                <div className="flex space-x-2">
+                                <div className="flex w-full space-x-2 overflow-hidden">
                                     <select
-                                        className="px-3 py-2.5 text-sm rounded-l-full border border-r-0 border-gray-300 bg-white focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none min-w-[90px]">
+                                        className="px-3 py-2.5 text-sm rounded-l-full border border-r-0 border-gray-300 bg-white focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none w-28">
                                         <option value="+977">NP +977</option>
                                     </select>
                                     <input
@@ -176,7 +185,7 @@ const ContactUs = () => {
                                         placeholder="XXX-XXXXXXX"
                                         value={formData.phone}
                                         onChange={handleInputChange}
-                                        className="flex-1 px-3 py-2.5 border border-gray-300 rounded-r-full focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                        className="flex-1 min-w-0 px-3 py-2.5 border border-gray-300 rounded-r-full focus:outline-none focus:ring-2 focus:ring-orange-500"
                                     />
                                 </div>
                             </div>
@@ -196,33 +205,38 @@ const ContactUs = () => {
                                 ></textarea>
                             </div>
 
-
                             {/* File Upload */}
-                            <div></div>
-                            <label className="block text-xs font-medium text-gray-700 mb-2 ml-1">
-                                Attach File <span className="text-gray-400 font-normal">(Optional)</span>
-                            </label>
-                            <div
-                                className="border-2 border-dashed border-gray-300 rounded-lg py-8 text-center text-gray-600 cursor-pointer"
-                                onDragOver={handleDragOver}
-                                onDrop={handleDrop}
-                                onClick={handleFileClick}
-                            >
-                                <p className="text-sm">Click or drag and drop to upload your file</p>
-                                <p className="text-xs">PNG, JPG, PDF, GIF, SVG (MAX 5 MB)</p>
-                                <input
-                                    type="file"
-                                    name="file"
-                                    ref={fileInputRef}
-                                    onChange={handleFileChange}
-                                    accept="image/*,.pdf,.svg"
-                                    className="hidden"
-                                />
-                                {formData.file && (
-                                    <p className="text-orange-500 font-medium mt-2 text-xs">
-                                        Selected: {formData.file.name}
+                            <div>
+                                <label className="block text-xs font-medium text-gray-700 mb-2 ml-1">
+                                    Attach File{" "}
+                                    <span className="text-gray-400 font-normal">(Optional)</span>
+                                </label>
+                                <div
+                                    className="border-2 border-dashed border-gray-300 rounded-lg py-8 text-center text-gray-600 cursor-pointer"
+                                    onDragOver={handleDragOver}
+                                    onDrop={handleDrop}
+                                    onClick={handleFileClick}
+                                >
+                                    <p className="text-sm">
+                                        Click or drag and drop to upload your file
                                     </p>
-                                )}
+                                    <p className="text-xs">
+                                        PNG, JPG, PDF, GIF, SVG (MAX 5 MB)
+                                    </p>
+                                    <input
+                                        type="file"
+                                        name="file"
+                                        ref={fileInputRef}
+                                        onChange={handleFileChange}
+                                        accept="image/*,.pdf,.svg"
+                                        className="hidden"
+                                    />
+                                    {formData.file && (
+                                        <p className="text-orange-500 font-medium mt-2 text-xs">
+                                            Selected: {formData.file.name}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Terms & Conditions */}
@@ -234,11 +248,11 @@ const ContactUs = () => {
                                     className="mr-2 h-4 w-4 border-gray-400 rounded focus:ring-orange-500"
                                 />
                                 <span className="text-sm text-gray-600">
-                                    I've read and agree to{" "}
+                  I've read and agree to{" "}
                                     <a href="#" className="text-orange-500">
-                                        AuctionHub Terms & Conditions
-                                    </a>
-                                </span>
+                    AuctionHub Terms & Conditions
+                  </a>
+                </span>
                             </div>
 
                             {/* Submit */}
@@ -261,22 +275,22 @@ const ContactUs = () => {
                         {
                             title: "Book a call",
                             desc: "Schedule a 15 min call with available agents",
-                            icon: <PhoneCall className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
+                            icon: <PhoneCall className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
                         },
                         {
                             title: "Send a mail",
                             desc: "Send an email to support@auctionhub.com",
-                            icon: <Mail className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
+                            icon: <Mail className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
                         },
                         {
                             title: "Visit us",
                             desc: "Visit our office HQ",
-                            icon: <MapPin className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
+                            icon: <MapPin className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
                         },
                         {
                             title: "Privacy choices",
                             desc: "Manage Consent Preferences",
-                            icon: <Shield className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
+                            icon: <Shield className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
                         },
                     ].map((item, i) => (
                         <div
@@ -292,11 +306,10 @@ const ContactUs = () => {
             </section>
 
             {/* FAQ Section */}
-            <section id="FAQ" className="bg-white p-6 rounded-lg mx-auto max-w-6xl mt-10 shadow-md">
-                <FAQ />
+            <section className="bg-white p-6 rounded-lg mx-auto max-w-6xl mt-10 shadow-md">
+                <FAQ/>
             </section>
         </div>
     );
-};
+}
 
-export default ContactUs;
