@@ -155,12 +155,14 @@ function Navbar() {
                             className="absolute top-full left-0 w-full bg-white border-t border-gray-200 flex flex-col items-center md:hidden py-4 space-y-3 shadow-lg z-50">
                             <Link to="/" className="block w-full text-center py-2 hover:bg-gray-100"
                                 onClick={() => setMenuOpen(false)}>Home</Link>
-                            <a href="#auction" className="block w-full text-center py-2 hover:bg-gray-100"
-                                onClick={() => setMenuOpen(false)}>Auction</a>
+                            {/* <a href="#auction" className="block w-full text-center py-2 hover:bg-gray-100"
+                                onClick={() => setMenuOpen(false)}>Auction</a> */}
                             <a href="/browse" className="block w-full text-center py-2 hover:bg-gray-100"
                                 onClick={() => setMenuOpen(false)}>Browse</a>
                             <Link to="/addproduct" className="block w-full text-center py-2 hover:bg-gray-100"
                                 onClick={() => setMenuOpen(false)}>Sell</Link>
+                            <Link to="/contact" className="block w-full text-center py-2 hover:bg-gray-100"
+                                onClick={() => setMenuOpen(false)}>Contact</Link>
 
 
                             <a href="#notifications"
@@ -175,8 +177,8 @@ function Navbar() {
                                     setMenuOpen(false);
                                     navigate("/userprofile");
                                 }}>Profile</a>
-                            <a href="#become-seller" className="block w-full text-center py-2 hover:bg-gray-100"
-                                onClick={() => setMenuOpen(false)}>Become Seller</a>
+                            {/* <a href="#become-seller" className="block w-full text-center py-2 hover:bg-gray-100"
+                                onClick={() => setMenuOpen(false)}>Become Seller</a> */}
                             <button onClick={() => {
                                 handleLogout();
                                 setMenuOpen(false);
