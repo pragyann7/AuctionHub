@@ -37,7 +37,7 @@ export default function ProductCard({ product }) {
                 <button className="cursor-pointer bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
                     Bid Now
                 </button>
-                <button className="flex items-center gap-1 text-gray-600 hover:text-orange-500 transition text-sm">
+                <button className="flex items-center cursor-pointer gap-1 text-gray-600 hover:text-orange-500 transition text-sm">
                     <Heart size={16} /> Watchlist
                 </button>
             </div>

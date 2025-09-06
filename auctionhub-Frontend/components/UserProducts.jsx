@@ -3,14 +3,49 @@ import React from "react";
 import { Eye, Heart, Info, Clock, Filter } from "lucide-react";
 import CountUp from "react-countup";
 import { motion } from "framer-motion";
+import ProductCard from "./ProductCard";
 
 const products = [
-  { id: 1, name: "GTA VI Exclusive & Limited Edition", price: 1700, time: "7hr : 22m : 45s", views: 999000, description: "Product is good, like new only" },
-  { id: 2, name: "GTA VI Exclusive & Limited Edition", price: 1700, time: "7hr : 22m : 45s", views: 999000, description: "Product is good, like new only" },
-  { id: 3, name: "GTA VI Exclusive & Limited Edition", price: 1700, time: "7hr : 22m : 45s", views: 999000, description: "Product is good, like new only" },
-  { id: 4, name: "GTA VI Exclusive & Limited Edition", price: 1700, time: "7hr : 22m : 45s", views: 999000, description: "Product is good, like new only" },
-  { id: 5, name: "GTA VI Exclusive & Limited Edition", price: 1700, time: "7hr : 22m : 45s", views: 999000, description: "Product is good, like new only" },
-  { id: 6, name: "GTA VI Exclusive & Limited Edition", price: 1700, time: "7hr : 22m : 45s", views: 999000, description: "Product is good, like new only" },
+  {
+    "id": 1,
+    "title": "Nike Air Jordan Sneakers",
+    "description": "Product is good, like new only",
+    "condition": "Like New",
+    "currentBid": 10710,
+    "timeLeft": "2d 10h",
+    "image": "https://picsum.photos/400/300?random=1",
+    "status": "upcoming"
+  },
+  {
+    "id": 2,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Brand new, unopened box",
+    "condition": "Used",
+    "currentBid": 1783,
+    "timeLeft": "4d 8h",
+    "image": "https://picsum.photos/400/300?random=2",
+    "status": "closed"
+  },
+  {
+    "id": 3,
+    "title": "GTA VI Exclusive & Limited Edition",
+    "description": "Authentic product, warranty included",
+    "condition": "Used",
+    "currentBid": 17500,
+    "timeLeft": "3d 10h",
+    "image": "https://picsum.photos/400/300?random=3",
+    "status": "closed"
+  },
+  {
+    "id": 4,
+    "title": "MacBook Pro 16-inch",
+    "description": "Authentic product, warranty included",
+    "condition": "Like New",
+    "currentBid": 7403,
+    "timeLeft": "1d 21h",
+    "image": "https://picsum.photos/400/300?random=4",
+    "status": "upcoming"
+  },
 ];
 
 const container = {
@@ -39,58 +74,54 @@ export default function UserProduct() {
       {/* Products Grid */}
       <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {products.map((product) => (
-          <motion.div
-            key={product.id}
-            variants={item}
-            className="border border-gray-200 rounded-[20px] bg-white shadow-sm hover:shadow-md transition-shadow relative overflow-hidden"
-          >
-            {/* Product image */}
-            <div className="h-48 bg-gray-100 flex items-center justify-center relative">
-              <span className="text-gray-400">Image</span>
+          <div className="bg-white rounded-xl shadow hover:shadow-md transition p-4 flex flex-col" >
+            {/* Product Image */}
+            <div div className="relative w-full h-48 mb-4" >
+              <img
+                src={product.image}
+                alt={product.title}
+                className="w-full h-full object-cover rounded-lg"
+              />
+              {/* Condition Badge */}
+              <span className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                {product.condition}
+              </span>
+            </div >
 
-              {/* Heart icon */}
-              <button className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors">
-                <Heart className="w-5 h-5 text-gray-600" />
-              </button>
+            {/* Title */}
+            <h3 h3 className="text-lg font-semibold mb-1" > {product.title}</h3 >
+            <p className="text-sm text-gray-500 mb-2">{product.description}</p>
 
-              {/* Info icon */}
-              <button className="absolute bottom-4 right-4 p-2 bg-white rounded-full shadow-sm hover:bg-gray-100 transition-colors">
-                <Info className="w-5 h-5 text-gray-600" />
-              </button>
+            {/* Current Bid + Timer */}
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <p className="text-xs text-gray-500">Current Bid</p>
+                {/* <p className="text-lg font-bold">${product.currentBid}</p> */}$
+                <CountUp end={product.currentBid} duration={1.5} separator="," />
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-gray-500">Ends in</p>
+                <p className="text-sm font-medium text-orange-600">{product.timeLeft}</p>
 
-              {/* Eye icon with view count */}
-              <div className="absolute bottom-4 left-4 flex items-center space-x-1 bg-white rounded-full px-3 py-1.5 shadow-sm">
-                <Eye className="w-4 h-4 text-gray-600" />
-                <span className="text-xs font-medium text-gray-700">
-                  <CountUp end={product.views} duration={1.5} separator="," />
-                </span>
               </div>
             </div>
 
-            {/* Product details */}
-            <div className="p-4">
-              <h3 className="font-semibold text-gray-800 text-lg mb-2">{product.name}</h3>
-              <p className="text-gray-600 text-sm mb-3">
-                {product.description} <span className="text-blue-600">Read more...</span>
-              </p>
-
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-xl text-gray-800">
-                  $<CountUp end={product.price} duration={1.5} separator="," />
-                </span>
-                <div className="flex items-center text-gray-600 text-sm">
-                  <Clock className="w-4 h-4 mr-1" />
-                  <span>{product.time}</span>
-                </div>
-              </div>
+            {/* Actions */}
+            <div className="flex justify-between items-center mt-auto">
+              <button className="cursor-pointer bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                Bid Now
+              </button>
+              <button className="flex items-center gap-1 text-gray-600 hover:text-orange-500 transition text-sm">
+                <Heart size={16} /> Watchlist
+              </button>
             </div>
-          </motion.div>
+          </div >
         ))}
       </motion.div>
 
       {/* See All */}
       <motion.div variants={item} className="text-center mt-8">
-        <button className="border border-gray-300 px-8 py-3 rounded-lg font-medium hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-colors shadow-sm">
+        <button className="border border-gray-300 px-8 py-3 rounded-lg font-medium hover:bg-orange-600 hover:text-white hover:orange-indigo-600 transition-colors shadow-sm">
           See All
         </button>
       </motion.div>
