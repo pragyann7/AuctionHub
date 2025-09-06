@@ -1,6 +1,6 @@
 import React from 'react';
 import { Facebook, Instagram, Twitter, Mail } from 'lucide-react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Footer() {
     return (
@@ -13,16 +13,17 @@ function Footer() {
                 <div>
                     <h4 className="font-semibold mb-2">Quick Links</h4>
                     <ul className="space-y-1">
-                        <li><a href="#" className="hover:text-orange-400">Home</a></li>
+                        <li><a href="/" className="hover:text-orange-400">Home</a></li>
                         <li><a href="#" className="hover:text-orange-400">Auctions</a></li>
                         <li><a href="#" className="hover:text-orange-400">Categories</a></li>
-                        <Link to="/contact" className="hover:text-orange-400">Contact</Link>
+                        <li><a href="/addproduct" className="hover:text-orange-400">Sell</a></li>
+                        <li><a href="/contact" className="hover:text-orange-400">Contact</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 className="font-semibold mb-2">Help</h4>
                     <ul className="space-y-1">
-                        <li><a href="#" className="hover:text-orange-400">FAQ</a></li>
+                        <li><a href="/contact#FAQ" className="hover:text-orange-400">FAQ</a></li>
                         <li><a href="#" className="hover:text-orange-400">Support</a></li>
                         <li><a href="#" className="hover:text-orange-400">Terms</a></li>
                         <li><a href="#" className="hover:text-orange-400">Privacy</a></li>

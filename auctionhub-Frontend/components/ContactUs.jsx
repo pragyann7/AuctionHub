@@ -1,5 +1,5 @@
-import React, {useState, useRef} from "react";
-import {PhoneCall, Mail, MapPin, Shield} from "lucide-react";
+import React, { useState, useRef } from "react";
+import { PhoneCall, Mail, MapPin, Shield } from "lucide-react";
 import FAQ from "./FAQ.jsx";
 
 const ContactUs = () => {
@@ -17,7 +17,7 @@ const ContactUs = () => {
     const fileInputRef = useRef(null);
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -234,11 +234,11 @@ const ContactUs = () => {
                                     className="mr-2 h-4 w-4 border-gray-400 rounded focus:ring-orange-500"
                                 />
                                 <span className="text-sm text-gray-600">
-                  I've read and agree to{" "}
+                                    I've read and agree to{" "}
                                     <a href="#" className="text-orange-500">
-                    AuctionHub Terms & Conditions
-                  </a>
-                </span>
+                                        AuctionHub Terms & Conditions
+                                    </a>
+                                </span>
                             </div>
 
                             {/* Submit */}
@@ -261,22 +261,22 @@ const ContactUs = () => {
                         {
                             title: "Book a call",
                             desc: "Schedule a 15 min call with available agents",
-                            icon: <PhoneCall className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
+                            icon: <PhoneCall className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
                         },
                         {
                             title: "Send a mail",
                             desc: "Send an email to support@auctionhub.com",
-                            icon: <Mail className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
+                            icon: <Mail className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
                         },
                         {
                             title: "Visit us",
                             desc: "Visit our office HQ",
-                            icon: <MapPin className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
+                            icon: <MapPin className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
                         },
                         {
                             title: "Privacy choices",
                             desc: "Manage Consent Preferences",
-                            icon: <Shield className="w-8 h-8 text-orange-500 mb-3 mx-auto"/>,
+                            icon: <Shield className="w-8 h-8 text-orange-500 mb-3 mx-auto" />,
                         },
                     ].map((item, i) => (
                         <div
@@ -292,8 +292,8 @@ const ContactUs = () => {
             </section>
 
             {/* FAQ Section */}
-            <section className="bg-white p-6 rounded-lg mx-auto max-w-6xl mt-10 shadow-md">
-                <FAQ/>
+            <section id="FAQ" className="bg-white p-6 rounded-lg mx-auto max-w-6xl mt-10 shadow-md">
+                <FAQ />
             </section>
         </div>
     );
