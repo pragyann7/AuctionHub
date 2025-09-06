@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "title": "Nike Air Jordan Sneakers",
+    "description": "Product is good, like new only",
+    "condition": "Like New",
+    "currentBid": 10710,
+    "timeLeft": "2d 10h",
+    "image": "https://picsum.photos/400/300?random=1",
+    "status": "upcoming"
+  },
+  {
+    "id": 2,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Brand new, unopened box",
+    "condition": "Used",
+    "currentBid": 1783,
+    "timeLeft": "4d 8h",
+    "image": "https://picsum.photos/400/300?random=2",
+    "status": "closed"
+  },
+  {
+    "id": 3,
+    "title": "GTA VI Exclusive & Limited Edition",
+    "description": "Authentic product, warranty included",
+    "condition": "Used",
+    "currentBid": 17500,
+    "timeLeft": "3d 10h",
+    "image": "https://picsum.photos/400/300?random=3",
+    "status": "closed"
+  },
+  {
+    "id": 4,
+    "title": "MacBook Pro 16-inch",
+    "description": "Authentic product, warranty included",
+    "condition": "Like New",
+    "currentBid": 7403,
+    "timeLeft": "1d 21h",
+    "image": "https://picsum.photos/400/300?random=4",
+    "status": "upcoming"
+  },
+  {
+    "id": 5,
+    "title": "Canon EOS R5 Camera",
+    "description": "Lightly used, works perfectly",
+    "condition": "Brand New",
+    "currentBid": 7625,
+    "timeLeft": "2d 5h",
+    "image": "https://picsum.photos/400/300?random=5",
+    "status": "live"
+  },
+  {
+    "id": 6,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Authentic product, warranty included",
+    "condition": "Brand New",
+    "currentBid": 7656,
+    "timeLeft": "4d 23h",
+    "image": "https://picsum.photos/400/300?random=6",
+    "status": "live"
+  },
+  {
+    "id": 7,
+    "title": "GTA VI Exclusive & Limited Edition",
+    "description": "Trusted seller, fast delivery",
+    "condition": "Brand New",
+    "currentBid": 11996,
+    "timeLeft": "5d 10h",
+    "image": "https://picsum.photos/400/300?random=7",
+    "status": "closed"
+  },
+  {
+    "id": 8,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Trusted seller, fast delivery",
+    "condition": "Brand New",
+    "currentBid": 17776,
+    "timeLeft": "3d 14h",
+    "image": "https://picsum.photos/400/300?random=8",
+    "status": "closed"
+  },
+  {
+    "id": 9,
+    "title": "Canon EOS R5 Camera",
+    "description": "Collector\u2019s edition, very limited",
+    "condition": "New",
+    "currentBid": 18111,
+    "timeLeft": "3d 12h",
+    "image": "https://picsum.photos/400/300?random=9",
+    "status": "live"
+  },
+  {
+    "id": 10,
+    "title": "Tesla Model S",
+    "description": "Authentic product, warranty included",
+    "condition": "Used",
+    "currentBid": 1185,
+    "timeLeft": "2d 21h",
+    "image": "https://picsum.photos/400/300?random=10",
+    "status": "live"
+  },
+  {
+    "id": 11,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Authentic product, warranty included",
+    "condition": "Good",
+    "currentBid": 3021,
+    "timeLeft": "3d 1h",
+    "image": "https://picsum.photos/400/300?random=11",
+    "status": "live"
+  },
+  {
+    "id": 12,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Product is good, like new only",
+    "condition": "New",
+    "currentBid": 19519,
+    "timeLeft": "1d 5h",
+    "image": "https://picsum.photos/400/300?random=12",
+    "status": "live"
+  },
+  {
+    "id": 13,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Trusted seller, fast delivery",
+    "condition": "New",
+    "currentBid": 1410,
+    "timeLeft": "1d 4h",
+    "image": "https://picsum.photos/400/300?random=13",
+    "status": "closed"
+  },
+  {
+    "id": 14,
+    "title": "Ibanez Electric Guitar",
+    "description": "Authentic product, warranty included",
+    "condition": "Brand New",
+    "currentBid": 6445,
+    "timeLeft": "5d 15h",
+    "image": "https://picsum.photos/400/300?random=14",
+    "status": "live"
+  },
+  {
+    "id": 15,
+    "title": "Nike Air Jordan Sneakers",
+    "description": "Collector\u2019s edition, very limited",
+    "condition": "Good",
+    "currentBid": 6706,
+    "timeLeft": "1d 8h",
+    "image": "https://picsum.photos/400/300?random=15",
+    "status": "upcoming"
+  },
+  {
+    "id": 16,
+    "title": "Patek Philippe Nautilus",
+    "description": "Brand new, unopened box",
+    "condition": "Brand New",
+    "currentBid": 11464,
+    "timeLeft": "3d 3h",
+    "image": "https://picsum.photos/400/300?random=16",
+    "status": "upcoming"
+  },
+  {
+    "id": 17,
+    "title": "Sony PlayStation 5",
+    "description": "Excellent condition, rare model",
+    "condition": "New",
+    "currentBid": 10469,
+    "timeLeft": "5d 11h",
+    "image": "https://picsum.photos/400/300?random=17",
+    "status": "live"
+  },
+  {
+    "id": 18,
+    "title": "Vintage Rolex Watch",
+    "description": "Collector\u2019s edition, very limited",
+    "condition": "Good",
+    "currentBid": 3448,
+    "timeLeft": "2d 20h",
+    "image": "https://picsum.photos/400/300?random=18",
+    "status": "closed"
+  },
+  {
+    "id": 19,
+    "title": "Canon EOS R5 Camera",
+    "description": "Collector\u2019s edition, very limited",
+    "condition": "Brand New",
+    "currentBid": 18361,
+    "timeLeft": "3d 15h",
+    "image": "https://picsum.photos/400/300?random=19",
+    "status": "upcoming"
+  },
+  {
+    "id": 20,
+    "title": "Sony PlayStation 5",
+    "description": "Trusted seller, fast delivery",
+    "condition": "New",
+    "currentBid": 17807,
+    "timeLeft": "3d 22h",
+    "image": "https://picsum.photos/400/300?random=20",
+    "status": "live"
+  },
+  {
+    "id": 21,
+    "title": "Tesla Model S",
+    "description": "Eco-friendly, sealed in original packaging",
+    "condition": "New",
+    "currentBid": 16181,
+    "timeLeft": "1d 8h",
+    "image": "https://picsum.photos/400/300?random=21",
+    "status": "live"
+  },
+  {
+    "id": 22,
+    "title": "Tesla Model S",
+    "description": "Collector\u2019s edition, very limited",
+    "condition": "Brand New",
+    "currentBid": 8033,
+    "timeLeft": "1d 9h",
+    "image": "https://picsum.photos/400/300?random=22",
+    "status": "upcoming"
+  },
+  {
+    "id": 23,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Authentic product, warranty included",
+    "condition": "Used",
+    "currentBid": 1875,
+    "timeLeft": "5d 22h",
+    "image": "https://picsum.photos/400/300?random=23",
+    "status": "closed"
+  },
+  {
+    "id": 24,
+    "title": "MacBook Pro 16-inch",
+    "description": "Eco-friendly, sealed in original packaging",
+    "condition": "Good",
+    "currentBid": 8370,
+    "timeLeft": "4d 5h",
+    "image": "https://picsum.photos/400/300?random=24",
+    "status": "upcoming"
+  },
+  {
+    "id": 25,
+    "title": "GTA VI Exclusive & Limited Edition",
+    "description": "Eco-friendly, sealed in original packaging",
+    "condition": "Good",
+    "currentBid": 13874,
+    "timeLeft": "4d 19h",
+    "image": "https://picsum.photos/400/300?random=25",
+    "status": "upcoming"
+  },
+  {
+    "id": 26,
+    "title": "GTA VI Exclusive & Limited Edition",
+    "description": "Trusted seller, fast delivery",
+    "condition": "Brand New",
+    "currentBid": 11308,
+    "timeLeft": "3d 20h",
+    "image": "https://picsum.photos/400/300?random=26",
+    "status": "upcoming"
+  },
+  {
+    "id": 27,
+    "title": "Canon EOS R5 Camera",
+    "description": "Trusted seller, fast delivery",
+    "condition": "Like New",
+    "currentBid": 17640,
+    "timeLeft": "4d 17h",
+    "image": "https://picsum.photos/400/300?random=27",
+    "status": "closed"
+  },
+  {
+    "id": 28,
+    "title": "Vintage Rolex Watch",
+    "description": "Product is good, like new only",
+    "condition": "New",
+    "currentBid": 4559,
+    "timeLeft": "3d 3h",
+    "image": "https://picsum.photos/400/300?random=28",
+    "status": "live"
+  },
+  {
+    "id": 29,
+    "title": "Ibanez Electric Guitar",
+    "description": "Brand new, unopened box",
+    "condition": "Good",
+    "currentBid": 14360,
+    "timeLeft": "3d 4h",
+    "image": "https://picsum.photos/400/300?random=29",
+    "status": "live"
+  },
+  {
+    "id": 30,
+    "title": "Tesla Model S",
+    "description": "Excellent condition, rare model",
+    "condition": "Like New",
+    "currentBid": 18204,
+    "timeLeft": "4d 21h",
+    "image": "https://picsum.photos/400/300?random=30",
+    "status": "closed"
+  },
+  {
+    "id": 31,
+    "title": "MacBook Pro 16-inch",
+    "description": "Brand new, unopened box",
+    "condition": "Good",
+    "currentBid": 7543,
+    "timeLeft": "1d 8h",
+    "image": "https://picsum.photos/400/300?random=31",
+    "status": "live"
+  },
+  {
+    "id": 32,
+    "title": "Vintage Rolex Watch",
+    "description": "Product is good, like new only",
+    "condition": "Good",
+    "currentBid": 8200,
+    "timeLeft": "2d 17h",
+    "image": "https://picsum.photos/400/300?random=32",
+    "status": "live"
+  },
+  {
+    "id": 33,
+    "title": "Sony PlayStation 5",
+    "description": "Brand new, unopened box",
+    "condition": "Used",
+    "currentBid": 9924,
+    "timeLeft": "1d 21h",
+    "image": "https://picsum.photos/400/300?random=33",
+    "status": "upcoming"
+  },
+  {
+    "id": 34,
+    "title": "GTA VI Exclusive & Limited Edition",
+    "description": "Product is good, like new only",
+    "condition": "Good",
+    "currentBid": 13177,
+    "timeLeft": "5d 17h",
+    "image": "https://picsum.photos/400/300?random=34",
+    "status": "upcoming"
+  },
+  {
+    "id": 35,
+    "title": "Vintage Rolex Watch",
+    "description": "Collector\u2019s edition, very limited",
+    "condition": "Like New",
+    "currentBid": 12319,
+    "timeLeft": "2d 21h",
+    "image": "https://picsum.photos/400/300?random=35",
+    "status": "upcoming"
+  },
+  {
+    "id": 36,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Brand new, unopened box",
+    "condition": "Used",
+    "currentBid": 5169,
+    "timeLeft": "3d 1h",
+    "image": "https://picsum.photos/400/300?random=36",
+    "status": "upcoming"
+  },
+  {
+    "id": 37,
+    "title": "Sony PlayStation 5",
+    "description": "Authentic product, warranty included",
+    "condition": "Brand New",
+    "currentBid": 18277,
+    "timeLeft": "4d 2h",
+    "image": "https://picsum.photos/400/300?random=37",
+    "status": "closed"
+  },
+  {
+    "id": 38,
+    "title": "Canon EOS R5 Camera",
+    "description": "Eco-friendly, sealed in original packaging",
+    "condition": "Used",
+    "currentBid": 1341,
+    "timeLeft": "2d 10h",
+    "image": "https://picsum.photos/400/300?random=38",
+    "status": "closed"
+  },
+  {
+    "id": 39,
+    "title": "MacBook Pro 16-inch",
+    "description": "Product is good, like new only",
+    "condition": "New",
+    "currentBid": 16876,
+    "timeLeft": "4d 23h",
+    "image": "https://picsum.photos/400/300?random=39",
+    "status": "upcoming"
+  },
+  {
+    "id": 40,
+    "title": "Canon EOS R5 Camera",
+    "description": "Product is good, like new only",
+    "condition": "Brand New",
+    "currentBid": 1305,
+    "timeLeft": "3d 3h",
+    "image": "https://picsum.photos/400/300?random=40",
+    "status": "upcoming"
+  },
+  {
+    "id": 41,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Eco-friendly, sealed in original packaging",
+    "condition": "Like New",
+    "currentBid": 703,
+    "timeLeft": "3d 5h",
+    "image": "https://picsum.photos/400/300?random=41",
+    "status": "live"
+  },
+  {
+    "id": 42,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Lightly used, works perfectly",
+    "condition": "Good",
+    "currentBid": 1908,
+    "timeLeft": "5d 21h",
+    "image": "https://picsum.photos/400/300?random=42",
+    "status": "closed"
+  },
+  {
+    "id": 43,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Product is good, like new only",
+    "condition": "New",
+    "currentBid": 19285,
+    "timeLeft": "5d 7h",
+    "image": "https://picsum.photos/400/300?random=43",
+    "status": "live"
+  },
+  {
+    "id": 44,
+    "title": "Vintage Rolex Watch",
+    "description": "Excellent condition, rare model",
+    "condition": "Brand New",
+    "currentBid": 9690,
+    "timeLeft": "4d 8h",
+    "image": "https://picsum.photos/400/300?random=44",
+    "status": "live"
+  },
+  {
+    "id": 45,
+    "title": "Patek Philippe Nautilus",
+    "description": "Eco-friendly, sealed in original packaging",
+    "condition": "Like New",
+    "currentBid": 9610,
+    "timeLeft": "4d 5h",
+    "image": "https://picsum.photos/400/300?random=45",
+    "status": "live"
+  },
+  {
+    "id": 46,
+    "title": "Sony PlayStation 5",
+    "description": "Authentic product, warranty included",
+    "condition": "Good",
+    "currentBid": 5163,
+    "timeLeft": "1d 13h",
+    "image": "https://picsum.photos/400/300?random=46",
+    "status": "live"
+  },
+  {
+    "id": 47,
+    "title": "Vintage Rolex Watch",
+    "description": "Excellent condition, rare model",
+    "condition": "New",
+    "currentBid": 12039,
+    "timeLeft": "5d 12h",
+    "image": "https://picsum.photos/400/300?random=47",
+    "status": "live"
+  },
+  {
+    "id": 48,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Brand new, unopened box",
+    "condition": "Brand New",
+    "currentBid": 1053,
+    "timeLeft": "1d 22h",
+    "image": "https://picsum.photos/400/300?random=48",
+    "status": "live"
+  },
+  {
+    "id": 49,
+    "title": "EcoFlow\u2122 Reusable Water Bottle",
+    "description": "Authentic product, warranty included",
+    "condition": "Brand New",
+    "currentBid": 15691,
+    "timeLeft": "2d 1h",
+    "image": "https://picsum.photos/400/300?random=49",
+    "status": "live"
+  },
+  {
+    "id": 50,
+    "title": "MacBook Pro 16-inch",
+    "description": "Product is good, like new only",
+    "condition": "Like New",
+    "currentBid": 7563,
+    "timeLeft": "3d 12h",
+    "image": "https://picsum.photos/400/300?random=50",
+    "status": "closed"
+  }
+]
