@@ -4,7 +4,7 @@ import SignIn from '../components/SignIn'
 import Home from '../components/Home'
 import AddProduct from '../components/AddProduct';
 import UserProfile from '../components/UserProfile';
-import ContactUs from '../components/ContactUs'
+import {ContactUs} from '../components/ContactUs'
 import Browse from '../components/Browse';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Layout from '../Layout/Layout';
