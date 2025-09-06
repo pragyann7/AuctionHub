@@ -15,19 +15,16 @@ const AddProduct = () => {
     const [images, setImages] = useState([]);
     const today = new Date();
     const [formData, setFormData] = useState({
-        // Step 1 - General
         name: "",
         description: "",
         category: "",
         condition: "",
-        // Step 2 - Pricing
         startingPrice: "",
         buyNowPrice: "",
         bidIncrement: "",
         auctionDuration: "",
         auctionStartDateTime: "",
         autoRelist: false,
-        // Step 3 - Shipping
         shippingOptions: "",
         shippingCost: "",
         shippingCountry: "",
@@ -37,7 +34,6 @@ const AddProduct = () => {
         shippingHandling: "",
         courierOption: "",
         pickupPoint: "",
-        // Step 4 - Terms
         returnPolicy: "",
         auctionTerms: "",
         paymentTerms: "",
@@ -65,8 +61,8 @@ const AddProduct = () => {
         setFormData({
             ...formData,
             shippingCountry: countryCode,
-            shippingCity: "", // reset district
-            shippingLocation: "" // reset location
+            shippingCity: "",
+            shippingLocation: ""
         });
     };
 
@@ -75,7 +71,7 @@ const AddProduct = () => {
         setFormData({
             ...formData,
             shippingDistrict: districtCode,
-            shippingLocation: "" // reset location
+            shippingLocation: ""
         });
     };
 
@@ -92,23 +88,23 @@ const AddProduct = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Prepare form data to log or send to API
+
         const payload = {
             ...formData,
-            images: images.map((img) => img.file.name), // for console, just logging file names
+            images: images.map((img) => img.file.name),
         };
 
         console.log("Form Submitted:", payload);
 
-        // TODO: Call API here with payload
+        // TODO: Call API
     };
 
 
     return (
-        <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10 mb-10">
-            <div className="flex items-center gap-2">
+        <div className="max-w-3xl mx-auto p-6 bg-white border-1 border-gray-300/30 shadow-md rounded-lg mt-10 mb-10">
+            <div className="flex mt-7 items-center gap-2">
                 <AiFillProduct className="text-5xl" />
-                <h2 className="text-2xl font-medium" id="top">Add Product</h2>
+                <h2 className="text-2xl font-medium">Add Product</h2>
             </div>
             <p className="mb-9 text-[15px] font-extralight">Add a new product for auction.</p>
 
@@ -248,7 +244,7 @@ const AddProduct = () => {
                                         <Eye size={16} strokeWidth={1.25} />
                                     </span>
 
-                                    <div className="mt-1 grid grid-cols-3 sm:grid-cols-4 gap-4">
+                                    <div className="mt-1 mb-7 grid grid-cols-3 sm:grid-cols-4 gap-4">
                                         {images.length > 0 ? (
                                             images.map((img, i) => (
                                                 <div key={i} className="relative w-full h-32">
@@ -356,8 +352,8 @@ const AddProduct = () => {
                                             setFormData({ ...formData, auctionStartDateTime: date })
                                         }
                                         showTimeSelect
-                                        timeFormat="hh:mm aa"         // 12-hour format
-                                        timeIntervals={15}            // interval for minutes
+                                        timeFormat="hh:mm aa"
+                                        timeIntervals={15}
                                         dateFormat="MMMM d, yyyy h:mm aa"
                                         className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
                                         placeholderText="Select Date & Time"
@@ -518,7 +514,7 @@ const AddProduct = () => {
                                         >
                                             <option value="">Select Location</option>
                                             {SouthAsiaData.find((c) => c.code === formData.shippingCountry)
-                                                ?.districts.find((d) => d.code === formData.shippingCity)
+                                                ?.districts.find((d) => d.code === formData.shippingDistrict)
                                                 ?.locations.map((loc, i) => (
                                                     <option key={i} value={loc}>
                                                         {loc}
@@ -627,7 +623,7 @@ const AddProduct = () => {
                             <button
                                 type="button"
                                 onClick={prevStep}
-                                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
+                                className="px-14 py-2 bg-gray-300 cursor-pointer rounded-2xl hover:bg-gray-400 transition"
                             >
                                 Back
                             </button>
@@ -636,14 +632,14 @@ const AddProduct = () => {
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="ml-auto px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600 transition"
+                                className="ml-auto px-14 py-2 bg-orange-500 cursor-pointer text-white rounded-2xl hover:bg-orange-600 transition"
                             >
                                 Next
                             </button>
                         ) : (
                             <button
                                 type="submit"
-                                className="ml-auto px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+                                className="ml-auto px-14 py-2 bg-green-500 cursor-pointer text-white rounded-2xl hover:bg-green-600 transition"
                             >
                                 Submit
                             </button>
