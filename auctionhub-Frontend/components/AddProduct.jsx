@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiFillProduct } from "react-icons/ai";
-import { ArrowRight, ImageUp, Eye, Package, CircleAlert } from "lucide-react";
+import { ArrowRight, ImageUp, Eye, Package, CircleAlert, Ship, Truck } from "lucide-react";
 import ImageUploadLabel from "../ToolTips component/ImageUploadTT";
 import SouthAsiaData from "../Resources/southAsiaData.json";
 import courierOption from "../Resources/courierOption.json";
@@ -150,7 +150,7 @@ const AddProduct = () => {
             </div>
 
 
-            <div className="border-0 p-6 rounded-[18px] flex justify-center">
+            <div className="border-1 border-gray-500/10 p-6 rounded-[18px] flex justify-center">
                 <form onSubmit={handleSubmit}>
 
                     {step === 1 && (
@@ -393,11 +393,12 @@ const AddProduct = () => {
                         <div>
                             <div className="flex justify-center mb-5">
                                 {/* <Ship size={100} strokeWidth={0.75} /> */}
-                                <Package size={100} strokeWidth={0.75} />
+                                <Truck size={100} strokeWidth={0.75} />
+                                {/* <Package size={100} strokeWidth={0.75} /> */}
                             </div>
                             <div className="space-y-4">
                                 <div className="flex flex-col md:flex-row md:gap-50">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col md:mb-4">
                                         <label>Shipping Options</label>
                                         <select
                                             name="shippingOptions"
@@ -414,7 +415,7 @@ const AddProduct = () => {
                                     <label className="text-2xl mt-7 md:mt-3">Shipping Location</label>
                                 </div>
                                 <div className="flex flex-col md:flex-row md:gap-45">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col md:mb-4">
                                         <label>Shipping Cost</label>
                                         <input
                                             type="number"
@@ -449,7 +450,7 @@ const AddProduct = () => {
                                 </div>
 
                                 <div className="flex flex-col md:flex-row md:gap-53">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col md:mb-4">
                                         <label>Handling Time</label>
                                         <select
                                             name="shippingHandling"
@@ -488,7 +489,7 @@ const AddProduct = () => {
                                 </div>
 
                                 <div className="flex flex-col md:flex-row md:gap-53">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col md:mb-4">
                                         <label>Estimated Delivery Time</label>
                                         <select
                                             name="shippingEstimte"
@@ -623,7 +624,7 @@ const AddProduct = () => {
                             <button
                                 type="button"
                                 onClick={prevStep}
-                                className="px-14 py-2 bg-gray-300 cursor-pointer rounded-2xl hover:bg-gray-400 transition"
+                                className="md:px-14 px-7 py-2 bg-gray-300 cursor-pointer rounded-2xl hover:bg-gray-400 transition"
                             >
                                 Back
                             </button>
@@ -632,14 +633,14 @@ const AddProduct = () => {
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="ml-auto px-14 py-2 bg-orange-500 cursor-pointer text-white rounded-2xl hover:bg-orange-600 transition"
+                                className="ml-auto px-7 md:px-14 py-2 bg-orange-500 cursor-pointer text-white rounded-2xl hover:bg-orange-600 transition"
                             >
                                 Next
                             </button>
                         ) : (
                             <button
                                 type="submit"
-                                className="ml-auto px-14 py-2 bg-green-500 cursor-pointer text-white rounded-2xl hover:bg-green-600 transition"
+                                className="ml-auto px-7 md:px-14 py-2 bg-green-500 cursor-pointer text-white rounded-2xl hover:bg-green-600 transition"
                             >
                                 Submit
                             </button>
