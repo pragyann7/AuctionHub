@@ -2,12 +2,13 @@ import React, { useContext, useState } from 'react';
 import AuthContext from '../context/AuthContext';
 import { useNavigate, Navigate, Link, NavLink } from "react-router-dom";
 import { Loader } from './Loading';
-import { Bell, User, ChevronDown } from 'lucide-react';
+import { Bell, User, ChevronDown, BrushCleaning, Ellipsis } from 'lucide-react';
 
 function Navbar() {
     const { logout, isAuthenticated, logoutLoading } = useContext(AuthContext);
     const [menuOpen, setMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [notification, setNotification] = useState(false);
 
     const handleLogout = async () => {
         await logout();
@@ -50,7 +51,7 @@ function Navbar() {
                             className={({ isActive }) =>
                                 isActive
                                     ? "text-orange-500 font-medium"
-                                    : "text-gray-700 hover:text-gray-600 transition-colors"
+                                    : "text-gray-700 hover:text-gray-600 transition-colors hover:text-orange-300"
                             }
                         >
                             Home
@@ -61,7 +62,7 @@ function Navbar() {
                             className={({ isActive }) =>
                                 isActive
                                     ? "text-orange-500 font-medium"
-                                    : "text-gray-700 hover:text-gray-600 transition-colors"
+                                    : "text-gray-700 hover:text-gray-600 transition-colors hover:text-orange-300"
                             }
                         >
                             Browse
@@ -72,7 +73,7 @@ function Navbar() {
                             className={({ isActive }) =>
                                 isActive
                                     ? "text-orange-500 font-medium"
-                                    : "text-gray-700 hover:text-gray-600 transition-colors"
+                                    : "text-gray-700 hover:text-gray-600 transition-colors hover:text-orange-300"
                             }
                         >
                             Sell
@@ -83,7 +84,7 @@ function Navbar() {
                             className={({ isActive }) =>
                                 isActive
                                     ? "text-orange-500 font-medium"
-                                    : "text-gray-700 hover:text-gray-600 transition-colors"
+                                    : "text-gray-700 hover:text-gray-600 transition-colors hover:text-orange-300"
                             }
                         >
                             Contact
@@ -93,18 +94,89 @@ function Navbar() {
 
 
                     <div className="relative hidden md:flex items-center space-x-5">
+                        <div className='relative'>
+                            <button className="flex items-center cursor-pointer"
+                                onClick={() => {
+                                    setNotification(!notification);
+                                    setDropdownOpen(false);
+                                }}
+                            >
+                                <Bell className="w-6 h-6 text-gray-700 hover:text-gray-900" />
 
-                        <div className="relative cursor-pointer">
-                            <Bell className="w-6 h-6 text-gray-700 hover:text-gray-900" />
-
-                            <span className="absolute -top-1 -right-1 h-2.5 w-2.5 bg-red-500 rounded-full"></span>
+                                <span className="absolute -top-1 -right-1 h-2.5 w-2.5 bg-red-500 rounded-full"></span>
+                            </button>
+                            {notification && (
+                                <div
+                                    className="absolute right-0 mt-2 w-75 py-3 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden"
+                                // onClick={() => setNotification(false)}
+                                >
+                                    <label className='text-2xl font-bold ml-4'>Notifications</label>
+                                    <div className='flex ml-39 mt-2 hover:text-red-600 hover:underline'>
+                                        <BrushCleaning size={15} />
+                                        <label className='ml-0.5 text-[12px] font-light cursor-pointer'>Mark all as read</label>
+                                    </div>
+                                    <div className='flex flex-row gap-1 px-2 py-2 cursor-pointer'>
+                                        <div className='bg-amber-700 text-white rounded-2xl w-7 h-7 flex items-center justify-center'>P</div>
+                                        <div className='bg-gray-300 w-59 p-1 text-[13px] rounded-md'>New product has arrived check it out!</div>
+                                        <div>
+                                            <Ellipsis size={18} />
+                                            <label className='text-[10px]'>4h</label>
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-row gap-1 px-2 py-2 cursor-pointer'>
+                                        <div className='bg-amber-700 text-white rounded-2xl w-7 h-7 flex items-center justify-center'>P</div>
+                                        <div className='bg-gray-300 w-59 p-1 text-[13px] rounded-md'>Auction has begin the one you liked.</div>
+                                        <div>
+                                            <Ellipsis size={18} />
+                                            <label className='text-[10px]'>8h</label>
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-row gap-1 px-2 py-2 cursor-pointer'>
+                                        <div className='bg-amber-700 text-white rounded-2xl w-7 h-7 flex items-center justify-center'>P</div>
+                                        <div className='bg-gray-300 w-59 p-1 text-[13px] rounded-md'>The auction has ended!</div>
+                                        <div>
+                                            <Ellipsis size={18} />
+                                            <label className='text-[10px]'>22h</label>
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-row gap-1 px-2 py-2 cursor-pointer'>
+                                        <div className='bg-amber-700 text-white rounded-2xl w-7 h-7 flex items-center justify-center'>P</div>
+                                        <div className='bg-gray-300 w-59 p-1 text-[13px] rounded-md'>You've won the auction for product #pd123</div>
+                                        <div>
+                                            <Ellipsis size={18} />
+                                            <label className='text-[10px]'>2d</label>
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-row gap-1 px-2 py-2 cursor-pointer'>
+                                        <div className='bg-amber-700 text-white rounded-2xl w-7 h-7 flex items-center justify-center'>P</div>
+                                        <div className='bg-gray-300 w-59 p-1 text-[13px] rounded-md'>Check out the products that may you like!</div>
+                                        <div>
+                                            <Ellipsis size={18} />
+                                            <label className='text-[10px]'>7d</label>
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-row gap-1 px-2 py-2 cursor-pointer'>
+                                        <div className='bg-amber-700 text-white rounded-2xl w-7 h-7 flex items-center justify-center'>P</div>
+                                        <div className='bg-gray-300 w-59 p-1 text-[13px] rounded-md'>Auction has begin for product #pd321, check it out.</div>
+                                        <div>
+                                            <Ellipsis size={18} />
+                                            <label className='text-[10px]'>14d</label>
+                                        </div>
+                                    </div>
+                                    <div className='flex items-center justify-center mt-2'>
+                                        <button className='text-[13px] cursor-pointer text-white bg-gray-700 px-17 py-1 rounded-[7px]'>See all notifications</button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-
 
                         <div className="relative">
                             <button
                                 className="flex items-center space-x-1 cursor-pointer focus:outline-none"
-                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                                onClick={() => {
+                                    setDropdownOpen(!dropdownOpen);
+                                    setNotification(false);
+                                }}
                             >
                                 <User
                                     className="w-7 h-7 text-gray-700 hover:text-gray-900 rounded-full border p-1 bg-gray-50" />
