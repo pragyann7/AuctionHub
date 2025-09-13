@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
 import { useNavigate, Navigate, Link, NavLink } from "react-router-dom";
 import { Loader } from './Loading';
@@ -9,6 +9,26 @@ function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [notification, setNotification] = useState(false);
+
+    const [hidden, setHidden] = useState(false);
+    const [lastScrollY, setLastScrollY] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            if (currentScrollY > lastScrollY && currentScrollY > 250) {
+                setHidden(true);
+            } else {
+                setHidden(false);
+            }
+
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollY]);
 
     const handleLogout = async () => {
         await logout();
@@ -39,7 +59,11 @@ function Navbar() {
         <div>
             {isAuthenticated ? (
                 <nav
-                    className="relative w-full px-6 py-3 border-b-[0.5px] border-gray-200 flex items-center justify-between">
+                    className={`fixed top-0 left-0 w-full z-50 bg-white px-6 py-3 flex items-center justify-between shadow transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'
+                        }`}
+                >
+
+
 
                     <h1 className="text-xl pl-2 font-bold">
                         <a href="/">Auction<span className='text-orange-400'>Hub</span></a>
@@ -263,8 +287,11 @@ function Navbar() {
 
                 </nav>
             ) : (
-                <nav className="px-6 py-2 border-b-[0.5px] border-gray-200 flex items-center justify-between">
-                    <h1 className="text-xl pl-7 font-bold"><a href="/">AuctionHub</a></h1>
+                <nav className={`fixed top-0 left-0 w-full z-50 bg-white px-6 py-3 flex items-center justify-between shadow transition-transform duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'
+                    }`}>
+                    <h1 className="text-xl pl-2 font-bold">
+                        <a href="/">Auction<span className='text-orange-400'>Hub</span></a>
+                    </h1>
                     <div className="flex items-center gap-4">
                         <button onClick={handleLogin} className="font-medium cursor-pointer">Log In</button>
                         <div className="w-px h-6 bg-gray-400"></div>
