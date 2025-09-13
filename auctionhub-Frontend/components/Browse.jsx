@@ -29,7 +29,7 @@ export default function Browse() {
 
 
             {showSidebar && (
-                <div className="fixed inset-0 bg-transparent bg-opacity-10 z-40 md:hidden">
+                <div className="fixed inset-0 bg-transparent bg-opacity-10 z-51 md:hidden">
                     <div className="absolute top-0 left-0 w-64 h-full bg-white shadow-lg p-4 overflow-y-auto z-50">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="font-semibold">Filters</h2>
