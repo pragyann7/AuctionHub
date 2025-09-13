@@ -7,6 +7,8 @@ import AuctionTabs from "./AuctionTabs";
 import products from "../Resources/products.json";
 import { ChevronsDown } from "lucide-react";
 import bgMov from "../src/assets/justicewillserve0001-0190.mp4";
+import bgPic from "../src/assets/Unknown-4.jpg";
+import bgRight from "../src/assets/travis.jpg";
 
 function Home() {
     const { user, isAuthenticated, loading } = useContext(AuthContext);
@@ -23,46 +25,11 @@ function Home() {
 
 
     return (
-        // <div className="container mx-auto px-4 py-8">
-        //     <AuctionTabs auctions={products} />
-        // </div>
         <div className="flex flex-col min-h-screen">
 
             <div>
                 {isAuthenticated && user ? (
                     <>
-                        {/* <h1 className="text-black text-4xl font-bold text-center mb-8">
-                            Welcome back, {user.username}!
-                        </h1> */}
-                        {/* Product Grid */}
-                        {/* <label htmlFor="auctionLive" className="text-3xl font-bold">Live Auction</label> */}
-                        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                            {products.map((p) => (
-                                <ProductCard key={p.id} product={p} />
-                            ))}
-                        </div> */}
-
-                        {/* plain moto landingpage */}
-                        {/* <div className="flex flex-col items-center justify-center min-h-170 md:min-h-210 relative">
-                            <div className="text-center">
-                                <h2 className="text-3xl md:text-7xl font-semibold font-playfair text-gray-800 tracking-wide">
-                                    <span className="block text-[#1A2238]">Bid.</span>
-                                    <span className="block text-[#B68973]">Belong.</span>
-                                    <span className="block text-[#7D5A50]">Become.</span>
-                                </h2>
-                                <p className="mt-4 text-gray-500 text-sm md:text-base italic">
-                                    The finest things in life aren’t bought — they’re won.
-                                </p>
-                            </div>
-                            <div
-                                className="absolute bottom-9 flex items-center justify-center w-12 h-12 animate-bounce text-gray-700 opacity-50 hover:bg-gray-200 transition"
-                            >
-                                <ChevronsDown />
-                            </div>
-                        </div> */}
-
-
                         <div className="relative w-full h-screen overflow-hidden">
                             <div className="hidden md:block absolute inset-0 w-full h-full">
                                 <video
@@ -98,20 +65,11 @@ function Home() {
                             </div>
                         </div>
 
-
-
-
-
-
-
-
-                        <div className="flex items-center justify-center gap-4 mt-3 mb-8">
+                        <div className="flex items-center justify-center gap-4 mt-19 mb-8">
                             <hr className="flex-1 border-gray-300" />
                             <h2 className="text-4xl font-bold">Auctions</h2>
                             <hr className="flex-1 border-gray-300" />
                         </div>
-
-
 
                         <div className="container mx-auto px-4 py-8">
                             <AuctionTabs auctions={products} />
@@ -119,18 +77,57 @@ function Home() {
                     </>
                 ) : (
                     <>
-                        {/* <h1 className="text-black text-4xl font-bold text-center mb-8">
-                            Guest Page
-                        </h1> */}
-                        {/* Product Grid for Guests */}
-                        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {products.map((p) => (
-                                <ProductCard key={p.id} product={p} />
-                            ))}
-                        </div> */}
+                        <section className="relative w-full h-screen bg-black text-white overflow-hidden">
+
+                            <div
+                                className="absolute inset-0 opacity-50"
+                                style={{
+                                    backgroundImage:
+                                        `url(${bgPic})`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                }}
+                            ></div>
+
+                            <div className="relative container mx-auto px-6 py-20 lg:py-28 flex flex-col lg:flex-row items-center">
+
+                                <div className="text-center lg:text-left lg:w-1/2 space-y-6">
+                                    <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+                                        Welcome to <span className="text-orange-400">AuctionHub</span>
+                                    </h1>
+                                    <p className="text-lg md:text-xl max-w-md mx-auto lg:mx-0">
+                                        Discover, bid, and win amazing items. Join us and start exploring
+                                        today!
+                                    </p>
+                                    <div className="flex justify-center lg:justify-start gap-4 pt-4">
+                                        <a
+                                            href="/signup"
+                                            className="px-6 py-3 bg-orange-400 text-gray-900 rounded-xl font-semibold hover:bg-orange-300 transition"
+                                        >
+                                            Get Started
+                                        </a>
+                                        <a
+                                            href="/signin"
+                                            className="px-6 py-3 bg-transparent border border-white rounded-xl font-semibold hover:bg-white hover:text-gray-900 transition"
+                                        >
+                                            Sign In
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                                <div className="lg:w-1/2 mt-10 lg:mt-0">
+                                    <img
+                                        src={bgRight}
+                                        alt="Auction Illustration"
+                                        className="rounded-2xl shadow-lg w-full"
+                                    />
+                                </div>
+                            </div>
+                        </section>
 
                         <div className="flex flex-col items-center justify-center min-h-170 md:min-h-210 relative">
-                            {/* Your centered content */}
+
                             <div className="text-center">
                                 <h2 className="text-3xl md:text-7xl font-semibold font-playfair text-gray-800 tracking-wide">
                                     <span className="block text-[#1A2238]">Bid.</span>
@@ -167,8 +164,6 @@ function Home() {
                             <h2 className="text-3xl font-bold text-black">Auctions</h2>
                             <hr className="flex-1 border-gray-300" />
                         </div>
-
-
 
                         <div className="container mx-auto px-4 py-8">
                             <AuctionTabs auctions={products} />
