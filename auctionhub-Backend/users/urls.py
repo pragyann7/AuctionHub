@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import RegisterView, ProtectedView, HomeView, CheckAvailabilityView, UserFetchView, LogoutView
+from .views import RegisterView, ProtectedView, HomeView, CheckAvailabilityView, UserFetchView, LogoutView, \
+    EditProfileView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -11,5 +12,5 @@ urlpatterns = [
     path('users/me/', UserFetchView.as_view(), name='user-fetch'),
     path('home/', HomeView.as_view(), name='home'),
     path("check-availability/", CheckAvailabilityView.as_view(), name="check-availability"),
-
+    path('edit-profile/', EditProfileView.as_view(), name='edit-profile'),
 ]
