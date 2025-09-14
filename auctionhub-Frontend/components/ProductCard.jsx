@@ -4,7 +4,7 @@ export default function ProductCard({ product }) {
     return (
         <div className="bg-white rounded-xl shadow hover:shadow-md transition p-4 flex flex-col" >
             {/* Product Image */}
-            <div div className="relative w-full h-48 mb-4" >
+            <div className="relative w-full h-48 mb-4" >
                 <img
                     src={product.image}
                     alt={product.title}
