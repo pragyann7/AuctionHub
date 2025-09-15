@@ -21,19 +21,27 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(
-        source='profile.phone_number', allow_blank=True, required=False
+         source='profile.phone_number', allow_blank=True, required=False
     )
     profile_picture = serializers.ImageField(
-        source='profile.profile_picture', allow_null=True, required=False
+         source='profile.profile_picture', allow_null=True, required=False
     )
+    profile_address = serializers.CharField(
+        source='profile.address', allow_blank=True, required=False
+    )
+    country = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    state = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    city = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    street = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     class Meta:
         model = User
         fields = [
             'id', 'username', 'first_name', 'last_name', 'email',
-            'phone_number', 'profile_picture','date_joined','last_login'
+            'phone_number', 'profile_picture', 'date_joined', 'last_login',
+            'profile_address', 'country', 'state', 'city', 'street'
         ]
-        read_only_fields = ['id', 'date_joined','last_login']
+        read_only_fields = ['id', 'date_joined', 'last_login']
 
     # Validators
     def validate_email(self, value):
@@ -69,14 +77,20 @@ class UserProfileSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.save()
 
-        profile_data = validated_data.pop('profile', None)
-        profile = instance.profile
-        if profile_data:
-            profile.phone_number = profile_data.get('phone_number', profile.phone_number)
-            if 'profile_picture' in profile_data:
-                profile.profile_picture = profile_data.get(
-                    'profile_picture', profile.profile_picture
-                )
-            profile.save()
+        profile, _ = Profile.objects.get_or_create(user=instance)
+        profile.phone_number = validated_data.get('phone_number', profile.phone_number)
 
+        if 'profile_picture' in validated_data:
+            profile.profile_picture = validated_data.get(
+                'profile_picture'
+            )
+
+        country = validated_data.get('country', "")
+        state = validated_data.get('state', "")
+        city = validated_data.get('city', "")
+        street = validated_data.get('street', "")
+        address_parts = [part for part in [ state, city, street, country] if part]
+        profile.address = ', '.join(address_parts)
+
+        profile.save()
         return instance
