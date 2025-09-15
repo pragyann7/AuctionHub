@@ -92,10 +92,9 @@ export const AuthProvider = ({children}) => {
 
         }
     };
-    const updateUserProfile = (updatedUser) => {
-        setUser(updatedUser);
+    const updateUserProfile = async () => {
+        await fetchUserData();
     }
-
     return (
         <AuthContext.Provider value={{
             user,
