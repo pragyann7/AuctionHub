@@ -113,6 +113,16 @@ function Navbar() {
                         >
                             Contact
                         </NavLink>
+                        <NavLink
+                            to="/delete"
+                            className={({ isActive }) =>
+                                isActive
+                                    ? "text-orange-500 font-medium"
+                                    : "text-gray-700 hover:text-gray-600 transition-colors hover:text-orange-300"
+                            }
+                        >
+                            Delete product
+                        </NavLink>
                     </div>
 
 
