@@ -11,7 +11,6 @@ function ImageUploadLabel() {
                 Upload Images
             </label>
 
-
             <div className="relative ml-auto md:ml-1">
                 <div
                     className="inline-block group"
@@ -32,8 +31,8 @@ function ImageUploadLabel() {
                         <p className="font-semibold mb-1">Image Guidelines:</p>
                         <ul className="list-disc list-inside">
                             <li>Format: JPG or PNG</li>
-                            <li>Max size: 5 MB</li>
-                            <li>Recommended: 800x800 px</li>
+                            <li>Max size: 300 KB</li>
+                            <li>Recommended: 1280x720 px</li>
                             <li>Single product per image</li>
                             <li>Neutral background preferred</li>
                         </ul>
