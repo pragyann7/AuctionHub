@@ -1,12 +1,32 @@
 import { useState, useEffect } from "react";
 import { Search, Filter, Grid, List, Eye, Heart, X } from "lucide-react";
-import products from "../Resources/products.json";
+// import products from "../Resources/products.json";
 import ProductCard from "./ProductCard";
 import ProductList from "./ProductList";
+import RealProductCard from "./RealProductCard";
+import axiosInstance from "../API/axiosInstance";
+
 
 export default function Browse() {
     const [viewMode, setViewMode] = useState("grid");
     const [showSidebar, setShowSidebar] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await axiosInstance.get("/AFauctions/");
+                setProducts(res.data);
+            } catch (err) {
+                console.error("Error fetching products:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     useEffect(() => {
         if (showSidebar) {
@@ -82,16 +102,22 @@ export default function Browse() {
                 </div>
 
 
-                {viewMode === "grid" ? (
+                {loading ? (
+                    <p className="text-center mt-10">Loading products…</p>
+                ) : products.length === 0 ? (
+                    <p className="text-center mt-10 text-gray-500">
+                        No products available.
+                    </p>
+                ) : viewMode === "grid" ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {products.map((a) => (
-                            <ProductCard key={a.id} product={a} />
+                        {products.map((product) => (
+                            <RealProductCard key={product.id} product={product} />
                         ))}
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {products.map((a) => (
-                            <ProductList key={a.id} product={a} />
+                        {products.map((product) => (
+                            <ProductList key={product.id} product={product} />
                         ))}
                     </div>
                 )}
