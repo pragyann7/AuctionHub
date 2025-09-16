@@ -1,5 +1,5 @@
 // src/components/UserProfile.jsx
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import {
     Star,
     Facebook,
@@ -11,18 +11,22 @@ import {
     Share2,
     MessageCircle,
     UserPlus,
-    ThumbsUp,
     Search,
     User,
+    Edit2,
 } from "lucide-react";
 import UserProduct from "./UserProducts";
 import UserAbout from "./UserAbout";
 import UserFeedback from "./UserFeedback";
 import CountUp from "react-countup";
 import {motion, AnimatePresence} from "framer-motion";
+import AuthContext from "../context/authContext";
+import {useNavigate} from "react-router-dom";
 
 export default function UserProfile() {
+    const {user, loading} = useContext(AuthContext);
     const [activeTab, setActiveTab] = useState("Products");
+    const navigate = useNavigate();
 
     const container = {
         hidden: {},
@@ -31,7 +35,12 @@ export default function UserProfile() {
 
     const item = {
         hidden: {opacity: 0, y: 15, scale: 0.97},
-        visible: {opacity: 1, y: 0, scale: 1, transition: {duration: 0.5, ease: "easeInOut"}},
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {duration: 0.5, ease: "easeInOut"},
+        },
     };
 
     const tabContentVariants = {
@@ -39,6 +48,14 @@ export default function UserProfile() {
         visible: {opacity: 1, y: 0, transition: {duration: 0.4}},
         exit: {opacity: 0, y: -10, transition: {duration: 0.3}},
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center text-gray-600">
+                Loading user profile...
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -52,16 +69,26 @@ export default function UserProfile() {
                         viewport={{once: true, amount: 0.3}}
                         variants={container}
                     >
+                        {/* Profile Picture */}
                         <motion.div
                             variants={item}
                             className="w-32 h-32 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-pink-300 to-pink-400 flex items-center justify-center text-white text-4xl font-bold shadow-lg flex-shrink-0 border-4 border-white"
                         >
                             <div
                                 className="w-28 h-28 sm:w-30 sm:h-30 rounded-full bg-orange-500 bg-opacity-50 flex items-center justify-center">
-                                <User size={80}/>
+                                {user?.profile_photo ? (
+                                    <img
+                                        src={user.profile_photo}
+                                        alt="Profile"
+                                        className="w-full h-full rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <User size={80}/>
+                                )}
                             </div>
                         </motion.div>
 
+                        {/* User Info */}
                         <motion.div variants={item} className="flex-grow">
                             <motion.div
                                 variants={container}
@@ -69,13 +96,16 @@ export default function UserProfile() {
                             >
                                 <motion.div variants={item}>
                                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 font-serif">
-                                        Kavreli Samdhi Suppliers
+                                        {user?.username || "Unnamed User"}
                                     </h1>
 
                                     <div className="flex items-center flex-wrap space-x-2 mb-3">
                                         <div className="flex items-center">
                                             {[1, 2, 3, 4].map((star) => (
-                                                <Star key={star} className="w-5 h-5 text-yellow-400 fill-current"/>
+                                                <Star
+                                                    key={star}
+                                                    className="w-5 h-5 text-yellow-400 fill-current"
+                                                />
                                             ))}
                                             <Star className="w-5 h-5 text-gray-300"/>
                                         </div>
@@ -83,11 +113,16 @@ export default function UserProfile() {
                       <CountUp end={4.5} decimals={1} duration={1.5}/>
                     </span>
                                         <span className="text-gray-500">/5</span>
-                                        <span className="text-gray-400 text-sm ml-2">(14 Ratings)</span>
+                                        <span className="text-gray-400 text-sm ml-2">
+                      (14 Ratings)
+                    </span>
                                     </div>
                                 </motion.div>
 
-                                <motion.div variants={item} className="flex space-x-3 flex-wrap">
+                                <motion.div
+                                    variants={item}
+                                    className="flex space-x-3 flex-wrap"
+                                >
                                     <div
                                         className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">
                                         <Facebook className="w-5 h-5 text-white"/>
@@ -107,34 +142,48 @@ export default function UserProfile() {
                                 </motion.div>
                             </motion.div>
 
+                            {/* Stats */}
                             <motion.div
                                 variants={container}
                                 className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"
                             >
                                 <motion.div variants={item}>
-                                    <div className="text-gray-500 font-medium text-sm mb-1">Location</div>
-                                    <div className="flex items-center space-x-2">
-                                        <MapPin className="w-4 h-4 text-red-500"/>
-                                        <span className="text-gray-800 font-medium">Tokyo, Nepal</span>
+                                    <div className="text-gray-500 font-medium text-sm mb-1">
+                                        Location
+                                    </div>
+                                    <div className="flex items-start space-x-2">
+                                        <MapPin className="w-4 h-4 text-red-500 mt-1"/>
+                                        <span className="text-gray-800 font-medium break-words max-w-xs sm:max-w-full">
+                                            {user?.profile_address || "Unknown"}
+                                        </span>
                                     </div>
                                 </motion.div>
 
                                 <motion.div variants={item}>
-                                    <div className="text-gray-500 font-medium text-sm mb-1">Joined</div>
-                                    <div className="text-gray-800 font-medium">7 February 2020</div>
+                                    <div className="text-gray-500 font-medium text-sm mb-1">
+                                        Joined
+                                    </div>
+                                    <div className="text-gray-800 font-medium">
+                                        {user?.date_joined
+                                            ? new Date(user.date_joined).toLocaleDateString("en-CA")
+                                            : "-"}
+                                    </div>
                                 </motion.div>
 
                                 <motion.div variants={item}>
-                                    <div className="text-gray-500 font-medium text-sm mb-1">Total Product</div>
+                                    <div className="text-gray-500 font-medium text-sm mb-1">
+                                        Total Product
+                                    </div>
                                     <div className="flex items-center space-x-2">
                                         <Package className="w-4 h-4 text-gray-600"/>
                                         <span className="text-gray-800 font-medium">
-                                        <CountUp end={9} duration={1.5}/>
-                                        </span>
+                      {user?.total_products || 0}
+                    </span>
                                     </div>
                                 </motion.div>
                             </motion.div>
 
+                            {/* Action Buttons */}
                             <motion.div variants={container} className="flex flex-wrap gap-2">
                                 <motion.button
                                     variants={item}
@@ -158,9 +207,10 @@ export default function UserProfile() {
                                 </motion.button>
                                 <motion.button
                                     variants={item}
+                                    onClick={() => navigate("/editprofile")}
                                     className="flex-1 min-w-[50px] bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm"
                                 >
-                                    <ThumbsUp className="w-4 h-4"/>
+                                    <Edit2 className="w-4 h-4"/>
                                 </motion.button>
                             </motion.div>
                         </motion.div>
@@ -168,6 +218,7 @@ export default function UserProfile() {
                 </div>
             </div>
 
+            {/* Tabs */}
             <div className="bg-white shadow-sm mt-[-20px] mx-4 sm:mx-6 rounded-xl">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
                     <div
@@ -214,6 +265,7 @@ export default function UserProfile() {
                 </div>
             </div>
 
+            {/* Tab Content */}
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
                 <AnimatePresence mode="wait">
                     {activeTab === "Products" && (

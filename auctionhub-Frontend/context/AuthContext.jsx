@@ -1,11 +1,11 @@
-import React, { useState, useEffect, createContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useState, useEffect, createContext} from "react";
+import {useNavigate} from "react-router-dom";
 import axiosInstance from "../API/axiosInstance";
 
 const AuthContext = createContext();
 export default AuthContext;
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,14 +35,17 @@ export const AuthProvider = ({ children }) => {
             // localStorage.clear();
             const refreshToken = localStorage.getItem("refresh");
             if (!refreshToken) {
-                setUser(null);
-                setIsAuthenticated(false);
-                localStorage.clear();
+                clearAuth();
             }
         } finally {
             setLoading(false);
         }
     };
+    const clearAuth = () => {
+        setUser(null);
+        setIsAuthenticated(false);
+        localStorage.clear();
+    }
 
     const login = async (credentials) => {
         try {
@@ -55,7 +58,6 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Login failed', error);
             alert('Login failed', error);
-            return
         }
     }
 
@@ -75,7 +77,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            await axiosInstance.post('logout/', { refresh });
+            await axiosInstance.post('logout/', {refresh});
             console.log('Logout Successful');
         } catch (error) {
             if (error.response) {
@@ -84,17 +86,28 @@ export const AuthProvider = ({ children }) => {
                 console.log(error.message);
             }
         } finally {
-            setUser(null);
-            setIsAuthenticated(false);
-            localStorage.clear();
+            clearAuth();
             navigate('/');
             setLogoutLoading(false);
 
         }
     };
-
+    const updateUserProfile = async () => {
+        await fetchUserData();
+    }
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout, loading, logoutLoading }}>
+        <AuthContext.Provider value={{
+            user,
+            setUser,
+            updateUserProfile,
+            isAuthenticated,
+            login,
+            logout,
+            loading,
+            logoutLoading,
+            fetchUserData,
+        }}
+        >
             {children}
         </AuthContext.Provider>
     )
