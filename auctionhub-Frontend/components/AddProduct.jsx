@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AiFillProduct } from "react-icons/ai";
+import axiosInstance from "../API/axiosInstance";
 import { ArrowRight, ImageUp, Eye, Package, CircleAlert, Ship, Truck } from "lucide-react";
 import ImageUploadLabel from "../ToolTips component/ImageUploadTT";
 import SouthAsiaData from "../Resources/southAsiaData.json";
@@ -42,7 +43,10 @@ const AddProduct = () => {
         hasWarranty: false,
     });
 
-    const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
+    const nextStep = (e) => {
+        e.preventDefault(); // stops accidental form submit
+        setStep(prev => Math.min(prev + 1, 4));
+    };
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
     const handleImageChange = (e) => {
@@ -85,18 +89,59 @@ const AddProduct = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        if (step < 4) return;
 
+        const formDataToSend = new FormData();
 
-        const payload = {
-            ...formData,
-            images: images.map((img) => img.file.name),
-        };
+        formDataToSend.append('name', formData.name);
+        formDataToSend.append('description', formData.description);
+        formDataToSend.append('category', formData.category);
+        formDataToSend.append('condition', formData.condition);
+        formDataToSend.append('starting_price', formData.startingPrice);
+        if (formData.buyNowPrice) formDataToSend.append('buy_now_price', formData.buyNowPrice);
+        if (formData.bidIncrement) formDataToSend.append('bid_increment', formData.bidIncrement);
+        formDataToSend.append(
+            'auction_start_datetime',
+            formData.auctionStartDateTime?.toISOString() || ''
+        );
+        formDataToSend.append('auction_duration', formData.auctionDuration);
+        formDataToSend.append('auto_relist', formData.autoRelist);
 
-        console.log("Form Submitted:", payload);
+        formDataToSend.append('shipping_options', formData.shippingOptions);
+        formDataToSend.append('shipping_cost', formData.shippingCost);
+        formDataToSend.append('shipping_country', formData.shippingCountry);
+        formDataToSend.append('shipping_district', formData.shippingDistrict);
+        formDataToSend.append('shipping_location', formData.shippingLocation);
+        formDataToSend.append('shipping_estimate', formData.shippingEstimte);
+        formDataToSend.append('shipping_handling', formData.shippingHandling);
+        formDataToSend.append('courier_option', formData.courierOption);
+        formDataToSend.append('pickup_point', formData.pickupPoint);
+        formDataToSend.append('return_policy', formData.returnPolicy);
+        formDataToSend.append('auction_terms', formData.auctionTerms);
+        formDataToSend.append('payment_terms', formData.paymentTerms);
+        formDataToSend.append('shipping_terms', formData.shippingTerms);
+        formDataToSend.append('warranty_terms', formData.warrantyTerms);
+        formDataToSend.append('has_warranty', formData.hasWarranty);
 
-        // TODO: Call API
+        if (images.length > 0) {
+            images.forEach((img) => {
+                formDataToSend.append('images', img.file); // or 'images[]'
+            });
+            // if you later switch to multiple images, append each with a different key
+        }
+
+        try {
+            const res = await axiosInstance.post('AFauctions/', formDataToSend, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            alert('Insertion Successful!');
+            console.log('Response:', res.data);
+        } catch (error) {
+            console.error('Error inserting product:', error.response?.data || error);
+            alert('Insertion Failed!');
+        }
     };
 
 
@@ -151,7 +196,7 @@ const AddProduct = () => {
 
 
             <div className="border-1 border-gray-500/10 p-6 rounded-[18px] flex justify-center">
-                <form onSubmit={handleSubmit}>
+                <form>
 
                     {step === 1 && (
                         <div className="space-y-4">
@@ -208,7 +253,7 @@ const AddProduct = () => {
                                     >
                                         <option value="">Select</option>
                                         <option value="new">New</option>
-                                        <option value="like-new">Like new</option>
+                                        <option value="likeNew">Like new</option>
                                         <option value="used">Used</option>
                                         <option value="refurbished">Refurbished</option>
                                     </select>
@@ -336,10 +381,12 @@ const AddProduct = () => {
                                         className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
                                     >
                                         <option value="">Select</option>
-                                        <option value="3day">3 day</option>
-                                        <option value="4day">4 day</option>
-                                        <option value="5day">5 day</option>
-                                        <option value="7day">7 day</option>
+                                        <option value="1">1 day</option>
+                                        <option value="2">2 day</option>
+                                        <option value="3">3 day</option>
+                                        <option value="4">4 day</option>
+                                        <option value="5">5 day</option>
+                                        <option value="7">7 day</option>
                                     </select>
                                 </div>
 
@@ -353,7 +400,7 @@ const AddProduct = () => {
                                         }
                                         showTimeSelect
                                         timeFormat="hh:mm aa"
-                                        timeIntervals={15}
+                                        timeIntervals={2}
                                         dateFormat="MMMM d, yyyy h:mm aa"
                                         className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
                                         placeholderText="Select Date & Time"
@@ -459,10 +506,10 @@ const AddProduct = () => {
                                             className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
                                         >
                                             <option value="">Select</option>
-                                            <option value="3day">3 day</option>
-                                            <option value="4day">4 day</option>
-                                            <option value="5day">5 day</option>
-                                            <option value="7day">7 day</option>
+                                            <option value="3">3 day</option>
+                                            <option value="4">4 day</option>
+                                            <option value="5">5 day</option>
+                                            <option value="7">7 day</option>
                                         </select>
 
                                     </div>
@@ -498,10 +545,10 @@ const AddProduct = () => {
                                             className="w-full md:w-48 border px-3 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
                                         >
                                             <option value="">Select</option>
-                                            <option value="3day">3 day</option>
-                                            <option value="4day">4 day</option>
-                                            <option value="5day">5 day</option>
-                                            <option value="7day">7 day</option>
+                                            <option value="3">3 day</option>
+                                            <option value="4">4 day</option>
+                                            <option value="5">5 day</option>
+                                            <option value="7">7 day</option>
                                         </select>
                                     </div>
 
@@ -640,6 +687,7 @@ const AddProduct = () => {
                         ) : (
                             <button
                                 type="submit"
+                                onClick={handleSubmit}
                                 className="ml-auto px-7 md:px-14 py-2 bg-green-500 cursor-pointer text-white rounded-2xl hover:bg-green-600 transition"
                             >
                                 Submit
