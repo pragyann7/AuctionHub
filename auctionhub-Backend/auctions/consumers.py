@@ -1,9 +1,6 @@
-# auctions/consumers.py
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from products.models import AuctionProduct
-from .models import Bid
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -63,6 +60,10 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_bid(self, user, product_id, amount):
         """Create a bid for the given product."""
+        # ✅ Import models lazily
+        from products.models import AuctionProduct
+        from .models import Bid
+
         product = AuctionProduct.objects.get(id=product_id)
 
         # Mark previous highest bid as not winning
