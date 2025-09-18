@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from datetime import timedelta
 
 
@@ -65,6 +66,19 @@ class AuctionProduct(models.Model):
         if first:
             return first.image.url
         return '/media/products/default.jpeg'
+    
+    @property
+    def status(self):
+        now = timezone.now()
+        if self.auction_start_datetime:
+            end_time = self.auction_start_datetime + timedelta(hours=self.auction_duration or 0)
+            if now < self.auction_start_datetime:
+                return "upcoming"
+            elif self.auction_start_datetime <= now <= end_time:
+                return "live"
+            else:
+                return "closed"
+        return "upcoming"
     
 
 class AuctionProductImage(models.Model):

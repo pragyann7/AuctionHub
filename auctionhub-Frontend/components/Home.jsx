@@ -1,10 +1,8 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import axiosInstance from "../API/axiosInstance";
 import AuthContext from '../context/AuthContext';
 import { Loader } from "./Loading";
-import HomeContent from "../notUsedComponent/HomeGuest";
-import ProductCard from "./ProductCard";
 import AuctionTabs from "./AuctionTabs";
-import products from "../Resources/products.json";
 import { ChevronsDown } from "lucide-react";
 import bgMov from "../src/assets/justicewillserve0001-0190.mp4";
 import bgPic from "../src/assets/Unknown-4.jpg";
@@ -12,6 +10,20 @@ import bgRight from "../src/assets/travis.jpg";
 
 function Home() {
     const { user, isAuthenticated, loading } = useContext(AuthContext);
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await axiosInstance.get("/AFauctions/");
+                setProducts(res.data);
+            } catch (err) {
+                console.error("Error fetching products:", err);
+            }
+        };
+
+        fetchProducts();
+    }, []);
 
     const stats = [
         { id: 1, name: 'Active auctions every 24 hours', value: '7,500+' },
