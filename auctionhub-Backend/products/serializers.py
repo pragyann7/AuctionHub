@@ -13,6 +13,7 @@ class AuctionProductSerializer(serializers.ModelSerializer):
     time_left = serializers.SerializerMethodField()
     auction_status = serializers.SerializerMethodField()
     auction_end_datetime = serializers.SerializerMethodField()
+    status = serializers.ReadOnlyField()
     
     class Meta:
         model = AuctionProduct

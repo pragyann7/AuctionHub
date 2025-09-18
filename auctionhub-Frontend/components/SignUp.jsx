@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../API/axiosInstance";
+import debounce from "lodash.debounce";
+
 
 export default function SignUp() {
 
@@ -9,20 +11,33 @@ export default function SignUp() {
     const navigate = useNavigate()
     const [errors, setErrors] = useState({});
 
-    const handleChange = async (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-
-        // Check availability for username/email
-        if (name === "username" || name === "email") {
+    // Debounced function
+    const checkAvailability = useCallback(
+        debounce(async (name, value) => {
             try {
-                const res = await axiosInstance.post("/check-availability/", { [name]: value });
+                await axiosInstance.post("/check-availability/", { [name]: value });
                 setErrors((prev) => ({ ...prev, [name]: "" }));
             } catch (err) {
-                setErrors((prev) => ({ ...prev, [name]: err.response?.data[name] }));
+                setErrors((prev) => ({
+                    ...prev,
+                    [name]: err.response?.data?.[name]
+                }));
             }
+        }, 1000),
+        []
+    );
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        if ((name === "username" || name === "email") && value.trim() !== "") {
+            checkAvailability(name, value); // only call if not empty
+        } else {
+            setErrors((prev) => ({ ...prev, [name]: "" })); // clear error for empty input
         }
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

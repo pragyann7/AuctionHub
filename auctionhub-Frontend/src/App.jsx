@@ -11,6 +11,7 @@ import DeleteProduct from '../components/DeleteProduct';
 import EditProfile from '../components/EditProfile';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Layout from '../Utils/Layout.jsx';
+import ProductDetail from '../components/ProductDetail.jsx';
 import './App.css';
 
 function App() {
@@ -27,6 +28,8 @@ function App() {
                 <Route path="/addproduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
                 <Route path="/contact" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
                 <Route path="/Browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
+                <Route path="/productdetail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
+                <Route path="/products/:id" element={<ProductDetail />} />
             </Routes>
         </Layout>
     );
