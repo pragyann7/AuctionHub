@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from products.models import AuctionProduct  # explicit import from products app
+from products.models import AuctionProduct
 
 
 class Bid(models.Model):
