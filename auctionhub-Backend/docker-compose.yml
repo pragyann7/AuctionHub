@@ -12,8 +12,32 @@ services:
       - redis
     env_file:
       - .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=auctionhub.settings
 
   redis:
     image: redis:7
     ports:
       - "6379:6379"
+
+#  celery:
+#    build: .
+#    command: celery -A auctionhub worker -l info
+#    volumes:
+#      - .:/app
+#    depends_on:
+#      - web
+#      - redis
+#    env_file:
+#      - .env
+#
+#  celery-beat:
+#    build: .
+#    command: celery -A auctionhub beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+#    volumes:
+#      - .:/app
+#    depends_on:
+#      - web
+#      - redis
+#    env_file:
+#      - .env
