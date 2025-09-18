@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import AuthContext from '../context/AuthContext';
 import { Loader } from "./Loading";
-import HomeContent from "../notUsedComponent/HomeGuest";
+import HomeContent from "../notUsedComponent/HomeContent";
 import ProductCard from "./ProductCard";
 import AuctionTabs from "./AuctionTabs";
 import products from "../Resources/products.json";
