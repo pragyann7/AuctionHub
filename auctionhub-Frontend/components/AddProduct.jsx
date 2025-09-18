@@ -24,7 +24,7 @@ const AddProduct = () => {
         buyNowPrice: "",
         bidIncrement: "",
         auctionDuration: "",
-        auctionStartDateTime: "",
+        auctionStartDateTime: null,
         autoRelist: false,
         shippingOptions: "",
         shippingCost: "",

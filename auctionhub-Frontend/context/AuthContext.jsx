@@ -1,11 +1,11 @@
-import React, {useState, useEffect, createContext} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useState, useEffect, createContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../API/axiosInstance";
 
 const AuthContext = createContext();
 export default AuthContext;
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -52,7 +52,7 @@ export const AuthProvider = ({children}) => {
             const res = await axiosInstance.post('/login/', credentials);
             localStorage.setItem('access', res.data.access);
             localStorage.setItem('refresh', res.data.refresh);
-            alert('Login Successful!');
+            // alert('Login Successful!');
             await fetchUserData();
             navigate('/');
         } catch (error) {
@@ -77,7 +77,7 @@ export const AuthProvider = ({children}) => {
         }
 
         try {
-            await axiosInstance.post('logout/', {refresh});
+            await axiosInstance.post('logout/', { refresh });
             console.log('Logout Successful');
         } catch (error) {
             if (error.response) {

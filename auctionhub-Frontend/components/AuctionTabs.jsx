@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ProductCard from "./ProductCard";
+import RealProductCard from "../components/RealProductCard";
 
 export default function AuctionTabs({ auctions }) {
     const [tab, setTab] = useState("live");
@@ -8,12 +8,12 @@ export default function AuctionTabs({ auctions }) {
         { key: "live", label: "Live" },
         { key: "upcoming", label: "Upcoming" },
         { key: "closed", label: "Closed" },
+        { key: "featured", label: "Featured" }, // NEW TAB ADDED
     ];
 
     return (
         <div>
             {/* Tabs */}
-            {/* <label className=" text-7xl font-bold mb-2">Auction</label> */}
             <div className="flex justify-center gap-6 mb-6">
                 {tabs.map((t) => (
                     <button
@@ -34,7 +34,7 @@ export default function AuctionTabs({ auctions }) {
                 {auctions
                     .filter((a) => a.status === tab)
                     .map((a) => (
-                        <ProductCard key={a.id} product={a} />
+                        <RealProductCard key={a.id} product={a} />
                     ))}
             </div>
         </div>
