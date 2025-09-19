@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Search, Filter, Grid, List, Eye, Heart, X } from "lucide-react";
 // import products from "../Resources/products.json";
-import ProductCard from "./ProductCard";
+import ProductCard from "../notUsedComponent/ProductCard";
 import ProductList from "./ProductList";
 import RealProductCard from "./RealProductCard";
 import axiosInstance from "../API/axiosInstance";
