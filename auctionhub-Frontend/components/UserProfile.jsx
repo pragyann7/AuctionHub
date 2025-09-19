@@ -1,5 +1,5 @@
 // src/components/UserProfile.jsx
-import React, {useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import {
     Star,
     Facebook,
@@ -19,34 +19,34 @@ import UserProduct from "./UserProducts";
 import UserAbout from "./UserAbout";
 import UserFeedback from "./UserFeedback";
 import CountUp from "react-countup";
-import {motion, AnimatePresence} from "framer-motion";
-import AuthContext from "../context/authContext";
-import {useNavigate} from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import AuthContext from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile() {
-    const {user, loading} = useContext(AuthContext);
+    const { user, loading } = useContext(AuthContext);
     const [activeTab, setActiveTab] = useState("Products");
     const navigate = useNavigate();
 
     const container = {
         hidden: {},
-        visible: {transition: {staggerChildren: 0.15}},
+        visible: { transition: { staggerChildren: 0.15 } },
     };
 
     const item = {
-        hidden: {opacity: 0, y: 15, scale: 0.97},
+        hidden: { opacity: 0, y: 15, scale: 0.97 },
         visible: {
             opacity: 1,
             y: 0,
             scale: 1,
-            transition: {duration: 0.5, ease: "easeInOut"},
+            transition: { duration: 0.5, ease: "easeInOut" },
         },
     };
 
     const tabContentVariants = {
-        hidden: {opacity: 0, y: 10},
-        visible: {opacity: 1, y: 0, transition: {duration: 0.4}},
-        exit: {opacity: 0, y: -10, transition: {duration: 0.3}},
+        hidden: { opacity: 0, y: 10 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+        exit: { opacity: 0, y: -10, transition: { duration: 0.3 } },
     };
 
     if (loading) {
@@ -66,7 +66,7 @@ export default function UserProfile() {
                         className="flex flex-col sm:flex-row items-start sm:space-x-6 space-y-4 sm:space-y-0"
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{once: true, amount: 0.3}}
+                        viewport={{ once: true, amount: 0.3 }}
                         variants={container}
                     >
                         {/* Profile Picture */}
@@ -83,7 +83,7 @@ export default function UserProfile() {
                                         className="w-full h-full rounded-full object-cover"
                                     />
                                 ) : (
-                                    <User size={80}/>
+                                    <User size={80} />
                                 )}
                             </div>
                         </motion.div>
@@ -107,15 +107,15 @@ export default function UserProfile() {
                                                     className="w-5 h-5 text-yellow-400 fill-current"
                                                 />
                                             ))}
-                                            <Star className="w-5 h-5 text-gray-300"/>
+                                            <Star className="w-5 h-5 text-gray-300" />
                                         </div>
                                         <span className="text-lg sm:text-xl font-semibold text-gray-800">
-                      <CountUp end={4.5} decimals={1} duration={1.5}/>
-                    </span>
+                                            <CountUp end={4.5} decimals={1} duration={1.5} />
+                                        </span>
                                         <span className="text-gray-500">/5</span>
                                         <span className="text-gray-400 text-sm ml-2">
-                      (14 Ratings)
-                    </span>
+                                            (14 Ratings)
+                                        </span>
                                     </div>
                                 </motion.div>
 
@@ -125,19 +125,19 @@ export default function UserProfile() {
                                 >
                                     <div
                                         className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-700 transition-colors">
-                                        <Facebook className="w-5 h-5 text-white"/>
+                                        <Facebook className="w-5 h-5 text-white" />
                                     </div>
                                     <div
                                         className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity">
-                                        <Instagram className="w-5 h-5 text-white"/>
+                                        <Instagram className="w-5 h-5 text-white" />
                                     </div>
                                     <div
                                         className="w-10 h-10 bg-black rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
-                                        <Twitter className="w-5 h-5 text-white"/>
+                                        <Twitter className="w-5 h-5 text-white" />
                                     </div>
                                     <div
                                         className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
-                                        <Mail className="w-5 h-5 text-white"/>
+                                        <Mail className="w-5 h-5 text-white" />
                                     </div>
                                 </motion.div>
                             </motion.div>
@@ -152,7 +152,7 @@ export default function UserProfile() {
                                         Location
                                     </div>
                                     <div className="flex items-start space-x-2">
-                                        <MapPin className="w-4 h-4 text-red-500 mt-1"/>
+                                        <MapPin className="w-4 h-4 text-red-500 mt-1" />
                                         <span className="text-gray-800 font-medium break-words max-w-xs sm:max-w-full">
                                             {user?.profile_address || "Unknown"}
                                         </span>
@@ -175,10 +175,10 @@ export default function UserProfile() {
                                         Total Product
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                        <Package className="w-4 h-4 text-gray-600"/>
+                                        <Package className="w-4 h-4 text-gray-600" />
                                         <span className="text-gray-800 font-medium">
-                      {user?.total_products || 0}
-                    </span>
+                                            {user?.total_products || 0}
+                                        </span>
                                     </div>
                                 </motion.div>
                             </motion.div>
@@ -189,28 +189,28 @@ export default function UserProfile() {
                                     variants={item}
                                     className="flex-1 min-w-[120px] bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 shadow-sm"
                                 >
-                                    <UserPlus className="w-4 h-4"/>
+                                    <UserPlus className="w-4 h-4" />
                                     <span>Follow</span>
                                 </motion.button>
                                 <motion.button
                                     variants={item}
                                     className="flex-1 min-w-[120px] bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 shadow-sm"
                                 >
-                                    <MessageCircle className="w-4 h-4"/>
+                                    <MessageCircle className="w-4 h-4" />
                                     <span>Contact</span>
                                 </motion.button>
                                 <motion.button
                                     variants={item}
                                     className="flex-1 min-w-[50px] bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm"
                                 >
-                                    <Share2 className="w-4 h-4"/>
+                                    <Share2 className="w-4 h-4" />
                                 </motion.button>
                                 <motion.button
                                     variants={item}
                                     onClick={() => navigate("/editprofile")}
                                     className="flex-1 min-w-[50px] bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm"
                                 >
-                                    <Edit2 className="w-4 h-4"/>
+                                    <Edit2 className="w-4 h-4" />
                                 </motion.button>
                             </motion.div>
                         </motion.div>
@@ -224,20 +224,19 @@ export default function UserProfile() {
                     <div
                         className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
                         <motion.div
-                            initial={{opacity: 0}}
-                            whileInView={{opacity: 1}}
-                            viewport={{once: true}}
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
                             className="flex flex-wrap justify-start gap-2"
                         >
                             {["Products", "About", "Feedback"].map((tab) => (
                                 <div
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`pb-3 px-4 sm:px-6 border-b-2 font-medium text-sm text-center cursor-pointer w-24 sm:w-auto ${
-                                        activeTab === tab
-                                            ? "border-indigo-600 text-indigo-600"
-                                            : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                                    }`}
+                                    className={`pb-3 px-4 sm:px-6 border-b-2 font-medium text-sm text-center cursor-pointer w-24 sm:w-auto ${activeTab === tab
+                                        ? "border-indigo-600 text-indigo-600"
+                                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                        }`}
                                 >
                                     {tab}
                                 </div>
@@ -246,13 +245,13 @@ export default function UserProfile() {
 
                         {activeTab === "Products" && (
                             <motion.div
-                                initial={{opacity: 0, y: 10}}
-                                animate={{opacity: 1, y: 0}}
-                                transition={{duration: 0.5}}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
                                 className="relative w-full sm:w-64"
                             >
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Search className="h-5 w-5 text-gray-400"/>
+                                    <Search className="h-5 w-5 text-gray-400" />
                                 </div>
                                 <input
                                     type="text"
@@ -276,7 +275,7 @@ export default function UserProfile() {
                             animate="visible"
                             exit="exit"
                         >
-                            <UserProduct/>
+                            <UserProduct />
                         </motion.div>
                     )}
                     {activeTab === "About" && (
@@ -287,7 +286,7 @@ export default function UserProfile() {
                             animate="visible"
                             exit="exit"
                         >
-                            <UserAbout/>
+                            <UserAbout />
                         </motion.div>
                     )}
                     {activeTab === "Feedback" && (
@@ -298,7 +297,7 @@ export default function UserProfile() {
                             animate="visible"
                             exit="exit"
                         >
-                            <UserFeedback/>
+                            <UserFeedback />
                         </motion.div>
                     )}
                 </AnimatePresence>

@@ -3,7 +3,7 @@ import React from "react";
 import { Eye, Heart, Info, Clock, Filter } from "lucide-react";
 import CountUp from "react-countup";
 import { motion } from "framer-motion";
-import ProductCard from "./ProductCard";
+import ProductCard from "../notUsedComponent/ProductCard";
 
 const products = [
   {

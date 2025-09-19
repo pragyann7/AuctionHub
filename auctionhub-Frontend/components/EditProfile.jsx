@@ -1,12 +1,12 @@
-import {PhotoIcon, UserCircleIcon} from "@heroicons/react/24/solid";
-import {ChevronDownIcon} from "@heroicons/react/24/solid";
-import {useState, useEffect, useContext} from "react";
+import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useState, useEffect, useContext } from "react";
 import axiosInstance from "../API/axiosInstance";
-import {useNavigate} from "react-router-dom";
-import AuthContext from "../context/authContext";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
 
 export default function EditProfile() {
-    const {user, updateUserProfile} = useContext(AuthContext);
+    const { user, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -74,14 +74,14 @@ export default function EditProfile() {
     }, [user]);
 
     const handleChange = (e) => {
-        const {name, value, type, checked} = e.target;
+        const { name, value, type, checked } = e.target;
         if (type === "checkbox") {
             setFormData((prev) => ({
                 ...prev,
-                notifications: {...prev.notifications, [name]: checked},
+                notifications: { ...prev.notifications, [name]: checked },
             }));
         } else {
-            setFormData((prev) => ({...prev, [name]: value}));
+            setFormData((prev) => ({ ...prev, [name]: value }));
         }
     };
 
@@ -103,13 +103,13 @@ export default function EditProfile() {
 
         try {
             const res = await axiosInstance.put("edit-profile/", data, {
-                headers: {"Content-Type": "multipart/form-data"},
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
             // Update context with the new user data
             updateUserProfile(res.data);
 
-            setFormData(prev => ({...prev, ...res.data}));
+            setFormData(prev => ({ ...prev, ...res.data }));
 
 
             navigate("/userprofile");
@@ -183,7 +183,7 @@ export default function EditProfile() {
                             Photo
                         </label>
                         <div className="mt-2 flex items-center gap-3">
-                            <UserCircleIcon className="h-12 w-12 text-gray-300"/>
+                            <UserCircleIcon className="h-12 w-12 text-gray-300" />
                             <label
                                 className="px-3 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-50 text-sm font-medium cursor-pointer">
                                 Change
@@ -205,7 +205,7 @@ export default function EditProfile() {
                         <div
                             className="mt-2 flex justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-10">
                             <div className="text-center">
-                                <PhotoIcon className="mx-auto h-12 w-12 text-gray-300"/>
+                                <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" />
                                 <div className="mt-4 flex text-sm text-gray-600 justify-center gap-2">
                                     <label
                                         className="relative cursor-pointer rounded-md bg-white text-indigo-600 font-semibold hover:text-indigo-500">
@@ -331,7 +331,7 @@ export default function EditProfile() {
                                 <option>Mexico</option>
                             </select>
                             <ChevronDownIcon
-                                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500"/>
+                                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
                         </div>
                     </div>
 

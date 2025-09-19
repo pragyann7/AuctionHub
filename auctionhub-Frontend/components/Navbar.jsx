@@ -123,16 +123,6 @@ function Navbar() {
                         >
                             Delete product
                         </NavLink>
-                        <NavLink
-                            to="/productdetail"
-                            className={({ isActive }) =>
-                                isActive
-                                    ? "text-orange-500 font-medium"
-                                    : "text-gray-700 hover:text-gray-600 transition-colors hover:text-orange-300"
-                            }
-                        >
-                            Product Detail
-                        </NavLink>
                     </div>
 
 
@@ -279,16 +269,6 @@ function Navbar() {
                                 onClick={() => setMenuOpen(false)}>Sell</Link>
                             <Link to="/contact" className="block w-full text-center py-2 hover:bg-gray-100"
                                 onClick={() => setMenuOpen(false)}>Contact</Link>
-                            <NavLink
-                                to="/productdetail"
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "text-orange-500 font-medium"
-                                        : "text-gray-700 hover:text-gray-600 transition-colors hover:text-orange-300"
-                                }
-                            >
-                                Product Detail
-                            </NavLink>
 
 
                             <a href="#notifications"

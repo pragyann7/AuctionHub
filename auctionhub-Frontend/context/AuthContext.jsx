@@ -29,10 +29,6 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
         } catch (error) {
             console.log(error);
-            // logout();
-            // setUser(null);
-            // setIsAuthenticated(false);
-            // localStorage.clear();
             const refreshToken = localStorage.getItem("refresh");
             if (!refreshToken) {
                 clearAuth();
