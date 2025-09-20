@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
-
+from django.conf import settings
 
 class AuctionProduct(models.Model):
 
@@ -10,6 +10,10 @@ class AuctionProduct(models.Model):
     ('used', 'Used'),
     ('refurbished', 'Refurbished'),
 ]
+    
+    seller = models.ForeignKey(
+        settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='products', null=True, blank=True
+    )
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -43,6 +47,7 @@ class AuctionProduct(models.Model):
     shipping_terms = models.TextField(blank=True, null=True)
     warranty_terms = models.TextField(blank=True, null=True)
     has_warranty = models.BooleanField(default=False)
+    view_count = models.PositiveIntegerField(default=0)
 
 
     created_at = models.DateTimeField(auto_now_add=True)

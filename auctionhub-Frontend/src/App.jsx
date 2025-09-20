@@ -13,6 +13,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Layout from '../Utils/Layout.jsx';
 import ProductDetail from '../components/ProductDetail.jsx';
 import './App.css';
+import BecomeSellerForm from '../components/BecomeSeller.jsx';
 
 function App() {
     return (
@@ -28,8 +29,9 @@ function App() {
                 <Route path="/addproduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
                 <Route path="/contact" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
                 <Route path="/Browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
-                <Route path="/productdetail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                 <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/become-seller" element={<BecomeSellerForm />} />
+                <Route path="/user/:id" element={<UserProfile />} />
             </Routes>
         </Layout>
     );

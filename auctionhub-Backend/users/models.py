@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
@@ -19,7 +19,7 @@ class Profile(models.Model):
 
 
 class SellerProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller_profile')
     shop_name = models.CharField(max_length=100)
     shop_description = models.TextField(blank=True, null=True)
     business_address = models.TextField()
@@ -30,10 +30,10 @@ class SellerProfile(models.Model):
     def __str__(self):
         return f"{self.shop_name} ({self.user.username})"
 
-@receiver(post_save,sender=User)
+@receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     else:
-        if hasattr(instance,'profile'):
-            instance.profile.save()
+        Profile.objects.get_or_create(user=instance)
+        instance.profile.save()

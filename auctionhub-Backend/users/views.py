@@ -4,9 +4,13 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from .models import Profile
+from .models import Profile, SellerProfile
 from .serializers import RegisterSerializer, UserProfileSerializer
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view, permission_classes
+from django.db.models import Count
+from django.contrib.auth import get_user_model
+
 
 
 class RegisterView(APIView):
@@ -18,13 +22,6 @@ class RegisterView(APIView):
             serializer.save()
             return Response({'message': 'User registered successfully!'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProtectedView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        return Response({"message": f"Hello, {request.user.username}! Welcome"})
 
 
 class LogoutView(APIView):
@@ -39,7 +36,7 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
         except TokenError:
-            pass  # token already invalid/blacklisted
+            pass
 
         return Response({"message": "Logout successful"}, status=status.HTTP_200_OK)
     
@@ -52,12 +49,20 @@ class UserFetchView(APIView):
         serializer = UserProfileSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-class HomeView(APIView):
-    permission_classes = [IsAuthenticated]
+User = get_user_model()
 
-    def get(self, request):
-        return Response({"message": f"Welcome {request.user.username}!",
-                         "username": request.user.username})
+class PublicUserDetailAPIView(generics.RetrieveAPIView):
+    """
+    Fetch any user's profile by ID. No authentication required if you want it public.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer  # same serializer you use for your own profile
+
+    def get_queryset(self):
+        return User.objects.annotate(
+            total_products=Count('products')  # 'products' = related_name on AuctionProduct
+        )
+
     
 class CheckAvailabilityView(APIView):
     permission_classes = [AllowAny]
@@ -85,3 +90,29 @@ class EditProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+    
+
+class BecomeSellerView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        profile = request.user.profile
+        shop_name = request.data.get('shop_name')
+        bank_account = request.data.get('bank_account')
+        business_address = request.data.get('business_address')
+        if not shop_name or not bank_account or not business_address:
+            return Response({'error': 'Missing required info'}, status=400)
+
+        # Create or update SellerProfile
+        SellerProfile.objects.update_or_create(
+            user=request.user,
+            defaults={
+                'shop_name': shop_name,
+                'bank_account': bank_account,
+                'business_address': business_address,
+                # etc.
+            }
+        )
+        profile.is_seller = True
+        profile.save()
+        return Response({'message': 'Seller account created!'})

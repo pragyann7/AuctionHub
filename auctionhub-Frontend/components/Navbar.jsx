@@ -2,10 +2,11 @@ import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
 import { useNavigate, Navigate, Link, NavLink } from "react-router-dom";
 import { Loader } from './Loading';
-import { Bell, User, ChevronDown, BrushCleaning, Ellipsis } from 'lucide-react';
+import { Bell, User, ChevronDown, BrushCleaning, Ellipsis, MessageSquare, MessageSquareQuote } from 'lucide-react';
+import axiosInstance from '../API/axiosInstance';
 
 function Navbar() {
-    const { logout, isAuthenticated, logoutLoading } = useContext(AuthContext);
+    const { logout, isAuthenticated, logoutLoading, user } = useContext(AuthContext);
     const [menuOpen, setMenuOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [notification, setNotification] = useState(false);
@@ -45,6 +46,10 @@ function Navbar() {
     const handleProfile = () => {
         setDropdownOpen(false);
         navigate("/userprofile");
+    };
+
+    const handleBecomeSeller = () => {
+        navigate("/become-seller");
     };
 
     if (logoutLoading) {
@@ -92,7 +97,7 @@ function Navbar() {
                             Browse
                         </NavLink>
 
-                        <NavLink
+                        {user?.is_seller && (<NavLink
                             to="/addproduct"
                             className={({ isActive }) =>
                                 isActive
@@ -101,7 +106,7 @@ function Navbar() {
                             }
                         >
                             Sell
-                        </NavLink>
+                        </NavLink>)}
 
                         <NavLink
                             to="/contact"
@@ -135,7 +140,7 @@ function Navbar() {
                                     setDropdownOpen(false);
                                 }}
                             >
-                                <Bell className="w-6 h-6 text-gray-700 hover:text-gray-900" />
+                                <Bell className="w-6 h-6 text-gray-700 hover:text-orange-400" />
 
                                 <span className="absolute -top-1 -right-1 h-2.5 w-2.5 bg-red-500 rounded-full"></span>
                             </button>
@@ -203,7 +208,7 @@ function Navbar() {
                                 </div>
                             )}
                         </div>
-
+                        <MessageSquareQuote className='cursor-pointer text-gray-700 hover:text-orange-400' />
                         <div className="relative">
                             <button
                                 className="flex items-center space-x-1 cursor-pointer focus:outline-none"
@@ -214,37 +219,48 @@ function Navbar() {
                             >
                                 <User
                                     className="w-7 h-7 text-gray-700 hover:text-gray-900 rounded-full border p-1 bg-gray-50" />
+                                <label className='font-normal cursor-pointer'>{user.username.charAt(0).toUpperCase() + user.username.slice(1)}</label>
                                 <ChevronDown className="w-4 h-4 text-gray-500" />
                             </button>
 
                             {dropdownOpen && (
-                                <div
-                                    className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
-                                    <a
-                                        href="#profile"
-                                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-                                        onClick={handleProfile}
+                                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+                                    <button
+                                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                                        onClick={() => {
+                                            handleProfile();
+                                            setDropdownOpen(false);
+                                        }}
                                     >
                                         Profile
-                                    </a>
-                                    <a
-                                        href="#become-seller"
-                                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-                                        onClick={() => setDropdownOpen(false)}
-                                    >
-                                        Become Seller
-                                    </a>
+                                    </button>
+
+                                    {!user?.is_seller && (
+                                        <button
+                                            className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                                            onClick={() => {
+                                                setDropdownOpen(false);
+                                                handleBecomeSeller();
+                                            }}
+                                        >
+                                            Become Seller
+                                        </button>
+                                    )}
+
+                                    <div className="border-t border-gray-200 my-1"></div>
+
                                     <button
+                                        className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
                                         onClick={() => {
                                             handleLogout();
                                             setDropdownOpen(false);
                                         }}
-                                        className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
                                     >
                                         Log Out
                                     </button>
                                 </div>
                             )}
+
                         </div>
                     </div>
 

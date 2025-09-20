@@ -286,9 +286,10 @@ export default function EditProfile() {
                             type="email"
                             name="email"
                             id="email"
+                            disabled
                             value={formData.email}
                             onChange={handleChange}
-                            className="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-600"
+                            className="mt-2 cursor-not-allowed block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 shadow-sm focus:ring-2 focus:ring-indigo-600"
                         />
                     </div>
 

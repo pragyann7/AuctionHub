@@ -8,6 +8,7 @@ export default AuthContext;
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     const [logoutLoading, setLogoutLoading] = useState(false);
@@ -27,6 +28,8 @@ export const AuthProvider = ({ children }) => {
             const res = await axiosInstance.get('/users/me/');
             setUser(res.data);
             setIsAuthenticated(true);
+            setCurrentUser(res.data);
+            // console.log(res.data);
         } catch (error) {
             console.log(error);
             const refreshToken = localStorage.getItem("refresh");
@@ -96,6 +99,7 @@ export const AuthProvider = ({ children }) => {
             user,
             setUser,
             updateUserProfile,
+            currentUser,
             isAuthenticated,
             login,
             logout,

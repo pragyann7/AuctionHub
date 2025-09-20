@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Heart, Eye, AlertTriangle, CircleChevronRight, ChevronRight, MessageCircle, MessageSquare, MessageSquareText, AlertCircle, ShieldCheck } from "lucide-react";
 import ProductImagesSlider from "./ProductImageSlider";
 import axiosInstance from "../API/axiosInstance";
+import CountUp from 'react-countup';
 
 function ProductDetail() {
     // const product = {
@@ -67,7 +68,8 @@ function ProductDetail() {
                 <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div className="absolute top-1 lg:top-5 lg:left-5 z-10 bg-red-400 px-4 rounded-2xl flex items-center text-white text-sm space-x-1">
                         <Eye className="w-4 h-4" />
-                        <span>9999views</span>
+                        <CountUp end={product.view_count} duration={5.5} separator="," />
+                        <span>view</span>
                     </div>
                     <ProductImagesSlider
                         images={product.images?.map(img => img.image)}
@@ -79,16 +81,29 @@ function ProductDetail() {
                         <h1 className="text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
                         <div className="cursor-pointer bg-white border-b border-gray-300/60 rounded-xl  p-6 flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 bg-blue-300 text-white rounded-full flex items-center justify-center">
-                                    P
+                                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                                    {product.seller_profile_photo ? (
+                                        <img
+                                            src={product.seller_profile_photo}
+                                            alt={product.seller_username}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-blue-300 flex items-center justify-center text-white font-bold">
+                                            {product.seller_username?.[0]?.toUpperCase() || 'U'}
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-gray-900">Hero</p>
-                                    {/* <p className="text-gray-500 text-sm">
-                                        {product.seller.rating} ⭐ ({product.seller.reviews} reviews)
-                                    </p> */}
+                                    <p className="font-semibold text-gray-900">
+                                        {product.seller_username
+                                            ? product.seller_username.charAt(0).toUpperCase() + product.seller_username.slice(1)
+                                            : 'User'}
+                                    </p>
+
                                 </div>
                             </div>
+
 
                             <div className="flex items-center space-x-3">
                                 <MessageSquareText className="text-gray-600 hover:text-blue-500 cursor-pointer" />
