@@ -4,41 +4,13 @@ import { Heart, Eye, AlertTriangle, CircleChevronRight, ChevronRight, MessageCir
 import ProductImagesSlider from "./ProductImageSlider";
 import axiosInstance from "../API/axiosInstance";
 import CountUp from 'react-countup';
+import { useNavigate } from "react-router-dom";
 
 function ProductDetail() {
-    // const product = {
-    //     name: "GTA VI Exclusive & Limited Edition",
-    //     images: [
-    //         "https://picsum.photos/400/300?random=1",
-    //         "https://picsum.photos/400/300?random=2",
-    //         "https://picsum.photos/400/300?random=3",
-    //         "https://picsum.photos/400/300?random=4",
-    //         "https://picsum.photos/400/300?random=1",
-    //         "https://picsum.photos/400/300?random=2",
-    //         "https://picsum.photos/400/300?random=3",
-    //         "https://picsum.photos/400/300?random=4",
-    //     ],
-    //     description:
-    //         "Brand new, sealed in original packaging. Limited edition collector's item.",
-    //     category: "Gaming",
-    //     originalPrice: 1700,
-    //     condition: "Good",
-    //     delivery: "Yes",
-    //     brand: "KPS Brand",
-    //     currentBid: 1900,
-    //     buyItNow: 2200,
-    //     endTime: "2d 4h 30m",
-    //     views: 999000,
-    //     seller: {
-    //         name: "KPS suppliers",
-    //         rating: 4.4,
-    //         reviews: 43,
-    //         contact: "9812345678",
-    //     },
-    // };
 
     const [product, setProduct] = useState(null);
     const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchProduct() {
@@ -80,7 +52,7 @@ function ProductDetail() {
                     <div className="lg:col-span-5 space-y-6 bg-white p-3 rounded-2xl">
                         <h1 className="text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
                         <div className="cursor-pointer bg-white border-b border-gray-300/60 rounded-xl  p-6 flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-4 cursor-pointer">
                                 <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
                                     {product.seller_profile_photo ? (
                                         <img
@@ -95,7 +67,7 @@ function ProductDetail() {
                                     )}
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-gray-900">
+                                    <p className="font-semibold text-gray-900 hover:underline">
                                         {product.seller_username
                                             ? product.seller_username.charAt(0).toUpperCase() + product.seller_username.slice(1)
                                             : 'User'}
@@ -108,7 +80,8 @@ function ProductDetail() {
                             <div className="flex items-center space-x-3">
                                 <MessageSquareText className="text-gray-600 hover:text-blue-500 cursor-pointer" />
                                 <div className="hover:bg-gray-400/30 w-10 h-10 flex items-center justify-center rounded-3xl">
-                                    <ChevronRight className="hidden lg:flex cursor-pointer" />
+                                    <ChevronRight className="hidden lg:flex cursor-pointer"
+                                        onClick={() => navigate(`/user/${product.seller_id}`)} />
                                 </div>
                             </div>
                         </div>
