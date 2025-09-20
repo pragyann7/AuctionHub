@@ -1,5 +1,5 @@
-// src/components/UserProfile.jsx
 import React, { useState, useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Star, Facebook, Instagram, Twitter, Mail, MapPin, Package, Share2, MessageCircle, UserPlus, Search, User, Edit2, Heart, X, } from "lucide-react";
 import RealProductCard from "./RealProductCard";
 import UserAbout from "./UserAbout";
@@ -10,22 +10,45 @@ import axiosInstance from "../API/axiosInstance";
 
 export default function UserProfile() {
     const { user, loading, currentUser } = useContext(AuthContext);
+    const { id } = useParams();
     const [activeTab, setActiveTab] = useState(user?.is_seller ? "Products" : "About");
+    const [profileUser, setProfileUser] = useState(null);
     const [products, setProducts] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!user?.is_seller) return;
-        const fetchProducts = async () => {
-            try {
-                const res = await axiosInstance.get(`/AFauctions/?seller_id=${user.id}`);
-                setProducts(res.data);
-            } catch (err) {
-                console.error(err);
+        const fetchProfile = async () => {
+            if (!id || id === currentUser?.id) {
+                // Own profile
+                setProfileUser(currentUser);
+                if (currentUser?.is_seller) {
+                    const res = await axiosInstance.get(`/AFauctions/?seller_id=${currentUser.id}`);
+                    setProducts(res.data);
+                }
+            } else {
+                // Other user's profile
+                try {
+                    const resUser = await axiosInstance.get(`/users/${id}/`);
+                    setProfileUser(resUser.data);
+
+                    if (resUser.data?.is_seller) {
+                        const resProducts = await axiosInstance.get(`/AFauctions/?seller_id=${resUser.data.id}`);
+                        setProducts(resProducts.data);
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
             }
         };
-        fetchProducts();
-    }, [user?.id, user?.is_seller]);
+
+        fetchProfile();
+    }, [id, currentUser]);
+
+    useEffect(() => {
+        if (profileUser) {
+            setActiveTab(profileUser.is_seller ? "Products" : "About");
+        }
+    }, [profileUser]);
 
     if (loading) {
         return (
@@ -46,9 +69,9 @@ export default function UserProfile() {
                             <div
                                 className="absolute inset-0 rounded-full flex items-center justify-center border-4 border-white shadow-lg bg-gradient-to-br from-pink-300 to-pink-400 text-white font-bold overflow-hidden"
                             >
-                                {user?.profile_photo ? (
+                                {profileUser?.profile_photo ? (
                                     <img
-                                        src={user.profile_photo}
+                                        src={profileUser.profile_photo}
                                         alt="Profile"
                                         className="w-full h-full object-cover rounded-full"
                                     />
@@ -59,15 +82,15 @@ export default function UserProfile() {
 
                             {/* Status Badge */}
                             <span
-                                className={`absolute top-1 right-1 px-2 py-1 cursor-default text-xs font-semibold rounded-full text-white shadow-md ${user?.is_seller ? 'bg-blue-500' : 'bg-green-500'
+                                className={`absolute top-1 right-1 px-2 py-1 cursor-default text-xs font-semibold rounded-full text-white shadow-md ${profileUser?.is_seller ? 'bg-blue-500' : 'bg-green-500'
                                     }`}
                             >
-                                {user?.is_seller ? 'Seller' : 'Buyer'}
+                                {profileUser?.is_seller ? 'Seller' : 'Buyer'}
                             </span>
 
                             {/* Tooltip on Hover (Above Badge) */}
                             <div className="absolute bottom-full right-0 mb-1 w-max px-2 py-1 text-xs rounded bg-gray-800 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                                {user?.is_seller ? 'Can bid and sell products' : 'Can only bid'}
+                                {profileUser?.is_seller ? 'Can bid and sell products' : 'Can only bid'}
                             </div>
                         </div>
 
@@ -80,7 +103,7 @@ export default function UserProfile() {
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-4 sm:space-y-0">
                                 <div>
                                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3 font-serif">
-                                        {user?.username || "Unnamed User"}
+                                        {profileUser?.username || "Unnamed User"}
                                     </h1>
                                     <div className="flex mb-3">
                                         <div className="flex flex-col">
@@ -94,7 +117,7 @@ export default function UserProfile() {
                                             <label>0</label>
                                         </div>
                                     </div>
-                                    {user?.is_seller && (<div className="flex items-center flex-wrap space-x-2 mb-3">
+                                    {profileUser?.is_seller && (<div className="flex items-center flex-wrap space-x-2 mb-3">
                                         <div className="flex items-center">
                                             {[1, 2, 3, 4].map((star) => (
                                                 <Star
@@ -137,7 +160,7 @@ export default function UserProfile() {
                                     <div className="flex items-start space-x-2">
                                         <MapPin className="w-4 h-4 text-red-500 mt-1" />
                                         <span className="text-gray-800 font-medium break-words max-w-xs sm:max-w-full">
-                                            {user?.profile_address || "Unknown"}
+                                            {profileUser?.profile_address || "Unknown"}
                                         </span>
                                     </div>
                                 </div>
@@ -147,31 +170,31 @@ export default function UserProfile() {
                                         Joined
                                     </div>
                                     <div className="text-gray-800 font-medium">
-                                        {user?.date_joined
-                                            ? new Date(user.date_joined).toLocaleDateString("en-CA")
+                                        {profileUser?.date_joined
+                                            ? new Date(profileUser.date_joined).toLocaleDateString("en-CA")
                                             : "-"}
                                     </div>
                                 </div>
 
-                                {user?.is_seller && (<div>
+                                {profileUser?.is_seller && (<div>
                                     <div className="text-gray-500 font-medium text-sm mb-1">
                                         Total Product
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <Package className="w-4 h-4 text-gray-600" />
                                         <span className="text-gray-800 font-medium">
-                                            {user?.total_products || 0}
+                                            {profileUser?.total_products || 0}
                                         </span>
                                     </div>
                                 </div>)}
-                                {!user?.is_seller && (<div>
+                                {!profileUser?.is_seller && (<div>
                                     <div className="text-gray-500 font-medium text-sm mb-1">
                                         Total Orders
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <Package className="w-4 h-4 text-gray-600" />
                                         <span className="text-gray-800 font-medium">
-                                            {user?.total_products || 0}
+                                            {profileUser?.total_products || 0}
                                         </span>
                                     </div>
                                 </div>)}
@@ -179,13 +202,13 @@ export default function UserProfile() {
 
                             {/* Action Buttons */}
                             <div className="flex flex-wrap gap-2">
-                                {user?.id !== currentUser?.id && (
+                                {profileUser?.id !== currentUser?.id && (
                                     <button className="w-full sm:flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 shadow-sm">
                                         <UserPlus className="w-4 h-4" />
                                         <span>Follow</span>
                                     </button>
                                 )}
-                                {user?.id !== currentUser?.id && (
+                                {profileUser?.id !== currentUser?.id && (
                                     <button className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 shadow-sm">
                                         <MessageCircle className="w-4 h-4" />
                                         <span>Contact</span>
@@ -198,7 +221,7 @@ export default function UserProfile() {
                                     <Heart className="w-4 h-4 mr-2" />
                                     WishList
                                 </button>
-                                {user?.id == currentUser?.id && (
+                                {profileUser?.id == currentUser?.id && (
                                     <button
                                         onClick={() => navigate("/editprofile")}
                                         className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm"
@@ -220,7 +243,7 @@ export default function UserProfile() {
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
                         <div className="flex flex-wrap justify-start gap-2">
                             {/* Conditionally render Products tab */}
-                            {user?.is_seller && (
+                            {profileUser?.is_seller && (
                                 <div
                                     onClick={() => setActiveTab("Products")}
                                     className={`pb-3 px-4 sm:px-6 border-b-2 font-medium text-sm text-center cursor-pointer w-24 sm:w-auto ${activeTab === "Products"
