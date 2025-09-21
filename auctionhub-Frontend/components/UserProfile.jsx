@@ -7,6 +7,7 @@ import UserFeedback from "./UserFeedback";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../API/axiosInstance";
+import { MdOutlineReportGmailerrorred } from "react-icons/md";
 
 export default function UserProfile() {
     const { user, loading, currentUser } = useContext(AuthContext);
@@ -214,7 +215,7 @@ export default function UserProfile() {
                                 )}
                                 {profileUser?.id !== currentUser?.id && (
                                     <button className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 shadow-sm">
-                                        <MessageCircle className="w-4 h-4" />
+                                        <MdOutlineReportGmailerrorred className="w-6 h-6" />
                                         <span>Report</span>
                                     </button>
                                 )}
@@ -249,7 +250,6 @@ export default function UserProfile() {
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
                         <div className="flex flex-wrap justify-start gap-2">
-                            {/* Conditionally render Products tab */}
                             {profileUser?.is_seller && (
                                 <div
                                     onClick={() => setActiveTab("Products")}
