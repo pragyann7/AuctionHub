@@ -14,6 +14,7 @@ import Layout from '../Utils/Layout.jsx';
 import ProductDetail from '../components/ProductDetail.jsx';
 import './App.css';
 import BecomeSellerForm from '../components/BecomeSeller.jsx';
+import VerifyEmailOTP from '../components/VerifyEmailOTP.jsx';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/become-seller" element={<BecomeSellerForm />} />
                 <Route path="/user/:id" element={<UserProfile />} />
+                <Route path="/verify-email" element={<VerifyEmailOTP />} />
             </Routes>
         </Layout>
     );
