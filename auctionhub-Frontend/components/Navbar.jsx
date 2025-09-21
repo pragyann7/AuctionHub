@@ -319,10 +319,10 @@ function Navbar() {
                         <a href="/">Auction<span className='text-orange-400'>Hub</span></a>
                     </h1>
                     <div className="flex items-center gap-4">
-                        <button onClick={handleLogin} className="font-medium cursor-pointer">Log In</button>
+                        <button onClick={handleLogin} className="font-medium border border-gray-600/30 hover:border-gray-600/70 px-4 py-1 rounded-full cursor-pointer">Log In</button>
                         <div className="w-px h-6 bg-gray-400"></div>
                         <button onClick={handleSignup}
-                            className="bg-blue-500 text-white text-[14px] font-bold px-4 py-2 rounded-full cursor-pointer">
+                            className="bg-orange-400 hover:bg-orange-500 transition text-white text-[14px] font-bold px-4 py-2 rounded-full cursor-pointer">
                             SignUp
                         </button>
                     </div>
