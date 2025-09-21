@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
 
 class Profile(models.Model):
@@ -12,6 +14,7 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     is_seller = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
@@ -37,3 +40,20 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     else:
         Profile.objects.get_or_create(user=instance)
         instance.profile.save()
+
+
+
+User = get_user_model()
+
+class EmailOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    last_sent_at = models.DateTimeField(auto_now=True)
+
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+
+    def __str__(self):
+        return f"{self.user.email} – {self.code}"
