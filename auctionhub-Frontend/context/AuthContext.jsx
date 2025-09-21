@@ -51,14 +51,13 @@ export const AuthProvider = ({ children }) => {
             const res = await axiosInstance.post('/login/', credentials);
             localStorage.setItem('access', res.data.access);
             localStorage.setItem('refresh', res.data.refresh);
-            // alert('Login Successful!');
             await fetchUserData();
             navigate('/');
         } catch (error) {
-            console.error('Login failed', error);
-            alert('Login failed', error);
+            throw error;
         }
-    }
+    };
+
 
     const logout = async () => {
         const confirmed = window.confirm("Do you want to log out?");
