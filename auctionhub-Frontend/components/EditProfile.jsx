@@ -30,7 +30,16 @@ export default function EditProfile() {
     });
 
     const [profilePhoto, setProfilePhoto] = useState(null);
-    const [coverPhoto, setCoverPhoto] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
+
+    const handleProfilePhotoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // create a preview URL
+            const imageUrl = URL.createObjectURL(file);
+            setPreviewImage(imageUrl);
+        }
+    };
 
     // Fetch user data from context or API
     useEffect(() => {
@@ -85,7 +94,7 @@ export default function EditProfile() {
         }
     };
 
-    const handleProfilePhotoChange = (e) => setProfilePhoto(e.target.files[0]);
+    // const handleProfilePhotoChange = (e) => setProfilePhoto(e.target.files[0]);
     const handleCoverPhotoChange = (e) => setCoverPhoto(e.target.files[0]);
 
     const handleSubmit = async (e) => {
@@ -129,6 +138,34 @@ export default function EditProfile() {
             onSubmit={handleSubmit}
             className="max-w-4xl mx-auto p-6 space-y-12 bg-white rounded-xl shadow-md"
         >
+            <div className="sm:col-span-3">
+                <label className="block text-sm font-medium text-gray-900 text-center">
+                    Profile Photo
+                </label>
+                <div className="flex flex-col items-center justify-center gap-4 mt-4">
+                    {/* If user selected an image, show it */}
+                    {previewImage ? (
+                        <img
+                            src={previewImage}
+                            alt="Profile Preview"
+                            className="h-50 w-50 rounded-full object-cover"
+                        />
+                    ) : (
+                        <UserCircleIcon className="h-50 w-50 text-gray-300" />
+                    )}
+
+                    <label className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-50 text-sm font-medium cursor-pointer">
+                        Change
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="sr-only"
+                            onChange={handleProfilePhotoChange}
+                        />
+                    </label>
+                </div>
+            </div>
+
             {/* Profile Section */}
             <div>
                 <h2 className="text-lg font-semibold text-gray-900">Profile</h2>
@@ -175,55 +212,6 @@ export default function EditProfile() {
                         <p className="mt-1 text-sm text-gray-600">
                             Write a few sentences about yourself.
                         </p>
-                    </div>
-
-                    {/* Profile Photo */}
-                    <div className="sm:col-span-3">
-                        <label className="block text-sm font-medium text-gray-900">
-                            Photo
-                        </label>
-                        <div className="mt-2 flex items-center gap-3">
-                            <UserCircleIcon className="h-12 w-12 text-gray-300" />
-                            <label
-                                className="px-3 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-50 text-sm font-medium cursor-pointer">
-                                Change
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="sr-only"
-                                    onChange={handleProfilePhotoChange}
-                                />
-                            </label>
-                        </div>
-                    </div>
-
-                    {/* Cover Photo */}
-                    <div className="sm:col-span-6">
-                        <label className="block text-sm font-medium text-gray-900">
-                            Cover photo
-                        </label>
-                        <div
-                            className="mt-2 flex justify-center rounded-lg border-2 border-dashed border-gray-300 px-6 py-10">
-                            <div className="text-center">
-                                <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" />
-                                <div className="mt-4 flex text-sm text-gray-600 justify-center gap-2">
-                                    <label
-                                        className="relative cursor-pointer rounded-md bg-white text-indigo-600 font-semibold hover:text-indigo-500">
-                                        <span>Upload a file</span>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            className="sr-only"
-                                            onChange={handleCoverPhotoChange}
-                                        />
-                                    </label>
-                                    <p>or drag and drop</p>
-                                </div>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    PNG, JPG, GIF up to 10MB
-                                </p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -415,13 +403,13 @@ export default function EditProfile() {
                 <button
                     type="button"
                     onClick={() => navigate("/userprofile")}
-                    className="w-full sm:w-auto text-gray-900 font-semibold border rounded-md px-4 py-2"
+                    className="w-full sm:w-auto text-gray-900 font-semibold border rounded-md px-4 py-2 cursor-pointer"
                 >
                     Cancel
                 </button>
                 <button
                     type="submit"
-                    className="w-full sm:w-auto bg-indigo-600 text-white px-4 py-2 rounded-md shadow hover:bg-indigo-500"
+                    className="w-full sm:w-auto bg-orange-500 text-white px-4 py-2 rounded-md shadow hover:bg-orange-600 cursor-pointer"
                 >
                     Save
                 </button>

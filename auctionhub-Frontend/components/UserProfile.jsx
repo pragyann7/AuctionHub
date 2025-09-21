@@ -19,14 +19,12 @@ export default function UserProfile() {
     useEffect(() => {
         const fetchProfile = async () => {
             if (!id || id === currentUser?.id) {
-                // Own profile
                 setProfileUser(currentUser);
                 if (currentUser?.is_seller) {
                     const res = await axiosInstance.get(`/AFauctions/?seller_id=${currentUser.id}`);
                     setProducts(res.data);
                 }
             } else {
-                // Other user's profile
                 try {
                     const resUser = await axiosInstance.get(`/users/${id}/`);
                     setProfileUser(resUser.data);
@@ -214,13 +212,22 @@ export default function UserProfile() {
                                         <span>Contact</span>
                                     </button>
                                 )}
-                                <button className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm">
+                                {profileUser?.id !== currentUser?.id && (
+                                    <button className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center justify-center space-x-2 shadow-sm">
+                                        <MessageCircle className="w-4 h-4" />
+                                        <span>Report</span>
+                                    </button>
+                                )}
+
+                                {profileUser?.id == currentUser?.id && (<button className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm">
                                     <label>View Orders</label>
-                                </button>
-                                <button className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm">
-                                    <Heart className="w-4 h-4 mr-2" />
-                                    WishList
-                                </button>
+                                </button>)}
+
+                                {profileUser?.id == currentUser?.id && (
+                                    <button className="w-full sm:flex-1 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-2 py-2 rounded-lg flex items-center justify-center shadow-sm">
+                                        <Heart className="w-4 h-4 mr-2" />
+                                        WishList
+                                    </button>)}
                                 {profileUser?.id == currentUser?.id && (
                                     <button
                                         onClick={() => navigate("/editprofile")}

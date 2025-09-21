@@ -61,13 +61,15 @@ function ProductDetail() {
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-blue-300 flex items-center justify-center text-white font-bold">
+                                        <div className="w-full h-full bg-blue-300 flex items-center justify-center text-white font-bold"
+                                            onClick={() => navigate(`/user/${product.seller_id}`)}>
                                             {product.seller_username?.[0]?.toUpperCase() || 'U'}
                                         </div>
                                     )}
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-gray-900 hover:underline">
+                                    <p className="font-semibold text-gray-900 hover:underline"
+                                        onClick={() => navigate(`/user/${product.seller_id}`)}>
                                         {product.seller_username
                                             ? product.seller_username.charAt(0).toUpperCase() + product.seller_username.slice(1)
                                             : 'User'}
