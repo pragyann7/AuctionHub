@@ -194,3 +194,16 @@ CACHES = {
 # Optional: store sessions in Redis
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+# Redis as broker & result backend
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+# Optional: timezone
+CELERY_TIMEZONE = "UTC"
+CELERY_ENABLE_UTC = True
+
+# Optional: run tasks in eager mode during development
+# CELERY_TASK_ALWAYS_EAGER = True
+
+

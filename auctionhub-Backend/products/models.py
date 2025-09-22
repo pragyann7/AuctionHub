@@ -1,6 +1,11 @@
+
+#products/smodels.py
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
+from django.contrib.auth.models import User
+
 
 
 class AuctionProduct(models.Model):
@@ -16,9 +21,11 @@ class AuctionProduct(models.Model):
     category = models.CharField(max_length=100, blank=True, null=True)
     condition = models.CharField(max_length=50, choices=CONDITION_CHOICES, blank=True, null=True)
     
-    starting_price = models.DecimalField(max_digits=10, decimal_places=2)
+    starting_price = models.DecimalField(max_digits=10, decimal_places=2) #initial price doesn't change
     buy_now_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    bid_increment = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    bid_increment = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True) #value always stay same throughout auction and this will help in auctions to increase current price
+    #at initial auction if someone bid, totalamount = starting_price + bid_increment and in another bid total amount + prev total amt + bid_increment
+
     
     auction_start_datetime = models.DateTimeField(blank=True, null=True)
     auction_duration = models.PositiveIntegerField(blank=True, null=True)
@@ -44,6 +51,16 @@ class AuctionProduct(models.Model):
     warranty_terms = models.TextField(blank=True, null=True)
     has_warranty = models.BooleanField(default=False)
 
+    # Winner & unsold
+    winner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='won_products'  # <-- explicit reverse name
+    )
+    is_unsold = models.BooleanField(default=False)
+
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -66,20 +83,22 @@ class AuctionProduct(models.Model):
         if first:
             return first.image.url
         return '/media/products/default.jpeg'
-    
+
     @property
     def status(self):
         now = timezone.now()
-        if self.auction_start_datetime:
-            end_time = self.auction_start_datetime + timedelta(hours=self.auction_duration or 0)
-            if now < self.auction_start_datetime:
-                return "upcoming"
-            elif self.auction_start_datetime <= now <= end_time:
-                return "live"
-            else:
-                return "closed"
-        return "upcoming"
-    
+        end_time = self.auction_end_datetime
+
+        if self.winner:
+            return "sold"
+        if self.is_unsold:
+            return "unsold"
+        if self.auction_start_datetime and now < self.auction_start_datetime:
+            return "upcoming"
+        if end_time and now < end_time:
+            return "live"
+        return "ended"
+
 
 class AuctionProductImage(models.Model):
     product = models.ForeignKey(AuctionProduct, related_name='images', on_delete=models.CASCADE)
