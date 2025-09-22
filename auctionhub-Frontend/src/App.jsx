@@ -12,6 +12,8 @@ import EditProfile from '../components/EditProfile';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Layout from '../Utils/Layout.jsx';
 import ProductDetail from '../components/ProductDetail.jsx';
+import Notfound from '../404/NotFound.jsx';
+import FAQ from '../components/FAQ.jsx';
 import './App.css';
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
                 <Route path="/Browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
                 <Route path="/productdetail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                 <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/NotFound" element={<Notfound />}/>
+                <Route path="/FAQ" element={<FAQ />}/>
             </Routes>
         </Layout>
     );

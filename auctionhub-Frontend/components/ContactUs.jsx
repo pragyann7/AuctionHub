@@ -1,6 +1,5 @@
 import React, {useState, useRef} from "react";
 import {PhoneCall, Mail, MapPin, Shield} from "lucide-react";
-import FAQ from "./FAQ.jsx";
 import axiosInstance from "../API/axiosInstance";
 
 export const ContactUs = () => {
@@ -303,11 +302,6 @@ export const ContactUs = () => {
                         </div>
                     ))}
                 </div>
-            </section>
-
-            {/* FAQ Section */}
-            <section className="bg-white p-6 rounded-lg mx-auto max-w-6xl mt-10 shadow-md">
-                <FAQ/>
             </section>
         </div>
     );
