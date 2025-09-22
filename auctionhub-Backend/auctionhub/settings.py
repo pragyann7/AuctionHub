@@ -180,17 +180,33 @@ CACHES = {
     }
 }
 
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'delete-expired-otps-every-30-seconds': {
+        'task': 'users.tasks.delete_expired_otps',
+        'schedule': 3600.0,
+    },
+    'delete-unverified-users-daily': {
+        'task': 'users.tasks.delete_unverified_users',
+        'schedule': 86400.0,
+    }
+}
+
+
+
 # Optional: store sessions in Redis
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+# SESSION_COOKIE_AGE = 3600
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'theeauctionhub@gmail.com'
 EMAIL_HOST_PASSWORD = 'ufhb kqlt ehru tnws'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-# DEFAULT_FROM_EMAIL = 'no-reply@auctionhub.com'
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'auctionhub@mail.com'
