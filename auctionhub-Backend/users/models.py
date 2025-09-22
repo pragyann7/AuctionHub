@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -43,14 +44,17 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
 
 
 
-User = get_user_model()
-
 class EmailOTP(models.Model):
+    PURPOSE_CHOICES = (
+        ('verify_email', 'Verify Email'),
+        ('password_reset', 'Password Reset'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
     last_sent_at = models.DateTimeField(auto_now=True)
+    purpose = models.CharField(max_length=20, choices=PURPOSE_CHOICES, default='verify_email')
 
     def is_expired(self):
         return timezone.now() > self.expires_at

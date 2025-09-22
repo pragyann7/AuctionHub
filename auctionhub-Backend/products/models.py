@@ -62,7 +62,7 @@ class AuctionProduct(models.Model):
     @property
     def auction_end_datetime(self):
         if self.auction_start_datetime and self.auction_duration:
-            return self.auction_start_datetime + timedelta(minutes=self.auction_duration)
+            return self.auction_start_datetime + timedelta(days=self.auction_duration)
         return None
     
     @property
