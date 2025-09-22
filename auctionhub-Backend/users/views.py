@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 from .utils import send_email_otp
 from .models import EmailOTP
 from django.utils import timezone
+from django.contrib.auth.hashers import make_password
 
 User = get_user_model()
 
@@ -115,12 +116,68 @@ class ResendOTPView(APIView):
 
         send_email_otp(user)
         return Response({"message": "A new OTP has been sent to your email."}, status=status.HTTP_200_OK)
+    
+
+
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email is required'}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'message': 'If an account with that email exists, an OTP has been sent.'})
+
+        send_email_otp(user, purpose='password_reset')
+
+        return Response({'message': 'If an account with that email exists, an OTP has been sent.'})
+
+    
+
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        print(request.data)
+        email = request.data.get('email')
+        code = request.data.get('code')
+        new_password = request.data.get('new_password')
+
+        if not email or not code or not new_password:
+            return Response({'error': 'Email, code, and new password are required'}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'detail': 'User not found'}, status=404)
+
+        try:
+            otp_obj = EmailOTP.objects.get(user=user, code=code, purpose='password_reset')
+        except EmailOTP.DoesNotExist:
+            print("Invalid code")
+            return Response({'detail': 'Invalid code'}, status=400)
+
+        if otp_obj.is_expired():
+            print(otp_obj.is_expired)
+            return Response({'detail': 'Code expired'}, status=400)
+
+        user.password = make_password(new_password)
+        user.save()
+
+        otp_obj.delete()
+
+        return Response({'message': 'Password reset successfully'})
 
 
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def post(self, request):
         refresh_token = request.data.get("refresh")
         if not refresh_token:
