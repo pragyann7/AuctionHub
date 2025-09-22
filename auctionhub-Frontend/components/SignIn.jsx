@@ -1,10 +1,10 @@
 import { useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import AuthContext from "../context/AuthContext";
+import PasswordReset from "./PasswordReset";
 
 export default function SignIn() {
     const { login } = useContext(AuthContext);
-
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function SignIn() {
                                 Password
                             </label>
                             <div className="text-sm">
-                                <a href="/forgetpass" className="font-semibold hover:underline hover:text-gray-700">
+                                <a href="/password-reset" className="font-semibold hover:underline hover:text-gray-700">
                                     Forgot password?
                                 </a>
                             </div>
