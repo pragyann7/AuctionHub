@@ -15,6 +15,7 @@ import ProductDetail from '../components/ProductDetail.jsx';
 import './App.css';
 import BecomeSellerForm from '../components/BecomeSeller.jsx';
 import VerifyEmailOTP from '../components/VerifyEmailOTP.jsx';
+import PasswordReset from '../components/PasswordReset.jsx';
 
 function App() {
     return (
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/become-seller" element={<BecomeSellerForm />} />
                 <Route path="/user/:id" element={<UserProfile />} />
                 <Route path="/verify-email" element={<VerifyEmailOTP />} />
+                <Route path="/password-reset" element={<PasswordReset />} />
             </Routes>
         </Layout>
     );
