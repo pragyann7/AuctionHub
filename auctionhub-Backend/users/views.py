@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from .models import Profile, SellerProfile
-from .serializers import RegisterSerializer, UserProfileSerializer
+from .models import Profile, SellerProfile, Follow
+from .serializers import RegisterSerializer, UserProfileSerializer, FollowSerializer
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.contrib.auth import get_user_model
@@ -27,10 +27,10 @@ class RegisterView(APIView):
         if not email or not username or not password:
             return Response({"error": "Username, email and password are required"}, status=400)
 
-        # Check if user already exists
+
         existing_user = User.objects.filter(email=email).first()
         if existing_user:
-            # If unverified, update credentials and resend OTP
+
             if hasattr(existing_user, 'profile') and not existing_user.profile.email_verified:
                 existing_user.username = username
                 existing_user.set_password(password)
@@ -42,7 +42,6 @@ class RegisterView(APIView):
             else:
                 return Response({"email": "Email already exists"}, status=400)
 
-        # Create new user
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -256,7 +255,6 @@ class BecomeSellerView(APIView):
         if not shop_name or not bank_account or not business_address:
             return Response({'error': 'Missing required info'}, status=400)
 
-        # Create or update SellerProfile
         SellerProfile.objects.update_or_create(
             user=request.user,
             defaults={
@@ -268,3 +266,33 @@ class BecomeSellerView(APIView):
         profile.is_seller = True
         profile.save()
         return Response({'message': 'Seller account created!'})
+
+
+
+
+class FollowCreateDestroyAPIView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = FollowSerializer
+
+    def post(self, request, *args, **kwargs):
+        following_id = request.data.get('following')
+        if not following_id:
+            return Response({"detail": "Missing following ID"}, status=400)
+
+        follow = Follow.objects.filter(follower=request.user, following_id=following_id).first()
+
+        if follow:
+
+            follow.delete()
+            return Response({"followed": False})
+        else:
+            Follow.objects.create(follower=request.user, following_id=following_id)
+            return Response({"followed": True})
+
+
+    def delete(self, request, *args, **kwargs):
+        following_id = request.data.get('following')
+        if not following_id:
+            return Response({"detail": "Missing following ID"}, status=400)
+        Follow.objects.filter(follower=request.user, following_id=following_id).delete()
+        return Response({"unfollowed": True})
