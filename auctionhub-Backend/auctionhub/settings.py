@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,10 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'channels',
 
     'users',
     'auctions',
@@ -82,6 +83,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'auctionhub.wsgi.application'
+ASGI_APPLICATION = 'auctionhub.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -96,7 +98,7 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
-        # 'OPTIONS': {'sslmode': 'require'},
+        'OPTIONS': {'sslmode': 'require'},
     }
 }
 
@@ -168,11 +170,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
+CHANNEL_LAYERS = {
+    "default": {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            # "hosts": [('redis', 6379)],
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
+        # "LOCATION": "redis://redis:6379/1",
         "LOCATION": "redis://127.0.0.1:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -198,6 +209,19 @@ CELERY_BEAT_SCHEDULE = {
 # Optional: store sessions in Redis
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+# Redis as broker & result backend
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+# Optional: timezone
+CELERY_TIMEZONE = "UTC"
+CELERY_ENABLE_UTC = True
+
+# Optional: run tasks in eager mode during development
+# CELERY_TASK_ALWAYS_EAGER = True
+
+
 # SESSION_COOKIE_AGE = 3600
 
 

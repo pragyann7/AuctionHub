@@ -46,36 +46,44 @@ const FAQ = () => {
       </div>
 
       <div className="space-y-0 border-t border-gray-200">
-        {faqData.map((faq) => (
-          <div key={faq.id} className="border-b border-gray-200">
-            <button
-              className="w-full py-6 px-0 flex items-center justify-between text-left hover:bg-gray-50 hover:px-4 transition-all duration-200 group"
-              onClick={() => toggleQuestion(faq.id)}
-            >
-              <div className="flex items-center gap-6">
-                <span className="text-base font-semibold text-gray-400 min-w-[2rem]">{faq.id}</span>
-                <span className="text-base font-semibold text-black">{faq.question}</span>
-              </div>
-              <div className={`ml-4 transform transition-transform duration-200 ${expandedQuestions[faq.id] ? 'rotate-180' : ''}`}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-500">
-                  <path
-                    d="M6 9L12 15L18 9"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </button>
+        {faqData.map((faq) => {
+  const isExpanded = expandedQuestions[faq.id];
+  return (
+    <div key={faq.id} className="border-b border-gray-200 ">
+      <button
+        className="w-full py-6 px-0 flex items-center justify-between text-left hover:bg-gray-50 hover:px-4 transition-all duration-200 group"
+        onClick={() => toggleQuestion(faq.id)}
+      >
+        <div className="flex items-center gap-6">
+          <span className="text-base font-semibold text-black min-w-[2rem]">{faq.id}</span>
+          <span className="text-base font-semibold text-black">{faq.question}</span>
+        </div>
+        <div className={`ml-4 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-500">
+            <path
+              d="M6 9L12 15L18 9"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+      </button>
 
-            {expandedQuestions[faq.id] && (
-              <div className="pb-6 pl-14 pr-6 animate-in slide-in-from-top-2 duration-200">
-                <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
-              </div>
-            )}
-          </div>
-        ))}
+      {/* Smooth transition container */}
+      <div
+        className={`overflow-hidden transition-all duration-800`}
+        style={{ maxHeight: isExpanded ? "500px" : "0" }}
+      >
+        <div className="pb-6 pl-14 pr-6">
+          <p className="text-gray-600 text-sm leading-relaxed">{faq.answer}</p>
+        </div>
+      </div>
+    </div>
+  );
+})}
+
       </div>
     </div>
   );
