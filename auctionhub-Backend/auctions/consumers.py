@@ -9,32 +9,25 @@ from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
-
 class AuctionConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        """Called when a WebSocket connection is opened."""
         self.auction_id = self.scope['url_route']['kwargs']['auction_id']
         self.auction_group_name = f'auction_{self.auction_id}'
 
-        # Join auction group
         await self.channel_layer.group_add(
             self.auction_group_name,
             self.channel_name
         )
         await self.accept()
-
-        # Send full auction state to late-joining user
         await self.send_auction_state()
 
     async def disconnect(self, close_code):
-        """Called when a WebSocket connection is closed."""
         await self.channel_layer.group_discard(
             self.auction_group_name,
             self.channel_name
         )
 
     async def receive(self, text_data):
-        """Handle incoming messages from client."""
         try:
             data = json.loads(text_data)
         except json.JSONDecodeError:
@@ -47,10 +40,7 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         elif action == 'end_auction':
             await self.handle_end_auction()
 
-    # -------------------- Bid Handling --------------------
-
     async def handle_bid(self, data):
-        """Process a bid from a user."""
         user = await self.get_user_from_scope()
         if not user:
             await self.send(json.dumps({'type': 'error', 'message': 'Authentication failed.'}))
@@ -63,7 +53,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             await self.send(json.dumps({'type': 'error', 'message': str(e)}))
             return
 
-        # Broadcast new bid to all clients in the auction
         await self.channel_layer.group_send(
             self.auction_group_name,
             {
@@ -75,14 +64,12 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         )
 
     async def handle_end_auction(self):
-        """End the auction manually and trigger winner assignment."""
         await self.close_auction()
         await self.send(json.dumps({'type': 'info', 'message': 'Auction ended, calculating winner...'}))
 
     # -------------------- Broadcast Handlers --------------------
 
     async def auction_update(self, event):
-        """Send bid update to client."""
         await self.send(json.dumps({
             'type': 'update',
             'user': event['user'],
@@ -91,18 +78,19 @@ class AuctionConsumer(AsyncWebsocketConsumer):
         }))
 
     async def auction_end(self, event):
-        """Send auction end and winner info to client."""
+        """Triggered by Celery after winner is assigned"""
         await self.send(json.dumps({
             'type': 'end',
             'winner': event['user'],
-            'final_price': event.get('final_price', 0),
+            'final_price': float(event.get('final_price', 0)),
         }))
+        # Close WebSocket after sending auction end
+        await self.close()
 
     # -------------------- Database Helpers --------------------
 
     @database_sync_to_async
     def get_user_from_scope(self):
-        """Get authenticated user from WebSocket query string token."""
         from django.contrib.auth import get_user_model
         from rest_framework_simplejwt.tokens import UntypedToken
         import jwt
@@ -123,7 +111,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def create_bid(self, user, amount_from_client=None):
-        """Create a bid and update total amount."""
         from django.apps import apps
 
         AuctionProduct = apps.get_model("products", "AuctionProduct")
@@ -172,10 +159,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def close_auction(self):
-        """
-        Close the auction and trigger winner assignment task.
-        Only triggers if auction ended AND no winner exists.
-        """
         from django.apps import apps
         AuctionProduct = apps.get_model("products", "AuctionProduct")
         Winner = apps.get_model("auctions", "Winner")
@@ -185,20 +168,17 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             product = AuctionProduct.objects.get(id=self.auction_id)
             now = timezone.now()
 
-            # Only trigger task if auction ended AND no winner exists
             if product.auction_end_datetime and now >= product.auction_end_datetime:
                 if not Winner.objects.filter(product=product).exists():
-                    # Use atomic transaction to prevent flooding
                     assign_winners_task.delay(product.id)
-
         except AuctionProduct.DoesNotExist:
             return
 
     @database_sync_to_async
     def get_full_auction_state(self):
-        """Return full auction state, including bids and winner info."""
         from django.apps import apps
         AuctionProduct = apps.get_model("products", "AuctionProduct")
+        Winner = apps.get_model("auctions", "Winner")
 
         try:
             product = AuctionProduct.objects.get(id=self.auction_id)
@@ -212,6 +192,13 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             {'user': b.user.username, 'amount': str(b.amount), 'total': str(b.total_amount)}
             for b in product.bids.order_by('bid_time')
         ]
+        now = timezone.now()
+        auction_ended = product.auction_end_datetime and now >= product.auction_end_datetime
+
+        winner_final_price = None
+        if product.winner:
+            last_winning_bid = product.bids.filter(user=product.winner).order_by('-bid_time').first()
+            winner_final_price = last_winning_bid.total_amount if last_winning_bid else current_bid
 
         return {
             'current_bid': str(current_bid),
@@ -219,10 +206,11 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             'auction_status': product.status,
             'auction_end_datetime': product.auction_end_datetime.isoformat() if product.auction_end_datetime else None,
             'winner': product.winner.username if product.winner else None,
+            'winner_final_price': str(winner_final_price) if winner_final_price else None,
+            'auction_ended': auction_ended,
         }
 
     async def send_auction_state(self):
-        """Send full auction state to the connected user."""
         state = await self.get_full_auction_state()
         if state:
             await self.send(json.dumps({'type': 'state', **state}))
