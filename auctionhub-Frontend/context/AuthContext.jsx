@@ -46,6 +46,11 @@ export const AuthProvider = ({ children }) => {
         localStorage.clear();
     }
 
+    const refreshUser = async () => {
+        await fetchUserData();
+    };
+
+
     const login = async (credentials) => {
         try {
             const res = await axiosInstance.post('/login/', credentials);
@@ -105,6 +110,7 @@ export const AuthProvider = ({ children }) => {
             loading,
             logoutLoading,
             fetchUserData,
+            refreshUser,
         }}
         >
             {children}

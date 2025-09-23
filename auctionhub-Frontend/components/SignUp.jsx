@@ -92,7 +92,7 @@ export default function SignUp() {
                                     required
                                     onChange={handleChange}
                                     autoComplete="username"
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600/50 sm:text-sm/6"
                                 />
                                 {errors.username && <span className="text-red-500 text-xs">{errors.username}</span>}
                             </div>
@@ -109,7 +109,7 @@ export default function SignUp() {
                                     required
                                     onChange={handleChange}
                                     autoComplete="email"
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600/50 sm:text-sm/6"
                                 />
                                 {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                             </div>
@@ -129,7 +129,7 @@ export default function SignUp() {
                                     required
                                     onChange={handleChange}
                                     autoComplete="current-password"
-                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600/50 sm:text-sm/6"
                                 />
                             </div>
                         </div>
@@ -137,7 +137,7 @@ export default function SignUp() {
                         <div>
                             <button
                                 type="submit"
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-orange-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600/50"
                             >
                                 Sign Up
                             </button>
@@ -146,7 +146,7 @@ export default function SignUp() {
 
                     <p className="mt-10 text-center text-sm/6 text-gray-500">
                         Already have an account?{' '}
-                        <a href="/signin" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                        <a href="/signin" className="font-semibold text-orange-400 hover:text-orange-500">
                             Login
                         </a>
                     </p>

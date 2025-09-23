@@ -7,6 +7,7 @@ import { ChevronsDown } from "lucide-react";
 import bgMov from "../src/assets/justicewillserve0001-0190.mp4";
 import bgPic from "../src/assets/Unknown-4.jpg";
 import bgRight from "../src/assets/travis.jpg";
+import AutoCarouselStatic from "./AutoImgSlider";
 
 function Home() {
     const { user, isAuthenticated, loading } = useContext(AuthContext);
@@ -42,6 +43,9 @@ function Home() {
             <div>
                 {isAuthenticated && user ? (
                     <>
+                        <div className="w-full">
+                            <AutoCarouselStatic interval={3000} /> {/* 4 second interval */}
+                        </div>
                         <div className="relative w-full h-screen overflow-hidden">
                             <div className="hidden md:block absolute inset-0 w-full h-full">
                                 <video

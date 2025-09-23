@@ -57,7 +57,7 @@ const PasswordReset = () => {
                 </h2>
 
                 {message && (
-                    <div className="mb-4 text-center text-sm text-blue-600">{message}</div>
+                    <div className="mb-4 text-center text-sm text-orange-600">{message}</div>
                 )}
 
                 {step === 1 && (
@@ -75,7 +75,7 @@ const PasswordReset = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                            className="w-full py-2 px-4 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
                         >
                             {loading ? "Sending..." : "Send OTP"}
                         </button>
@@ -107,7 +107,7 @@ const PasswordReset = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-2 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                            className="w-full py-2 px-4 bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition"
                         >
                             {loading ? "Resetting..." : "Reset Password"}
                         </button>
