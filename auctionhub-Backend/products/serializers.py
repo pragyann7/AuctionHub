@@ -26,6 +26,7 @@ class AuctionProductSerializer(serializers.ModelSerializer):
     time_left = serializers.SerializerMethodField()
     auction_status = serializers.SerializerMethodField()
     auction_end_datetime = serializers.SerializerMethodField()
+    winner = serializers.StringRelatedField(read_only=True)
     status = serializers.ReadOnlyField()  # uses model property
 
     class Meta:
@@ -68,3 +69,6 @@ class AuctionProductSerializer(serializers.ModelSerializer):
         hours, remainder = divmod(remaining.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
         return f"{days}d {hours}h {minutes}m"
+
+    def get_winner_name(self, obj):
+        return obj.winner.username if obj.winner else None
