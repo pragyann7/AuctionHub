@@ -1,4 +1,4 @@
-#products/seriailzers.py
+# products/seriailzers.py
 from rest_framework import serializers
 from django.utils import timezone
 from .models import AuctionProduct, AuctionProductImage
@@ -26,8 +26,10 @@ class AuctionProductSerializer(serializers.ModelSerializer):
     time_left = serializers.SerializerMethodField()
     auction_status = serializers.SerializerMethodField()
     auction_end_datetime = serializers.SerializerMethodField()
-    winner = serializers.StringRelatedField(read_only=True)
+    winner_name = serializers.SerializerMethodField()
+    winner_final_price = serializers.SerializerMethodField()
     status = serializers.ReadOnlyField()  # uses model property
+    auction_ended = serializers.SerializerMethodField()
 
     class Meta:
         model = AuctionProduct
@@ -71,4 +73,17 @@ class AuctionProductSerializer(serializers.ModelSerializer):
         return f"{days}d {hours}h {minutes}m"
 
     def get_winner_name(self, obj):
-        return obj.winner.username if obj.winner else None
+        if obj.status == "ended" and obj.winner:
+            return obj.winner.username
+        return None
+
+    def get_auction_ended(self, obj):
+        return obj.status == "ended"
+
+    def get_winner_final_price(self, obj):
+        if obj.winner:
+            # Check if Winner entry exists
+            winner_entry = getattr(obj, 'winner_entries', None)
+            if winner_entry:
+                return winner_entry.final_price
+        return None
