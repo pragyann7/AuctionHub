@@ -12,7 +12,11 @@ function ProductDetail() {
     const ws = useRef(null);
     const reconnectTimeout = useRef(null);
     const [isAuctionEnded, setIsAuctionEnded] = useState(false);
-    const [isWinningBid, setIsWinningBid] = useState(null);
+    useEffect(() => {
+        if (isAuctionEnded && product?.winner_name) {
+            alert(`Auction ended! Winner: ${product.winner_name}, Price: $${product.winner_final_price}`);
+        }
+    }, [isAuctionEnded, product?.winner_name]);
 
     // Fetch product data initially
     useEffect(() => {
@@ -21,10 +25,13 @@ function ProductDetail() {
                 const response = await axiosInstance.get(`/auctions/${id}/`);
                 setProduct({
                     ...response.data,
-                    bids: [],
+                    bids: (response.data.bids ?? []).slice().reverse(),
                     current_bid: response.data.current_bid ?? response.data.starting_price,
-                    bid_increment: response.data.bid_increment ?? 0
+                    bid_increment: response.data.bid_increment ?? 0,
+                    winner_name: response.data.winner_name ?? null,
+                    winner_final_price: response.data.winner_final_price ?? null,
                 });
+                setIsAuctionEnded(response.data.auction_ended);
                 setBidAmount(response.data.bid_increment?.toString() ?? "0");
             } catch (err) {
                 console.error("Failed to fetch product:", err);
@@ -35,7 +42,6 @@ function ProductDetail() {
     }, [id]);
 
     // WebSocket connection
-// WebSocket connection
     useEffect(() => {
         let isMounted = true;          // Track if component is mounted
         let manuallyClosed = false;    // Track if we closed WS intentionally
@@ -87,6 +93,8 @@ function ProductDetail() {
                                 amount: parseFloat(b.amount),
                                 total: parseFloat(b.total)
                             })),
+                            winner_name: data.winner ?? prev.winner_name,
+                            winner_final_price: data.winner_final_price ?? prev.current_bid,
                         }));
                         if (data.auction_ended) setIsAuctionEnded(true);
                         break;
@@ -106,11 +114,15 @@ function ProductDetail() {
 
                     case "end":
                         setIsAuctionEnded(true);
-                        setIsWinningBid({
-                            user: data.winner,
-                            final_price: parseFloat(data.final_price),
-                        });
-                        setError(`Auction ended! Winner: ${data.winner}, Final Price: $${data.final_price}`);
+                        setProduct(prev => ({
+                            ...prev,
+                            winner_name: data.winner ?? prev.winner_name,
+                            winner_final_price: data.final_price ?? prev.current_bid,
+                        }));
+                        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+                            ws.current.close();
+                            console.log("WebSocket closed for ended auction");
+                        }
                         break;
 
                     case "error":
@@ -209,8 +221,8 @@ function ProductDetail() {
                             <p className="text-4xl font-bold text-orange-500">
                                 {/*${isAuctionEnded ? isWinningBid?.final_price : product.current_bid ?? product.starting_price}*/}
                                 ${isAuctionEnded
-                                ? (product.winner_name ? product.current_bid : product.current_bid)
-                                : product.current_bid ?? product.starting_price}
+                                ? (product.winner_final_price ?? product.current_bid)
+                                : (product.current_bid ?? product.starting_price)}
                             </p>
 
                             {product.buy_now_price && (
@@ -235,7 +247,7 @@ function ProductDetail() {
                                 <AlertCircle size={17} className="ml-1"/>
                             </div>
 
-                            {!isAuctionEnded ? (
+                            {!isAuctionEnded && (
                                 <>
                                     <input
                                         type="number"
@@ -245,29 +257,34 @@ function ProductDetail() {
                                         max={product.bid_increment}
                                         step="0.01"
                                         onChange={e => setBidAmount(e.target.value)}
+                                        disabled={isAuctionEnded} // <-- disabled if auction ended
                                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
                                     />
+
                                     <p className="text-gray-500 text-sm mt-1">
                                         Maximum allowed bid: ${product.bid_increment}
                                     </p>
 
+
                                     <button
                                         onClick={placeBid}
-                                        className="w-full py-3 font-semibold rounded-lg bg-orange-500 text-white hover:bg-orange-600"
+                                        disabled={isAuctionEnded} // <-- disabled if auction ended
+                                        className={`w-full py-3 font-semibold rounded-lg ${
+                                            isAuctionEnded ? "bg-gray-400 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600 text-white"
+                                        }`}
                                     >
                                         Place Bid
                                     </button>
                                 </>
-                            ) : (
+                            )}{/* Permanent winner display */}
+                            {isAuctionEnded && product.winner_name && (
                                 <div
-                                    className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-center text-gray-700">
-                                    Auction Ended
-                                    <div className="text-xl font-bold text-orange-500 mt-1">
-                                        Winner: {product.winner_name ?? isWinningBid?.user},
-                                        Price: ${isWinningBid?.final_price ?? product.current_bid}
-                                    </div>
+                                    className="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-center text-gray-700 mt-2">
+                                    Winner: {product.winner_name}, Price:
+                                    ${product.winner_final_price ?? product.current_bid}
                                 </div>
                             )}
+
 
                             {error && <p className="text-red-500 mt-2">{error}</p>}
 
@@ -277,7 +294,7 @@ function ProductDetail() {
                                 <ul className="max-h-32 overflow-y-auto">
                                     {product.bids.map((b, idx) => (
                                         <li key={idx} className="text-gray-600">
-                                            {b.user}: ${b.amount} (Total: ${b.total})
+                                            {b.user}: ${b.amount} (Total : ${b.total})
                                         </li>
                                     ))}
                                 </ul>
