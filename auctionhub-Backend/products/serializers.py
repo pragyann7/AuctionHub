@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.utils import timezone
-from .models import AuctionProduct, AuctionProductImage
+from .models import AuctionProduct, AuctionProductImage, Wishlist
 
 class AuctionProductImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,6 +18,8 @@ class AuctionProductSerializer(serializers.ModelSerializer):
     seller_username = serializers.CharField(source='seller.username', read_only=True)
     seller_profile_photo = serializers.SerializerMethodField()
     view_count = serializers.IntegerField(read_only=True)
+    is_wishlisted = serializers.SerializerMethodField()
+    wishlist_id = serializers.SerializerMethodField()
     
     
     class Meta:
@@ -58,14 +60,39 @@ class AuctionProductSerializer(serializers.ModelSerializer):
     
     def get_auction_status(self, obj):
         now = timezone.now()
-        if obj.auction_start_datetime and now < obj.auction_start_datetime:
-            return "starts_in"
-        if obj.auction_end_datetime and now < obj.auction_end_datetime:
-            return "ends_in"
-        return "ended"
+        if obj.auction_start_datetime and obj.auction_end_datetime:
+            if now < obj.auction_start_datetime:
+                return "upcoming"
+            elif obj.auction_start_datetime <= now <= obj.auction_end_datetime:
+                return "live"
+            else:
+                return "ended"
+        return "upcoming"
 
     def format_duration(self, remaining):
         days = remaining.days
         hours, remainder = divmod(remaining.seconds, 3600)
         minutes, _ = divmod(remainder, 60)
         return f"{days}d {hours}h {minutes}m"
+    
+    def get_is_wishlisted(self, obj):
+        user = self.context.get("request").user
+        if user.is_authenticated:
+            return obj.wishlisted_by.filter(user=user).exists()
+        return False
+
+    def get_wishlist_id(self, obj):
+        user = self.context.get("request").user
+        if user.is_authenticated:
+            wishlist = obj.wishlisted_by.filter(user=user).first()
+        if wishlist:
+            return wishlist.id
+        return None
+
+
+
+class WishlistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist
+        fields = ["id", "user", "product", "added_at"]
+        read_only_fields = ["user", "added_at"]
