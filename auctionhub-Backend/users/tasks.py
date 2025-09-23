@@ -17,9 +17,7 @@ def delete_expired_otps():
 
 @shared_task
 def delete_unverified_users():
-    """
-    Delete users who have not verified their email within time period
-    """
+
     threshold = timezone.now() - timedelta(days=1)
     unverified_users = User.objects.filter(
         profile__email_verified=False,
