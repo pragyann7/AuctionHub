@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Follow
 from products.models import AuctionProduct
+from django.contrib.auth import get_user_model
+from products.models import Wishlist
 
-
+User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -37,17 +39,21 @@ class UserProfileSerializer(serializers.ModelSerializer):
     street = serializers.CharField(write_only=True, required=False, allow_blank=True)
     is_seller = serializers.BooleanField(source='profile.is_seller', read_only=True)
     total_products = serializers.SerializerMethodField()
+    watchlist_count = serializers.SerializerMethodField()
+    following = serializers.SerializerMethodField()
+    followers_count = serializers.SerializerMethodField()
+    following_count = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = [
             'id', 'username', 'first_name', 'last_name', 'email',
             'phone_number', 'profile_picture', 'date_joined', 'last_login',
-            'profile_address', 'country', 'state', 'city', 'street', 'is_seller', 'total_products'
+            'profile_address', 'country', 'state', 'city', 'street', 'is_seller', 'total_products', 'watchlist_count','following', 'followers_count', 'following_count'
         ]
         read_only_fields = ['id', 'date_joined', 'last_login']
 
-    # Validators
+
     def validate_email(self, value):
         user = self.instance
         if User.objects.exclude(pk=user.pk).filter(email=value).exists():
@@ -61,7 +67,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return value
 
     def validate_profile_picture(self, value):
-        max_size = 5 * 1024 * 1024  # 5MB
+        max_size = 5 * 1024 * 1024
         if value.size > max_size:
             raise serializers.ValidationError(
                 "Profile picture should not exceed 5MB in size."
@@ -100,6 +106,31 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return instance
 
     def get_total_products(self, obj):
-        if obj.profile.is_seller:  # optional check if only for sellers
+        if obj.profile.is_seller: 
             return AuctionProduct.objects.filter(seller=obj).count()
         return 0
+    
+    def get_watchlist_count(self, obj):
+        return Wishlist.objects.filter(user=obj).count()
+    
+    def get_following(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+
+            return Follow.objects.filter(follower=request.user, following=obj).exists()
+        return False
+
+
+
+    def get_followers_count(self, obj):
+        return Follow.objects.filter(following=obj).count()
+
+    def get_following_count(self, obj):
+        return Follow.objects.filter(follower=obj).count()
+    
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follow
+        fields = ['id', 'follower', 'following', 'created_at']
