@@ -15,6 +15,10 @@ class AuctionProduct(models.Model):
     ('used', 'Used'),
     ('refurbished', 'Refurbished'),
 ]
+    
+    seller = models.ForeignKey(
+        settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='products', null=True, blank=True
+    )
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -50,6 +54,7 @@ class AuctionProduct(models.Model):
     shipping_terms = models.TextField(blank=True, null=True)
     warranty_terms = models.TextField(blank=True, null=True)
     has_warranty = models.BooleanField(default=False)
+    view_count = models.PositiveIntegerField(default=0)
 
     # Winner & unsold
     winner = models.ForeignKey(
@@ -74,7 +79,7 @@ class AuctionProduct(models.Model):
     @property
     def auction_end_datetime(self):
         if self.auction_start_datetime and self.auction_duration:
-            return self.auction_start_datetime + timedelta(minutes=self.auction_duration)
+            return self.auction_start_datetime + timedelta(days=self.auction_duration)
         return None
     
     @property

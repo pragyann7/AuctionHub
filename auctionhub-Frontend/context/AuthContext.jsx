@@ -8,6 +8,7 @@ export default AuthContext;
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     const [logoutLoading, setLogoutLoading] = useState(false);
@@ -27,12 +28,10 @@ export const AuthProvider = ({ children }) => {
             const res = await axiosInstance.get('/users/me/');
             setUser(res.data);
             setIsAuthenticated(true);
+            setCurrentUser(res.data);
+            // console.log(res.data);
         } catch (error) {
             console.log(error);
-            // logout();
-            // setUser(null);
-            // setIsAuthenticated(false);
-            // localStorage.clear();
             const refreshToken = localStorage.getItem("refresh");
             if (!refreshToken) {
                 clearAuth();
@@ -52,14 +51,13 @@ export const AuthProvider = ({ children }) => {
             const res = await axiosInstance.post('/login/', credentials);
             localStorage.setItem('access', res.data.access);
             localStorage.setItem('refresh', res.data.refresh);
-            // alert('Login Successful!');
             await fetchUserData();
             navigate('/');
         } catch (error) {
-            console.error('Login failed', error);
-            alert('Login failed', error);
+            throw error;
         }
-    }
+    };
+
 
     const logout = async () => {
         const confirmed = window.confirm("Do you want to log out?");
@@ -100,6 +98,7 @@ export const AuthProvider = ({ children }) => {
             user,
             setUser,
             updateUserProfile,
+            currentUser,
             isAuthenticated,
             login,
             logout,

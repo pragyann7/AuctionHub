@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Profile
+from products.models import AuctionProduct
+
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -33,13 +35,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     state = serializers.CharField(write_only=True, required=False, allow_blank=True)
     city = serializers.CharField(write_only=True, required=False, allow_blank=True)
     street = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    is_seller = serializers.BooleanField(source='profile.is_seller', read_only=True)
+    total_products = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = [
             'id', 'username', 'first_name', 'last_name', 'email',
             'phone_number', 'profile_picture', 'date_joined', 'last_login',
-            'profile_address', 'country', 'state', 'city', 'street'
+            'profile_address', 'country', 'state', 'city', 'street', 'is_seller', 'total_products'
         ]
         read_only_fields = ['id', 'date_joined', 'last_login']
 
@@ -94,3 +98,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         profile.save()
         return instance
+
+    def get_total_products(self, obj):
+        if obj.profile.is_seller:  # optional check if only for sellers
+            return AuctionProduct.objects.filter(seller=obj).count()
+        return 0

@@ -1,11 +1,13 @@
-import React, {useState, useEffect, useRef} from "react";
-import {useParams} from "react-router-dom";
-import {Heart, Eye, AlertTriangle, ChevronRight, MessageSquareText, AlertCircle, ShieldCheck} from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { Heart, Eye, AlertTriangle, ChevronRight, MessageSquareText, AlertCircle, ShieldCheck } from "lucide-react";
 import ProductImagesSlider from "./ProductImageSlider";
 import axiosInstance from "../API/axiosInstance";
+import CountUp from 'react-countup';
+import { useNavigate } from "react-router-dom";
 
 function ProductDetail() {
-    const {id} = useParams();
+    const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [bidAmount, setBidAmount] = useState("");
     const [error, setError] = useState(null);
@@ -18,7 +20,8 @@ function ProductDetail() {
         }
     }, [isAuctionEnded, product?.winner_name]);
 
-    // Fetch product data initially
+    // Fetch product data initially    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -165,7 +168,7 @@ function ProductDetail() {
         }
 
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-            ws.current.send(JSON.stringify({action: "bid", amount: bid}));
+            ws.current.send(JSON.stringify({ action: "bid", amount: bid }));
             setBidAmount("");
             setError(null);
         } else {
@@ -180,11 +183,10 @@ function ProductDetail() {
         <div className="min-h-screen bg-gray-50 py-8">
             <div className="max-w-7xl mx-auto lg:px-8">
                 <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    {/* Views */}
-                    <div
-                        className="absolute top-1 lg:top-5 lg:left-5 z-10 bg-red-400 px-4 rounded-2xl flex items-center text-white text-sm space-x-1">
-                        <Eye className="w-4 h-4"/>
-                        <span>{product.views ?? 0} views</span>
+                    <div className="absolute top-1 lg:top-5 lg:left-5 z-10 bg-red-400 px-4 rounded-2xl flex items-center text-white text-sm space-x-1">
+                        <Eye className="w-4 h-4" />
+                        <CountUp end={product.view_count} duration={5.5} separator="," />
+                        <span>view</span>
                     </div>
 
                     <ProductImagesSlider
@@ -194,23 +196,36 @@ function ProductDetail() {
 
                     <div className="lg:col-span-5 space-y-6 bg-white p-3 rounded-2xl">
                         <h1 className="text-3xl font-bold text-gray-900 mb-3">{product.name}</h1>
-
-                        {/* Seller info */}
-                        <div
-                            className="cursor-pointer bg-white border-b border-gray-300/60 rounded-xl p-6 flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                                <div
-                                    className="w-12 h-12 bg-blue-300 text-white rounded-full flex items-center justify-center">P
+                        <div className="cursor-pointer bg-white border-b border-gray-300/60 rounded-xl  p-6 flex items-center justify-between">
+                            <div className="flex items-center space-x-4 cursor-pointer">
+                                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                                    {product.seller_profile_photo ? (
+                                        <img
+                                            src={product.seller_profile_photo}
+                                            alt={product.seller_username}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-blue-300 flex items-center justify-center text-white font-bold"
+                                            onClick={() => navigate(`/user/${product.seller_id}`)}>
+                                            {product.seller_username?.[0]?.toUpperCase() || 'U'}
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
                                     <p className="font-semibold text-gray-900">Hero</p>
+                                    {/* <p className="text-gray-500 text-sm">
+                                        {product.seller.rating} ⭐ ({product.seller.reviews} reviews)
+                                    </p> */}
                                 </div>
                             </div>
+
                             <div className="flex items-center space-x-3">
-                                <MessageSquareText className="text-gray-600 hover:text-blue-500 cursor-pointer"/>
+                                <MessageSquareText className="text-gray-600 hover:text-blue-500 cursor-pointer" />
                                 <div
                                     className="hover:bg-gray-400/30 w-10 h-10 flex items-center justify-center rounded-3xl">
-                                    <ChevronRight className="hidden lg:flex cursor-pointer"/>
+                                    <ChevronRight className="hidden lg:flex cursor-pointer"
+                                        onClick={() => navigate(`/user/${product.seller_id}`)} />
                                 </div>
                             </div>
                         </div>
@@ -221,8 +236,8 @@ function ProductDetail() {
                             <p className="text-4xl font-bold text-orange-500">
                                 {/*${isAuctionEnded ? isWinningBid?.final_price : product.current_bid ?? product.starting_price}*/}
                                 ${isAuctionEnded
-                                ? (product.winner_final_price ?? product.current_bid)
-                                : (product.current_bid ?? product.starting_price)}
+                                    ? (product.winner_final_price ?? product.current_bid)
+                                    : (product.current_bid ?? product.starting_price)}
                             </p>
 
                             {product.buy_now_price && (
@@ -244,7 +259,7 @@ function ProductDetail() {
                             <div className="flex items-center mt-1">
                                 <p className="text-gray-500 text-[17px]">Condition:</p>
                                 <p className="text-md text-gray-500 ml-7 lg:ml-10">{product.condition}</p>
-                                <AlertCircle size={17} className="ml-1"/>
+                                <AlertCircle size={17} className="ml-1" />
                             </div>
 
                             {!isAuctionEnded && (
@@ -269,9 +284,8 @@ function ProductDetail() {
                                     <button
                                         onClick={placeBid}
                                         disabled={isAuctionEnded} // <-- disabled if auction ended
-                                        className={`w-full py-3 font-semibold rounded-lg ${
-                                            isAuctionEnded ? "bg-gray-400 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600 text-white"
-                                        }`}
+                                        className={`w-full py-3 font-semibold rounded-lg ${isAuctionEnded ? "bg-gray-400 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600 text-white"
+                                            }`}
                                     >
                                         Place Bid
                                     </button>
@@ -331,7 +345,7 @@ function ProductDetail() {
 
                     <div className="p-6 space-y-4 lg:w-1/2">
                         <div className="flex justify-center">
-                            <ShieldCheck size={39} className="text-green-500"/>
+                            <ShieldCheck size={39} className="text-green-500" />
                             <div className="flex flex-col mb-6">
                                 <h1 className="text-2xl font-bold">Verified and Secure</h1>
                                 <p className="text-sm">AuctionHub Money Back Guarantee</p>

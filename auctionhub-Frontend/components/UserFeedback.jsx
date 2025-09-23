@@ -1,8 +1,7 @@
 // src/components/UserFeedback.jsx
-import React from "react";
+import React, { useContext } from "react";
 import { Star, ThumbsUp, ThumbsDown } from "lucide-react";
-import CountUp from "react-countup";
-import { motion } from "framer-motion";
+import AuthContext from "../context/AuthContext";
 
 const feedbacks = [
   {
@@ -28,27 +27,16 @@ const feedbacks = [
   },
 ];
 
-const container = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 15, scale: 0.97 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: "easeInOut" } },
-};
-
 export default function UserFeedback() {
+  const { user, CurrentUser } = useContext(AuthContext);
   return (
-    <motion.div className="w-full max-w-full" initial="hidden" animate="visible" variants={container}>
+    <div className="w-full max-w-full">
       {/* Feedback Summary */}
-      <motion.div variants={item} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+      {user?.is_seller && (<div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Feedback Summary</h2>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <span className="text-3xl font-bold text-gray-800">
-              <CountUp end={4.5} decimals={1} duration={1.5} />
-            </span>
+            <span className="text-3xl font-bold text-gray-800">4.5</span>
             <div className="flex items-center">
               {[1, 2, 3, 4].map((star) => (
                 <Star key={star} className="w-5 h-5 text-yellow-400 fill-current" />
@@ -57,18 +45,14 @@ export default function UserFeedback() {
             </div>
             <span className="text-gray-500 text-sm">(14 ratings)</span>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col lg:flex-row items-center space-x-4">
             <div className="flex items-center space-x-1">
               <ThumbsUp className="w-5 h-5 text-green-500" />
-              <span className="text-gray-700 font-medium">
-                <CountUp end={95} duration={1.5} />%
-              </span>
+              <span className="text-gray-700 font-medium">95%</span>
             </div>
             <div className="flex items-center space-x-1">
               <ThumbsDown className="w-5 h-5 text-red-500" />
-              <span className="text-gray-700 font-medium">
-                <CountUp end={5} duration={1.5} />%
-              </span>
+              <span className="text-gray-700 font-medium">5%</span>
             </div>
           </div>
         </div>
@@ -76,31 +60,36 @@ export default function UserFeedback() {
         {/* Rating Bars */}
         <div className="space-y-2">
           {[5, 4, 3, 2, 1].map((rating) => {
-            const widthPercent = rating === 5 ? 70 : rating === 4 ? 20 : rating === 3 ? 5 : rating === 2 ? 3 : 2;
+            const widthPercent =
+              rating === 5 ? 70 : rating === 4 ? 20 : rating === 3 ? 5 : rating === 2 ? 3 : 2;
             return (
-              <motion.div key={rating} variants={item} className="flex items-center space-x-3">
+              <div key={rating} className="flex items-center space-x-3">
                 <div className="flex items-center space-x-1 w-16">
                   <span className="text-sm text-gray-600">{rating}</span>
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                 </div>
                 <div className="flex-grow h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${widthPercent}%` }}></div>
+                  <div
+                    className="h-full bg-yellow-400 rounded-full"
+                    style={{ width: `${widthPercent}%` }}
+                  ></div>
                 </div>
-                <span className="text-sm text-gray-600 w-10">
-                  <CountUp end={widthPercent} duration={1.5} suffix="%" />
-                </span>
-              </motion.div>
+                <span className="text-sm text-gray-600 w-10">{widthPercent}%</span>
+              </div>
             );
           })}
         </div>
-      </motion.div>
+      </div>)}
 
       {/* Recent Feedback */}
-      <motion.div variants={item} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Feedback</h2>
         <div className="space-y-6">
           {feedbacks.map((feedback) => (
-            <motion.div key={feedback.id} variants={item} className="pb-6 border-b border-gray-200 last:border-0 last:pb-0">
+            <div
+              key={feedback.id}
+              className="pb-6 border-b border-gray-200 last:border-0 last:pb-0"
+            >
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <h3 className="font-medium text-gray-800">{feedback.name}</h3>
@@ -109,7 +98,8 @@ export default function UserFeedback() {
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-4 h-4 ${i < feedback.rating ? "text-yellow-400 fill-current" : "text-gray-300"}`}
+                          className={`w-4 h-4 ${i < feedback.rating ? "text-yellow-400 fill-current" : "text-gray-300"
+                            }`}
                         />
                       ))}
                     </div>
@@ -126,16 +116,16 @@ export default function UserFeedback() {
                 </div>
               </div>
               <p className="text-gray-600 text-sm">{feedback.comment}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         <div className="mt-6 text-center">
-          <button className="border border-gray-300 px-8 py-3 rounded-lg font-medium hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-colors shadow-sm">
+          <button className="border border-gray-300 px-8 py-3 rounded-lg font-medium hover:bg-orange-400 hover:text-white cursor-pointer transition-colors shadow-sm">
             See All Feedback
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

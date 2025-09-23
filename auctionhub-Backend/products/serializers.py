@@ -30,11 +30,27 @@ class AuctionProductSerializer(serializers.ModelSerializer):
     winner_final_price = serializers.SerializerMethodField()
     status = serializers.ReadOnlyField()  # uses model property
     auction_ended = serializers.SerializerMethodField()
+    seller_id = serializers.IntegerField(source='seller.id', read_only=True)
+    seller_username = serializers.CharField(source='seller.username', read_only=True)
+    seller_profile_photo = serializers.SerializerMethodField()
+    view_count = serializers.IntegerField(read_only=True)
+    
 
     class Meta:
         model = AuctionProduct
         fields = '__all__'
 
+    def get_seller_profile_photo(self, obj):
+        """Return full URL of seller profile picture if exists."""
+        seller = obj.seller
+        if seller and hasattr(seller, 'profile') and seller.profile.profile_picture:
+            request = self.context.get('request')
+            url = seller.profile.profile_picture.url
+            if request:
+                return request.build_absolute_uri(url)
+            return url
+        return None
+    
     def get_current_bid(self, obj):
         # Get highest bid if exists, otherwise starting price
         highest_bid = obj.bids.order_by('-total_amount').first()

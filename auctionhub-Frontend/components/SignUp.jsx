@@ -11,7 +11,6 @@ export default function SignUp() {
     const navigate = useNavigate()
     const [errors, setErrors] = useState({});
 
-    // Debounced function
     const checkAvailability = useCallback(
         debounce(async (name, value) => {
             try {
@@ -32,9 +31,9 @@ export default function SignUp() {
         setFormData((prev) => ({ ...prev, [name]: value }));
 
         if ((name === "username" || name === "email") && value.trim() !== "") {
-            checkAvailability(name, value); // only call if not empty
+            checkAvailability(name, value);
         } else {
-            setErrors((prev) => ({ ...prev, [name]: "" })); // clear error for empty input
+            setErrors((prev) => ({ ...prev, [name]: "" }));
         }
     };
 
@@ -45,15 +44,30 @@ export default function SignUp() {
             alert("Fix errors before submitting");
             return;
         }
+
         try {
-            const res = await axiosInstance.post('register/', formData);
-            console.log(res.data);
-            alert(res.data.message)
-            navigate('/signin');
+            const res = await axiosInstance.post("/register/", formData);
+            alert(res.data.message);
+            navigate("/verify-email", { state: { email: formData.email } });
+
         } catch (err) {
-            alert('Registration failed. ' + (err.response?.data?.username || err.response?.data?.password))
+            if (err.response?.data) {
+                const backendMessage =
+                    err.response.data.message ||
+                    Object.values(err.response.data)
+                        .flat()
+                        .join(" ");
+
+                alert("Registration failed: " + backendMessage);
+            } else {
+                alert("Registration failed. Something went wrong.");
+                console.error(err);
+            }
         }
     };
+
+
+
 
     return (
         <>

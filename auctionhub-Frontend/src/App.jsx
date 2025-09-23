@@ -15,6 +15,9 @@ import ProductDetail from '../components/ProductDetail.jsx';
 import Notfound from '../404/NotFound.jsx';
 import FAQ from '../components/FAQ.jsx';
 import './App.css';
+import BecomeSellerForm from '../components/BecomeSeller.jsx';
+import VerifyEmailOTP from '../components/VerifyEmailOTP.jsx';
+import PasswordReset from '../components/PasswordReset.jsx';
 
 function App() {
     return (
@@ -30,10 +33,13 @@ function App() {
                 <Route path="/addproduct" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
                 <Route path="/contact" element={<ProtectedRoute><ContactUs /></ProtectedRoute>} />
                 <Route path="/Browse" element={<ProtectedRoute><Browse /></ProtectedRoute>} />
-                <Route path="/productdetail" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
                 <Route path="/products/:id" element={<ProductDetail />} />
-                <Route path="/NotFound" element={<Notfound />}/>
-                <Route path="/FAQ" element={<FAQ />}/>
+                <Route path="/become-seller" element={<BecomeSellerForm />} />
+                <Route path="/user/:id" element={<UserProfile />} />
+                <Route path="/verify-email" element={<VerifyEmailOTP />} />
+                <Route path="/password-reset" element={<PasswordReset />} />
+                <Route path="/NotFound" element={<Notfound />} />
+                <Route path="/FAQ" element={<FAQ />} />
             </Routes>
         </Layout>
     );
