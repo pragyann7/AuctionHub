@@ -49,7 +49,7 @@ export default function Browse() {
     }, []);
 
 
-    // Build query string for API
+
     const buildQueryParams = () => {
         const params = new URLSearchParams();
         if (searchQuery) params.append("search", searchQuery);
@@ -83,8 +83,8 @@ export default function Browse() {
 
     useEffect(() => {
         debouncedFetch();
-        return debouncedFetch.cancel;
-    }, [searchQuery, selectedCategories, selectedConditions, minPrice, maxPrice, debouncedFetch]);
+    }, [searchQuery, selectedCategories, selectedConditions, minPrice, maxPrice]);
+
 
     useEffect(() => {
         document.body.style.overflow = showSidebar ? "hidden" : "auto";
@@ -93,7 +93,7 @@ export default function Browse() {
 
     return (
         <div className="flex w-full">
-            {/* Sidebar */}
+
             <aside className="hidden md:block w-64 h-screen sticky top-0 border-r border-gray-500/20 px-4 py-6 overflow-y-auto">
                 <FiltersSidebar
                     categories={categories}
@@ -109,7 +109,6 @@ export default function Browse() {
                 />
             </aside>
 
-            {/* Mobile sidebar */}
             {showSidebar && (
                 <div className="fixed inset-0 bg-white/30 backdrop-blur-[4px] z-50 md:hidden">
                     <div className="absolute top-0 left-0 w-64 h-full bg-white shadow-lg p-4 overflow-y-auto z-50">
@@ -133,9 +132,8 @@ export default function Browse() {
                 </div>
             )}
 
-            {/* Main */}
             <main className="flex-1 p-4 md:p-6 overflow-y-auto">
-                {/* Search & view toggle */}
+
                 <div className="flex justify-between items-center mb-6">
                     <button
                         className="flex items-center gap-1 border px-3 py-2 rounded-md text-sm hover:bg-gray-50 md:hidden"
@@ -153,10 +151,8 @@ export default function Browse() {
                             className="w-full pl-10 pr-8 py-2 rounded-full border border-gray-300 focus:outline-none focus:border-orange-500 focus:ring focus:ring-orange-500 shadow-sm placeholder-gray-400 text-sm transition"
                         />
 
-                        {/* Search icon */}
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
 
-                        {/* Clear button */}
                         {searchQuery && (
                             <button
                                 className="absolute right-4 top-1/2 cursor-pointer -translate-y-1/2 text-red-400 hover:text-red-600"
@@ -182,7 +178,6 @@ export default function Browse() {
                     </div>
                 </div>
 
-                {/* Products */}
                 {loading ? (
                     viewMode === "grid" ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -227,7 +222,6 @@ export default function Browse() {
     );
 }
 
-// Filters Sidebar Component
 function FiltersSidebar({
     categories,
     conditions,
