@@ -8,12 +8,31 @@ export default function AuctionTabs({ auctions }) {
         { key: "live", label: "Live" },
         { key: "upcoming", label: "Upcoming" },
         { key: "closed", label: "Closed" },
-        { key: "featured", label: "Featured" }, // NEW TAB ADDED
+        { key: "featured", label: "Featured" },
     ];
+
+    const now = new Date();
+
+    const filteredAuctions = auctions.filter((a) => {
+        const start = new Date(a.auction_start_datetime);
+        const end = new Date(a.auction_end_datetime);
+
+        switch (tab) {
+            case "live":
+                return start <= now && now <= end;
+            case "upcoming":
+                return now < start;
+            case "closed":
+                return now > end;
+            case "featured":
+                return a.is_featured === true;
+            default:
+                return false;
+        }
+    });
 
     return (
         <div>
-            {/* Tabs */}
             <div className="flex justify-center gap-6 mb-6">
                 {tabs.map((t) => (
                     <button
@@ -29,13 +48,16 @@ export default function AuctionTabs({ auctions }) {
                 ))}
             </div>
 
-            {/* Auction Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {auctions
-                    .filter((a) => a.status === tab)
-                    .map((a) => (
+                {filteredAuctions.length > 0 ? (
+                    filteredAuctions.map((a) => (
                         <RealProductCard key={a.id} product={a} />
-                    ))}
+                    ))
+                ) : (
+                    <p className="col-span-full text-center text-gray-500">
+                        No {tab} auctions found.
+                    </p>
+                )}
             </div>
         </div>
     );
