@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0008_auctionproduct_is_unsold_auctionproduct_winner'),
-        ('products', '0009_auctionproduct_view_count'),
+        ("products", "0008_auctionproduct_is_unsold_auctionproduct_winner"),
+        ("products", "0009_auctionproduct_view_count"),
     ]
 
-    operations = [
-    ]
+    operations = []
