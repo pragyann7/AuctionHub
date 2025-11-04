@@ -12,7 +12,7 @@ import EditProfile from '../components/EditProfile';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Layout from '../Utils/Layout.jsx';
 import ProductDetail from '../components/ProductDetail.jsx';
-import Notfound from '../404/NotFound.jsx';
+import Notfound from '../404/notFound.jsx';
 import FAQ from '../components/FAQ.jsx';
 import './App.css';
 import BecomeSellerForm from '../components/BecomeSeller.jsx';
