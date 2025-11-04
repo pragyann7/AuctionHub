@@ -28,29 +28,33 @@ def assign_winners_task(product_id):
 
             # Exit if winner already assigned or auction unsold
             if Winner.objects.filter(product=product).exists() or product.is_unsold:
-                logger.info(f"Winner already assigned or auction unsold for product {product_id}")
+                logger.info(
+                    f"Winner already assigned or auction unsold for product {product_id}"
+                )
                 return
 
             # Get highest bid
-            last_bid = product.bids.order_by('-total_amount', '-bid_time').first()
+            last_bid = product.bids.order_by("-total_amount", "-bid_time").first()
 
             if last_bid:
                 winner = Winner.objects.create(
                     product=product,
                     user=last_bid.user,
                     final_price=last_bid.total_amount,
-                    winning_time=timezone.now()
+                    winning_time=timezone.now(),
                 )
-                logger.info(f"Winner assigned: {winner.user.username} for product {product.id}")
+                logger.info(
+                    f"Winner assigned: {winner.user.username} for product {product.id}"
+                )
 
                 # Notify WebSocket group
                 async_to_sync(channel_layer.group_send)(
                     f"auction_{product.id}",
                     {
-                        'type': 'auction_end',
-                        'user': winner.user.username,
-                        'final_price': float(winner.final_price),
-                    }
+                        "type": "auction_end",
+                        "user": winner.user.username,
+                        "final_price": float(winner.final_price),
+                    },
                 )
             else:
                 # Mark auction as unsold
@@ -73,13 +77,14 @@ def assign_all_ended_auctions():
     now = timezone.now()
 
     # Active auctions without a winner
-    active_auctions = AuctionProduct.objects.filter(is_unsold=False, winner__isnull=True)
+    active_auctions = AuctionProduct.objects.filter(
+        is_unsold=False, winner__isnull=True
+    )
 
     for auction in active_auctions:
         if auction.auction_end_datetime and auction.auction_end_datetime <= now:
             # Queue a winner task for this product only
             assign_winners_task.delay(auction.id)
-
 
 
 @shared_task

@@ -201,10 +201,12 @@ CELERY_BEAT_SCHEDULE = {
     'delete-unverified-users-daily': {
         'task': 'users.tasks.delete_unverified_users',
         'schedule': 86400.0,
-    }
+    },
+    'assign-ended-auctions-every-minute': {
+        'task': 'auctions.tasks.assign_all_ended_auctions',
+        'schedule': crontab(minute='*'),
+    },
 }
-
-
 
 # Optional: store sessions in Redis
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"

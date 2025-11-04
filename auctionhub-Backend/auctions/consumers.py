@@ -13,12 +13,25 @@ class AuctionConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.auction_id = self.scope['url_route']['kwargs']['auction_id']
         self.auction_group_name = f'auction_{self.auction_id}'
+        
+        auction_state = await self.get_full_auction_state()
+        if not auction_state:
+            await self.send(json.dumps({'type': 'error', 'message': 'Auction not found.'}))
+            await self.close()
+            return
+        
+        if auction_state['auction_ended']:
+            await self.send(json.dumps({'type': 'error', 'message': 'Auction has ended.'}))
+            await self.close()
+            return
+        
 
         await self.channel_layer.group_add(
             self.auction_group_name,
             self.channel_name
         )
         await self.accept()
+        logger.info(f"WebSocket connected for auction {self.auction_id}")
         await self.send_auction_state()
 
     async def disconnect(self, close_code):
@@ -84,7 +97,6 @@ class AuctionConsumer(AsyncWebsocketConsumer):
             'winner': event['user'],
             'final_price': float(event.get('final_price', 0)),
         }))
-        # Close WebSocket after sending auction end
         await self.close()
 
     # -------------------- Database Helpers --------------------

@@ -1,4 +1,3 @@
-# products/seriailzers.py
 from rest_framework import serializers
 from django.utils import timezone
 from .models import AuctionProduct, AuctionProductImage
@@ -98,7 +97,6 @@ class AuctionProductSerializer(serializers.ModelSerializer):
 
     def get_winner_final_price(self, obj):
         if obj.winner:
-            # Check if Winner entry exists
             winner_entry = getattr(obj, 'winner_entries', None)
             if winner_entry:
                 return winner_entry.final_price
